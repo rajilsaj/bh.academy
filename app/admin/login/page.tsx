@@ -5,6 +5,8 @@ import { auth, googleActive, signIn } from '@/lib/auth'
 import { AlerteSombre, SuccesSombre } from '@/components/AccesRefuse'
 import { fr } from '@/lib/i18n/fr'
 import { LogoFondation } from '@/components/LogoFondation'
+import { Hyperespace } from '@/components/Hyperespace'
+import { policeTitre } from '@/lib/fonts'
 
 export const dynamic = 'force-dynamic'
 
@@ -58,19 +60,20 @@ export default async function LoginPage({
         : null
 
   return (
-    <div className="bo grid place-items-center px-4 py-16">
+    <div className={`${policeTitre.variable} bo grid place-items-center px-4 py-16`}>
+      <Hyperespace />
       <main className="w-full max-w-sm">
         <div className="mb-6 flex items-center gap-3">
-          {/* La marque de la Fondation, en blanc sur le fond sombre. */}
+          {/* La marque de la Fondation, en blanc sur le violet. */}
           <LogoFondation hauteur="h-9" href="/" />
           <div>
-            <p className="font-semibold">{fr.backoffice.titre}</p>
-            <p className="bo-doux">{fr.app.baseline}</p>
+            <p className="titre text-2xl leading-tight">{fr.backoffice.titre}</p>
+            <p className="bo-doux">{fr.backoffice.baseline}</p>
           </div>
         </div>
 
         <div className="bo-panneau">
-          <h1 className="mb-1 text-lg font-semibold">{fr.admin.connexion}</h1>
+          <h1 className="mb-1 text-2xl">{fr.admin.connexion}</h1>
           <p className="bo-doux mb-4">{fr.admin.connexionAide}</p>
 
           {erreur ? (

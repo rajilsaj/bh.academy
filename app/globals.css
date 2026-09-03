@@ -219,17 +219,22 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* BACK-OFFICE — sombre et dense. Formateurs et apprenants.            */
+/* LE COCKPIT — le back-office, dans la peau de la vitrine : violet          */
+/* quadrillé, panneaux translucides, jaune pour l'action, titres Fredoka.     */
 /* ------------------------------------------------------------------ */
 @layer components {
   .bo {
-    @apply min-h-screen bg-bo-fond text-bo-texte;
+    @apply relative z-10 min-h-screen bg-vitrine-violet/90 bg-quadrillage bg-grille44 text-bo-texte;
+    color-scheme: dark;
+  }
+  .bo h1 {
+    @apply font-titre tracking-fort;
   }
   .bo-panneau {
-    @apply rounded-bloc border border-bo-bordure bg-bo-panneau p-5;
+    @apply rounded-carte border border-bo-bordure bg-bo-panneau p-5 backdrop-blur-sm;
   }
   .bo-sous-panneau {
-    @apply rounded-xl border border-bo-bordure bg-bo-panneau-2 p-4;
+    @apply rounded-bloc border border-bo-bordure bg-bo-panneau-2 p-4;
   }
   .bo-titre {
     @apply text-sm font-semibold text-bo-texte;
@@ -238,68 +243,71 @@
     @apply text-xs text-bo-doux;
   }
   .bo-chiffre {
-    @apply text-3xl font-bold tracking-tight text-bo-texte;
+    @apply font-titre text-4xl leading-none tracking-fort text-vitrine-jaune;
   }
 
-  /* Le sélecteur pilule blanc/noir de la maquette. */
+  /* Le sélecteur pilule de la maquette : l'onglet actif est jaune. */
   .bo-onglets {
-    @apply inline-flex items-center gap-1 rounded-full border border-bo-bordure bg-bo-panneau-2 p-1;
+    @apply inline-flex items-center gap-1 rounded-full border border-bo-bordure bg-bo-panneau p-1;
   }
   .bo-onglet {
-    @apply rounded-full px-4 py-1.5 text-sm font-medium text-bo-doux
-           hover:text-bo-texte;
+    @apply rounded-full px-4 py-1.5 text-sm font-medium text-bo-doux hover:text-bo-texte;
   }
   .bo-onglet-actif {
-    @apply rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-bo-fond;
+    @apply rounded-full bg-vitrine-jaune px-4 py-1.5 text-sm font-bold text-vitrine-violet-fonce;
   }
 
   .bo-puce {
     @apply inline-flex items-center gap-1.5 rounded-full border border-bo-bordure
-           bg-bo-panneau-2 px-2.5 py-1 text-xs font-medium text-bo-doux;
+           bg-bo-panneau px-2.5 py-1 text-xs font-medium text-bo-doux;
   }
   .bo-bouton {
-    @apply inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm
-           font-semibold text-bo-fond hover:bg-white/90;
+    @apply inline-flex items-center gap-2 rounded-full bg-vitrine-jaune px-4 py-2 text-sm
+           font-bold tracking-fort text-vitrine-violet-fonce transition-colors hover:bg-vitrine-jaune-fonce;
   }
   .bo-bouton-discret {
-    @apply inline-flex items-center gap-2 rounded-full border border-bo-bordure
-           bg-bo-panneau-2 px-4 py-2 text-sm font-medium text-bo-texte hover:border-bo-doux;
+    @apply inline-flex items-center gap-2 rounded-full border-2 border-white/30
+           px-4 py-1.5 text-sm font-semibold text-bo-texte transition-colors hover:bg-white/10;
   }
   .bo-champ {
-    @apply w-full rounded-xl border border-bo-bordure bg-bo-panneau-2 px-3 py-2.5 text-sm
-           text-bo-texte placeholder:text-bo-doux focus:border-bo-violet focus:outline-none;
+    @apply w-full rounded-bloc border-2 border-white/25 bg-white/10 px-3 py-2.5 text-sm
+           text-bo-texte placeholder:text-white/45 focus:border-vitrine-jaune focus:outline-none;
+  }
+  /* Les listes déroulantes natives s'ouvrent sur fond clair : le texte doit y rester lisible. */
+  .bo-champ option {
+    @apply bg-white text-vitrine-violet-fonce;
   }
 
   .bo-tableau {
     @apply w-full border-collapse text-sm;
   }
   .bo-tableau th {
-    @apply border-b border-bo-bordure px-3 py-2.5 text-left text-xs font-semibold
+    @apply border-b border-bo-bordure px-3 py-2.5 text-left text-xs font-bold
            uppercase tracking-wide text-bo-doux;
   }
   .bo-tableau td {
-    @apply border-b border-bo-bordure/60 px-3 py-2.5 align-middle text-bo-texte;
+    @apply border-b border-white/10 px-3 py-2.5 align-middle text-bo-texte;
   }
 
   /* Barre d'avancement : deux div, aucune bibliothèque de graphiques. */
   .bo-jauge {
-    @apply h-2 w-full overflow-hidden rounded-full bg-bo-bordure;
+    @apply h-2 w-full overflow-hidden rounded-full bg-white/15;
   }
   .bo-jauge > span {
     @apply block h-full rounded-full;
   }
 
-  /* Barre latérale du back-office : groupes en capitales, lien actif blanc plein. */
+  /* Barre latérale : violet plus profond, lien actif en jaune plein. */
   .bo-sidebar {
-    @apply w-64 shrink-0 border-r border-bo-bordure bg-bo-panneau;
+    @apply w-64 shrink-0 border-r border-bo-bordure bg-vitrine-violet-fonce/70 backdrop-blur-md;
   }
   .bo-nav-groupe {
-    @apply px-4 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-bo-doux;
+    @apply px-4 pb-1 pt-4 text-[11px] font-bold uppercase tracking-wider text-bo-doux;
   }
   .bo-nav-lien {
-    @apply flex items-center rounded-lg px-3 py-2 text-sm font-medium text-bo-doux
-           hover:bg-bo-panneau-2 hover:text-bo-texte
-           aria-[current=page]:bg-white aria-[current=page]:font-semibold aria-[current=page]:text-bo-fond;
+    @apply flex items-center rounded-full px-3 py-2 text-sm font-medium text-bo-doux
+           hover:bg-white/10 hover:text-bo-texte
+           aria-[current=page]:bg-vitrine-jaune aria-[current=page]:font-bold aria-[current=page]:text-vitrine-violet-fonce;
   }
 }
 

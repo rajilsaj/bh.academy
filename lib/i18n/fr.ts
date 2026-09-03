@@ -231,11 +231,12 @@ export const fr = {
       ressources: 'Ressources',
       utilisateurs: 'Utilisateurs',
       visites: 'Visites',
+      configuration: 'Paramètres',
     },
     sidebar: {
       personnes: 'Personnes',
       modules: 'Modules',
-      audience: 'Audience',
+      configuration: 'Configuration',
       menu: 'Menu',
     },
     roles: {
@@ -367,6 +368,43 @@ export const fr = {
       tableauBord: 'Tableau de bord (une ligne par apprenant)',
       telecharger: 'Télécharger',
       tables: 'Tables brutes',
+    },
+
+    /* L'état de la configuration : les services branchés, et comment brancher les autres. */
+    configuration: {
+      titre: 'Paramètres',
+      sousTitre: 'Les services du site, ceux qui sont branchés et ce qui manque aux autres. Les valeurs se modifient dans Vercel → Environment Variables, puis redéploiement.',
+      servicesActifs: 'Services actifs',
+      adresse: 'Adresse publique (APP_URL)',
+      voirVisites: 'Voir les visites',
+      actif: 'Actif',
+      inactif: 'Non configuré',
+      injoignable: 'Base injoignable : vérifiez DATABASE_URL.',
+      baseDetail: 'Connectée · {apprenants} apprenants · {comptes} comptes du personnel',
+      stockageDetail: 'Supabase Storage, bucket privé « {bucket} »',
+      stockageLocal: 'Fichiers écrits sur le disque local : sur Vercel ils disparaîtraient. Renseignez Supabase.',
+      secretsOk: 'Secrets de session et de liens apprenants présents',
+      secretsManquants: 'AUTH_SECRET ou TOKEN_SECRET manquant : connexion et liens apprenants en panne.',
+      assistantRepli: 'Sans clé : l’assistant répond depuis le contenu de la page.',
+      courrielInactif: 'Sans serveur SMTP, les invitations restent en attente.',
+      ouModifier: 'Rien ne se modifie ici : les secrets vivent dans Vercel (Settings → Environment Variables) et dans le fichier .env en local. Après un changement, redéployez.',
+      services: {
+        titre: 'Services',
+        base: 'Base de données (Supabase)',
+        baseAide: 'Chaîne de connexion du pooler Supabase, port 6543.',
+        stockage: 'Fichiers (Supabase Storage)',
+        stockageAide: 'URL du projet et clé service_role, depuis Project Settings → API.',
+        connexion: 'Connexion et liens apprenants',
+        connexionAide: 'Deux chaînes aléatoires de 32 caractères ou plus (openssl rand -base64 32).',
+        google: 'Connexion Google',
+        googleAide: 'Client OAuth « application Web » dans Google Cloud Console, avec l’URI de redirection {url}.',
+        assistant: 'Assistant de la FAQ (Claude)',
+        assistantAide: 'Clé API Anthropic. Facultatif.',
+        courriel: 'Courriel (SMTP)',
+        courrielAide: 'Serveur SMTP classique ; Gmail : smtp.gmail.com, port 465, mot de passe d’application.',
+        sms: 'SMS (webhook)',
+        smsAide: 'Un webhook HTTP qui reçoit { "to", "body" } en JSON.',
+      },
     },
 
     /* Mesure d'audience du site public. */
@@ -1037,7 +1075,9 @@ export const fr = {
   },
 
   backoffice: {
-    titre: 'Back-office',
+    /* Le back-office s'appelle le cockpit : on y pilote la formation. */
+    titre: 'Le Cockpit',
+    baseline: 'IALab · Fondation BantuHub',
     vueEnsemble: 'Vue d’ensemble',
     modules: 'Modules',
     apprenants: 'Apprenants',

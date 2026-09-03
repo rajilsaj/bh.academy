@@ -4,14 +4,17 @@ import { auth, can, signOut } from '@/lib/auth'
 import { fr } from '@/lib/i18n/fr'
 import type { Permission } from '@/lib/auth'
 import { AdminSidebar, type GroupeNav } from '@/components/AdminSidebar'
+import { Hyperespace } from '@/components/Hyperespace'
+import { LogoFondation } from '@/components/LogoFondation'
+import { policeTitre } from '@/lib/fonts'
 
 export const dynamic = 'force-dynamic'
 
 type Lien = { href: string; label: string; permission: Permission }
 
 /**
- * Deux groupes, c'est tout : les personnes, et la matière enseignée. Un
- * formateur ne voit que le second ; l'administrateur voit les deux.
+ * Trois groupes : les personnes, la matière enseignée, la configuration. Un
+ * formateur ne voit que la matière ; l'administrateur voit tout.
  */
 const GROUPES: { titre: string; liens: Lien[] }[] = [
   {
@@ -19,14 +22,17 @@ const GROUPES: { titre: string; liens: Lien[] }[] = [
     liens: [{ href: '/admin/utilisateurs', label: fr.admin.nav.utilisateurs, permission: 'gererUtilisateurs' }],
   },
   {
-    titre: fr.admin.sidebar.audience,
-    liens: [{ href: '/admin/visites', label: fr.admin.nav.visites, permission: 'voirVisites' }],
-  },
-  {
     titre: fr.admin.sidebar.modules,
     liens: [
       { href: '/admin/modules', label: fr.admin.nav.modules, permission: 'voirModules' },
       { href: '/admin/ressources', label: fr.admin.nav.ressources, permission: 'gererRessources' },
+    ],
+  },
+  {
+    titre: fr.admin.sidebar.configuration,
+    liens: [
+      { href: '/admin/configuration', label: fr.admin.nav.configuration, permission: 'gererConfiguration' },
+      { href: '/admin/visites', label: fr.admin.nav.visites, permission: 'voirVisites' },
     ],
   },
 ]
@@ -68,18 +74,19 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   )
 
   return (
-    <div className="bo lg:flex lg:min-h-screen">
+    <div className={`${policeTitre.variable} bo lg:flex lg:min-h-screen`}>
+      {/* Le même ciel en vitesse lumière que la vitrine, derrière le violet. */}
+      <Hyperespace />
+
       {/* ------------------------------------------------ barre latérale */}
       <aside className="bo-sidebar hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col">
-        <Link href="/admin" className="flex items-center gap-3 border-b border-bo-bordure px-4 py-4">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-sm font-bold text-bo-fond">
-            B
-          </span>
-          <span>
-            <span className="block text-sm font-semibold leading-tight">{fr.backoffice.titre}</span>
-            <span className="bo-doux block">{fr.app.baseline}</span>
-          </span>
-        </Link>
+        <div className="border-b border-bo-bordure px-4 py-4">
+          <LogoFondation hauteur="h-7" href="/" />
+          <Link href="/admin" className="mt-3 block">
+            <span className="titre block text-xl leading-tight">{fr.backoffice.titre}</span>
+            <span className="bo-doux block">{fr.backoffice.baseline}</span>
+          </Link>
+        </div>
         <div className="flex-1 overflow-y-auto pb-4">
           <AdminSidebar groupes={groupes} />
         </div>
@@ -88,15 +95,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
       <div className="min-w-0 flex-1">
         {/* ------------------------------------------- en-tête petit écran */}
-        <header className="border-b border-bo-bordure bg-bo-panneau lg:hidden">
+        <header className="border-b border-bo-bordure bg-vitrine-violet-fonce/70 backdrop-blur-md lg:hidden">
           <div className="flex items-center gap-3 px-4 py-3">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-sm font-bold text-bo-fond">
-              B
-            </span>
-            <span className="text-base font-semibold">{fr.backoffice.titre}</span>
+            <LogoFondation hauteur="h-6" href="/" />
+            <span className="titre text-lg">{fr.backoffice.titre}</span>
             <details className="ml-auto">
               <summary className="bo-bouton-discret cursor-pointer list-none">{fr.admin.sidebar.menu}</summary>
-              <div className="absolute inset-x-0 z-40 mt-2 border-y border-bo-bordure bg-bo-panneau pb-3 shadow-2xl">
+              <div className="absolute inset-x-0 z-40 mt-2 border-y border-bo-bordure bg-vitrine-violet-fonce pb-3 shadow-2xl">
                 <AdminSidebar groupes={groupes} />
                 <div className="mt-3 border-t border-bo-bordure px-4 pt-3">{compte}</div>
               </div>

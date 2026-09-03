@@ -116,6 +116,7 @@ export const PERMISSIONS = {
   gererUtilisateurs: ['admin'],
   gererFormations: ['admin'],
   voirVisites: ['admin'],
+  gererConfiguration: ['admin'],
 } as const satisfies Record<string, readonly Role[]>
 
 export type Permission = keyof typeof PERMISSIONS
