@@ -771,8 +771,8 @@ export const fr = {
     /* « Nos formateurs », lus en base. */
     formateurs: {
       titre: 'Nos',
-      manuscrit: 'formateurs.',
-      sousTitre: 'Des praticiens qui utilisent l’IA au quotidien, et qui vous accompagnent module après module.',
+      manuscrit: 'experts.',
+      sousTitre: 'Nos formateurs : des experts qui utilisent l’IA au quotidien, et qui vous accompagnent module après module.',
       linkedin: 'LinkedIn',
       facebook: 'Facebook',
       site: 'Site web',
