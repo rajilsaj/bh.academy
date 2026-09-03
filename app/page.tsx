@@ -65,6 +65,7 @@ const LIENS_NAV = [
   { href: '#apropos', label: v.nav.apropos },
   { href: '#programme', label: v.nav.programme },
   { href: '#questions', label: v.nav.faq },
+  { href: '/presse', label: v.nav.presse },
 ] as const
 
 export default async function Accueil({ searchParams }: { searchParams?: { q?: string } }) {
@@ -122,7 +123,7 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
               <a
                 key={l.href}
                 href={l.href}
-                data-section={l.href.slice(1)}
+                data-section={l.href.startsWith('#') ? l.href.slice(1) : undefined}
                 className="bascule-graisse border-b-2 border-transparent pb-0.5 hover:font-bold hover:tracking-fort aria-[current=true]:border-vitrine-jaune aria-[current=true]:font-bold aria-[current=true]:tracking-fort"
               >
                 {l.label}
@@ -500,6 +501,12 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
               </span>
             </Link>
           </div>
+          {/* Le lien vers l'espace presse, aussi accessible sur petit écran où le menu n'existe pas. */}
+          <p className="mt-4">
+            <Link href="/presse" className="text-lg font-semibold text-white/80 underline decoration-white/40 underline-offset-4 hover:text-white">
+              {v.nav.presse}
+            </Link>
+          </p>
           <Signature />
         </footer>
       </div>

@@ -713,6 +713,7 @@ export const fr = {
       programme: 'Le programme',
       apropos: 'À propos',
       faq: 'Questions',
+      presse: 'Espace presse',
       inscription: 'Je m’inscris',
       connexion: 'Connectez-vous ici',
       espace: 'Mon espace',
@@ -767,6 +768,40 @@ export const fr = {
       { n: '5', k: 'Semaines', t: 'de formation en présentiel' },
       { n: '1 000', k: 'Participants', t: 'attendus sur la promotion' },
     ],
+
+    /* L'espace presse : les documents officiels, à télécharger. */
+    presse: {
+      titre: 'Espace presse',
+      intro:
+        'Les documents de référence sur le laboratoire d’intelligence artificielle de la Fondation BantuHub et sur la formation, pour la presse, les partenaires et toute personne qui veut les détails.',
+      pages: 'pages',
+      telecharger: 'Télécharger le PDF',
+      lireEnLigne: 'Lire en ligne',
+      contactTitre: 'Contact presse',
+      contactTexte: 'Pour une interview, un visuel ou une précision, écrivez à la Fondation BantuHub.',
+      documents: [
+        {
+          fichier: 'dossier-presentation-ia-lab.pdf',
+          type: 'Dossier de présentation',
+          titre: 'L’ia.lab, laboratoire d’intelligence artificielle appliquée',
+          description:
+            'Éditorial, la Fondation BantuHub, le laboratoire et ses domaines d’intervention, son fonctionnement et son équipe, comment le soutenir.',
+          pages: 12,
+          taille: '2,8 Mo',
+          date: 'Mars 2026',
+        },
+        {
+          fichier: 'formation-bh-ai.pdf',
+          type: 'Programme de formation',
+          titre: 'Formation à l’intelligence artificielle au service de l’employabilité des jeunes',
+          description:
+            'Objectifs, public, modules à la carte avec durée, prérequis et contenu de chacun : découvrir l’IA générative, le prompt engineering, les cas métiers, la bureautique augmentée.',
+          pages: 8,
+          taille: '3,7 Mo',
+          date: '2026',
+        },
+      ],
+    },
 
     /* « Nos formateurs », lus en base. */
     formateurs: {
