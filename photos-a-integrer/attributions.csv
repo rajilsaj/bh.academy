@@ -1,0 +1,12 @@
+# Rempli à partir des noms de fichiers Unsplash (« <photographe>-<id>-unsplash.jpg »).
+# Les lignes sans photographe sont celles que je n'ai pas pu établir : Unsplash
+# bloque les requêtes depuis cette machine, et les fichiers ne portent aucune
+# métadonnée EXIF/XMP. Ouvrez page_photo dans un navigateur : le nom est sous l'image.
+fichier,emplacement,photographe,page_photo
+x-IgUR1iX0mqM-unsplash.jpg,heros/accueil,,https://unsplash.com/photos/IgUR1iX0mqM
+christina-wocintechchat-com-m-6U4n-I2_R2M-unsplash.jpg,arguments/pratique,Christina @ wocintechchat.com,https://unsplash.com/photos/m-6U4n-I2_R2M
+x-uAcoCc1dKiA-unsplash.jpg,arguments/telephone,,https://unsplash.com/photos/uAcoCc1dKiA
+x-BVr3XaBiWLU-unsplash.jpg,arguments/suivi,,https://unsplash.com/photos/BVr3XaBiWLU
+1.jpg,arguments/certificat,,
+x-YgOCJz9uGMk-unsplash.jpg,final/appel,,https://unsplash.com/photos/YgOCJz9uGMk
+oluwakemi-solaja-ZN52ZBFkw4Y-unsplash.jpg,NON UTILISEE (en réserve),Oluwakemi Solaja,https://unsplash.com/photos/ZN52ZBFkw4Y

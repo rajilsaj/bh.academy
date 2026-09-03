@@ -1,0 +1,29 @@
+# SITE_ADDRESS = :80 en local, ou le nom de domaine en production
+# (Caddy obtient alors un certificat Let's Encrypt automatiquement).
+{$SITE_ADDRESS} {
+	encode zstd gzip
+
+	# Metabase, pour les tableaux de bord d'indicateurs.
+	handle_path /bi/* {
+		reverse_proxy metabase:3000
+	}
+	redir /bi /bi/ permanent
+
+	# L'application : apprenants et administration.
+	handle {
+		reverse_proxy app:3000
+	}
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options SAMEORIGIN
+		Referrer-Policy same-origin
+		# Les liens apprenants ne doivent jamais finir dans un moteur de recherche.
+		X-Robots-Tag "noindex, nofollow"
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

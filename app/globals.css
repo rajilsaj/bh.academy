@@ -1,0 +1,566 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /*
+   * Défilement doux d'une section à l'autre. Une ligne de CSS, aucun
+   * JavaScript, et le même garde-fou que la parallaxe : qui a demandé moins
+   * d'animations garde le saut instantané.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /*
+   * L'en-tête est collant (~5 rem) : sans réserve, chaque saut d'ancre
+   * cache le titre visé dessous. La réserve vaut sa hauteur plus un souffle.
+   */
+  :target,
+  section[id] {
+    scroll-margin-top: 5.5rem;
+  }
+  @media (min-width: 768px) {
+    :target,
+    section[id] {
+      scroll-margin-top: 6.25rem;
+    }
+  }
+  body {
+    @apply bg-vitrine-lavande text-slate-900 antialiased;
+  }
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+  }
+  /* Le focus doit rester visible : ces pages se remplissent au clavier. */
+  :focus-visible {
+    outline: 3px solid #fcc63c;
+    outline-offset: 2px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* VITRINE — violet, jaune, rondeurs. Public et apprenants.            */
+/* ------------------------------------------------------------------ */
+@layer components {
+  /*
+   * ---------------------------------------------------------------------
+   * Typographie « Light & Smooth Bold »
+   *
+   * Deux graisses, loin l'une de l'autre : 300 pour lire, 700 pour
+   * hiérarchiser. Jamais 300 et 400 côte à côte — l'écart ne se voit pas.
+   * Le 300 vient de la pile système (Segoe UI Light, Roboto Light, SF Light) :
+   * Fredoka n'est embarquée qu'en 700, et c'est voulu.
+   *
+   * Règle dure : jamais de léger sous 18 px, les déliés disparaissent. Les
+   * classes ci-dessous fixent la taille elles-mêmes ; un script
+   * (`scripts/verifier-typo.ts`) refuse tout `font-light` posé avec
+   * `text-xs|sm|base`, au typecheck comme au build.
+   * ---------------------------------------------------------------------
+   */
+
+  /* Corps de texte léger : 18 px, 300, interligne 1,6, lissage explicite. */
+  .texte-leger {
+    @apply text-lg font-light leading-[1.6] tracking-leger;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  /* Titre léger — pile système, à poser avec une taille ≥ text-xl. */
+  .titre-leger {
+    @apply font-light leading-tight tracking-leger;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  /* Gras net : 700, interlettrage resserré. */
+  .texte-fort {
+    @apply font-bold tracking-fort;
+  }
+  /* Pour tout élément qui passe de léger à gras au survol ou à l'état courant. */
+  .bascule-graisse {
+    transition:
+      font-weight 0.2s ease-in-out,
+      color 0.2s ease-in-out,
+      border-color 0.2s ease-in-out;
+  }
+
+  .titre {
+    @apply font-titre font-bold leading-[1.05] tracking-fort;
+  }
+  /* Les mots manuscrits de la maquette (« never before », « fun. »). */
+  .manuscrit {
+    @apply font-accent font-bold text-vitrine-turquoise;
+    letter-spacing: 0.01em;
+  }
+
+  .panneau-violet {
+    @apply relative bg-vitrine-violet bg-quadrillage bg-grille44 text-white;
+  }
+
+  .bouton-principal {
+    @apply inline-flex w-full items-center justify-center gap-2 rounded-full bg-vitrine-jaune
+           px-6 py-4 text-center text-lg font-bold tracking-fort text-vitrine-violet-fonce
+           transition-colors active:bg-vitrine-jaune-fonce;
+  }
+  .bouton-principal .fleche,
+  .bouton-pilule .fleche {
+    @apply grid h-6 w-6 shrink-0 place-items-center rounded-full bg-vitrine-violet-fonce
+           text-xs text-vitrine-jaune;
+  }
+  .bouton-pilule {
+    @apply inline-flex items-center gap-2 rounded-full bg-vitrine-jaune px-5 py-2.5
+           text-sm font-bold tracking-fort text-vitrine-violet-fonce active:bg-vitrine-jaune-fonce;
+  }
+  .bouton-fantome {
+    @apply inline-flex items-center gap-2 rounded-full border-2 border-white/35 px-5 py-2.5
+           text-sm font-semibold text-white active:bg-white/10;
+  }
+  .bouton-blanc {
+    @apply inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm
+           font-bold text-vitrine-violet active:bg-vitrine-lavande;
+  }
+
+  .carte {
+    @apply rounded-carte bg-white p-5 text-slate-900;
+  }
+  .carte-violette {
+    @apply rounded-carte border border-white/15 bg-white/10 p-5 text-white;
+  }
+
+  /*
+   * Relief « 3D » des glyphes du héros — le « × » et le « = » extrudés de la
+   * maquette. Deux ombres dures empilées font l'extrusion ; leurs teintes
+   * dérivent de la palette par `color-mix`, rien n'est écrit en dur.
+   * `.relief-texte` pour du texte, `.relief-svg` pour un tracé SVG.
+   */
+  .relief-texte {
+    text-shadow:
+      3px 3px 0 color-mix(in srgb, currentColor 55%, black),
+      6px 6px 0 color-mix(in srgb, currentColor 30%, black);
+  }
+  .relief-svg {
+    filter: drop-shadow(3px 3px 0 color-mix(in srgb, currentColor 55%, black))
+      drop-shadow(3px 3px 0 color-mix(in srgb, currentColor 30%, black));
+  }
+  /* Griffonnage à la main, en clair sur le violet. */
+  .griffonnage {
+    @apply font-accent font-bold text-white/80;
+    letter-spacing: 0.01em;
+  }
+
+  /* Les pastilles flottantes « Music / Play / Learning » de la maquette. */
+  .pastille {
+    @apply inline-block rounded-full border-2 border-white/40 px-4 py-1.5 text-sm
+           font-semibold text-white;
+  }
+
+  .champ {
+    @apply w-full rounded-bloc border-2 border-slate-300 bg-white px-4 py-3 text-base
+           text-slate-900 placeholder:text-slate-400
+           focus:border-vitrine-violet focus:outline-none;
+  }
+  .champ-violet {
+    @apply w-full rounded-bloc border-2 border-white/30 bg-white/10 px-4 py-3 text-base
+           text-white placeholder:text-white/50 focus:border-vitrine-jaune focus:outline-none;
+  }
+  .etiquette {
+    @apply mb-1.5 block text-sm font-semibold text-slate-700;
+  }
+  .etiquette-claire {
+    @apply mb-1.5 block text-sm font-semibold text-white/85;
+  }
+
+  /* Choix radio/case en grande cible tactile. */
+  .option {
+    @apply flex cursor-pointer items-center gap-3 rounded-bloc border-2 border-slate-300
+           bg-white p-3 text-slate-900 has-[:checked]:border-vitrine-violet
+           has-[:checked]:bg-vitrine-lavande;
+  }
+
+  .alerte {
+    @apply rounded-bloc border-2 border-red-300 bg-red-50 px-4 py-3 text-sm font-medium text-red-900;
+  }
+  .succes {
+    @apply rounded-bloc border-2 border-emerald-300 bg-emerald-50 px-4 py-3 text-sm
+           font-medium text-emerald-900;
+  }
+
+  /* Accordéon FAQ — <details>/<summary>, donc sans JavaScript. */
+  .faq {
+    @apply overflow-hidden rounded-bloc border-2 border-white/25 bg-white/10;
+  }
+  /* Question en 700, réponse en 300, même corps : la paire léger/gras. */
+  .faq > summary {
+    @apply flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3
+           text-lg font-bold tracking-fort text-white;
+  }
+  .faq > summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq > summary::after {
+    content: '▾';
+    @apply text-white/70 transition-transform;
+  }
+  .faq[open] > summary::after {
+    transform: rotate(180deg);
+  }
+  .faq[open] > summary {
+    @apply bg-white/10;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* BACK-OFFICE — sombre et dense. Formateurs et apprenants.            */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .bo {
+    @apply min-h-screen bg-bo-fond text-bo-texte;
+  }
+  .bo-panneau {
+    @apply rounded-bloc border border-bo-bordure bg-bo-panneau p-5;
+  }
+  .bo-sous-panneau {
+    @apply rounded-xl border border-bo-bordure bg-bo-panneau-2 p-4;
+  }
+  .bo-titre {
+    @apply text-sm font-semibold text-bo-texte;
+  }
+  .bo-doux {
+    @apply text-xs text-bo-doux;
+  }
+  .bo-chiffre {
+    @apply text-3xl font-bold tracking-tight text-bo-texte;
+  }
+
+  /* Le sélecteur pilule blanc/noir de la maquette. */
+  .bo-onglets {
+    @apply inline-flex items-center gap-1 rounded-full border border-bo-bordure bg-bo-panneau-2 p-1;
+  }
+  .bo-onglet {
+    @apply rounded-full px-4 py-1.5 text-sm font-medium text-bo-doux
+           hover:text-bo-texte;
+  }
+  .bo-onglet-actif {
+    @apply rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-bo-fond;
+  }
+
+  .bo-puce {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-bo-bordure
+           bg-bo-panneau-2 px-2.5 py-1 text-xs font-medium text-bo-doux;
+  }
+  .bo-bouton {
+    @apply inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm
+           font-semibold text-bo-fond hover:bg-white/90;
+  }
+  .bo-bouton-discret {
+    @apply inline-flex items-center gap-2 rounded-full border border-bo-bordure
+           bg-bo-panneau-2 px-4 py-2 text-sm font-medium text-bo-texte hover:border-bo-doux;
+  }
+  .bo-champ {
+    @apply w-full rounded-xl border border-bo-bordure bg-bo-panneau-2 px-3 py-2.5 text-sm
+           text-bo-texte placeholder:text-bo-doux focus:border-bo-violet focus:outline-none;
+  }
+
+  .bo-tableau {
+    @apply w-full border-collapse text-sm;
+  }
+  .bo-tableau th {
+    @apply border-b border-bo-bordure px-3 py-2.5 text-left text-xs font-semibold
+           uppercase tracking-wide text-bo-doux;
+  }
+  .bo-tableau td {
+    @apply border-b border-bo-bordure/60 px-3 py-2.5 align-middle text-bo-texte;
+  }
+
+  /* Barre d'avancement : deux div, aucune bibliothèque de graphiques. */
+  .bo-jauge {
+    @apply h-2 w-full overflow-hidden rounded-full bg-bo-bordure;
+  }
+  .bo-jauge > span {
+    @apply block h-full rounded-full;
+  }
+
+  /* Barre latérale du back-office : groupes en capitales, lien actif blanc plein. */
+  .bo-sidebar {
+    @apply w-64 shrink-0 border-r border-bo-bordure bg-bo-panneau;
+  }
+  .bo-nav-groupe {
+    @apply px-4 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-bo-doux;
+  }
+  .bo-nav-lien {
+    @apply flex items-center rounded-lg px-3 py-2 text-sm font-medium text-bo-doux
+           hover:bg-bo-panneau-2 hover:text-bo-texte
+           aria-[current=page]:bg-white aria-[current=page]:font-semibold aria-[current=page]:text-bo-fond;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* FONDU DANS L'HYPERESPACE — le bas du panneau se dissout dans le fond. */
+/* ------------------------------------------------------------------ */
+/*
+ * Un bloc de 14 rem qui prolonge le panneau (même violet, même grille) sous
+ * un masque à courbe d'accélération : opaque en haut, transparent en bas.
+ * Le canvas d'hyperespace, fixé derrière toute la page, apparaît à travers.
+ * Le masque ne porte que sur ce petit bloc — jamais sur le panneau entier,
+ * qui forcerait une couche composée de toute la hauteur de la page.
+ */
+.fondu-hyperespace {
+  height: 14rem;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 1) 0%,
+    rgb(0 0 0 / 0.987) 8%,
+    rgb(0 0 0 / 0.951) 16%,
+    rgb(0 0 0 / 0.896) 23%,
+    rgb(0 0 0 / 0.825) 29%,
+    rgb(0 0 0 / 0.741) 35%,
+    rgb(0 0 0 / 0.648) 41%,
+    rgb(0 0 0 / 0.55) 47%,
+    rgb(0 0 0 / 0.45) 53%,
+    rgb(0 0 0 / 0.352) 59%,
+    rgb(0 0 0 / 0.259) 65%,
+    rgb(0 0 0 / 0.175) 71%,
+    rgb(0 0 0 / 0.104) 78%,
+    rgb(0 0 0 / 0.049) 84%,
+    rgb(0 0 0 / 0.013) 92%,
+    rgb(0 0 0 / 0) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 1) 0%,
+    rgb(0 0 0 / 0.987) 8%,
+    rgb(0 0 0 / 0.951) 16%,
+    rgb(0 0 0 / 0.896) 23%,
+    rgb(0 0 0 / 0.825) 29%,
+    rgb(0 0 0 / 0.741) 35%,
+    rgb(0 0 0 / 0.648) 41%,
+    rgb(0 0 0 / 0.55) 47%,
+    rgb(0 0 0 / 0.45) 53%,
+    rgb(0 0 0 / 0.352) 59%,
+    rgb(0 0 0 / 0.259) 65%,
+    rgb(0 0 0 / 0.175) 71%,
+    rgb(0 0 0 / 0.104) 78%,
+    rgb(0 0 0 / 0.049) 84%,
+    rgb(0 0 0 / 0.013) 92%,
+    rgb(0 0 0 / 0) 100%
+  );
+}
+@media (max-width: 639px) {
+  .fondu-hyperespace {
+    height: 8rem;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* FOND ESPACE — ciel étoilé statique des pages apprenant (inscription).  */
+/* ------------------------------------------------------------------ */
+/*
+ * Aucune image, aucune animation, aucun JavaScript : un violet presque noir
+ * tiré de la palette, deux nébuleuses en dégradés radiaux, et deux tuiles
+ * d'étoiles répétées. Quelques centaines d'octets de CSS, rien de plus —
+ * c'est une page consultée en données mobiles.
+ */
+.fond-espace {
+  @apply relative text-white;
+  background-color: color-mix(in srgb, theme('colors.vitrine.violet-fonce') 35%, black);
+  background-image:
+    radial-gradient(60% 45% at 15% 10%, color-mix(in srgb, theme('colors.vitrine.turquoise') 20%, transparent), transparent 70%),
+    radial-gradient(55% 40% at 85% 25%, color-mix(in srgb, theme('colors.vitrine.rose') 18%, transparent), transparent 70%),
+    radial-gradient(1px 1px at 12px 28px, rgb(255 255 255 / 0.7) 50%, transparent 51%),
+    radial-gradient(1px 1px at 61px 143px, rgb(255 255 255 / 0.6) 50%, transparent 51%),
+    radial-gradient(1px 1px at 98px 71px, rgb(255 255 255 / 0.8) 50%, transparent 51%),
+    radial-gradient(1px 1px at 141px 187px, rgb(255 255 255 / 0.5) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 176px 39px, rgb(255 255 255 / 0.9) 50%, transparent 51%),
+    radial-gradient(1px 1px at 203px 118px, rgb(255 255 255 / 0.6) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 34px 201px, theme('colors.vitrine.turquoise') 50%, transparent 51%);
+  background-size:
+    100% 100%,
+    100% 100%,
+    220px 220px,
+    220px 220px,
+    220px 220px,
+    220px 220px,
+    220px 220px,
+    220px 220px,
+    220px 220px;
+  background-attachment: fixed;
+}
+
+/* ------------------------------------------------------------------ */
+/* ÉCRAN DE CHARGEMENT R2-D2 — bureau seulement, jamais sous « moins de  */
+/* mouvement » : masqué par la feuille, sans JavaScript.                 */
+/* ------------------------------------------------------------------ */
+@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+  .chargement-r2 {
+    display: none;
+  }
+}
+/* Déjà vu pendant cette visite (classe posée par un script en ligne avant le
+   premier rendu) : pas de second écran à chaque question ou rechargement. */
+html.r2-vu .chargement-r2 {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* PARALLAXE — CSS pur, piloté par le défilement. Aucun JavaScript.     */
+/* ------------------------------------------------------------------ */
+/*
+ * Les couches bougent grâce à `animation-timeline: view()` : le navigateur
+ * lie l'animation à la position de l'élément dans le viewport, sans écouteur
+ * de défilement, sans requestAnimationFrame, sans un octet de JavaScript.
+ * Les pages apprenant continuent donc de fonctionner sans JavaScript.
+ *
+ * Trois garde-fous, dans cet ordre :
+ *
+ *   1. `prefers-reduced-motion` — un utilisateur qui a demandé moins
+ *      d'animations n'en reçoit aucune. Ce n'est pas une option.
+ *   2. `@supports (animation-timeline: view())` — un Android d'entrée de
+ *      gamme au WebView ancien ne connaît pas la propriété : il ignore tout
+ *      le bloc et affiche la page strictement statique. C'est exactement le
+ *      comportement voulu pour le public visé — aucun surcoût, aucun saut.
+ *   3. `pointer: fine` — la parallaxe est réservée aux écrans pilotés à la
+ *      souris. Sur un téléphone, le défilement au doigt doit rester net.
+ *
+ * Aucune de ces règles n'ajoute de requête ni de bibliothèque : le coût total
+ * est d'environ 700 octets de CSS, compressés avec le reste de la feuille.
+ */
+@media (prefers-reduced-motion: no-preference) and (pointer: fine) {
+  @supports (animation-timeline: view()) {
+    .parallaxe-fond,
+    .parallaxe-lent,
+    .parallaxe-rapide,
+    .parallaxe-apparition {
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+    }
+
+    /* Le quadrillage du panneau : dérive ample et très lente, presque
+       subliminale. C'est elle qui donne la profondeur. */
+    .parallaxe-fond {
+      animation-name: derive-fond;
+      animation-range: cover 0% cover 100%;
+    }
+    /* Gribouillis, étoiles : dérive discrète. */
+    .parallaxe-lent {
+      animation-name: derive-lente;
+      animation-range: cover 0% cover 100%;
+    }
+    /* Couche de premier plan : plus rapide, donc perçue comme plus proche. */
+    .parallaxe-rapide {
+      animation-name: derive-rapide;
+      animation-range: cover 0% cover 100%;
+    }
+    /* Révélation des sections à l'entrée dans le viewport.
+       La plage est une distance fixe (35 % de la hauteur d'écran), pas un
+       pourcentage de la section : en pourcentage, une section plus haute que
+       l'écran — la FAQ avec sa réponse — restait translucide tant que son bas
+       n'était pas entré, et s'effaçait dès qu'on remontait de quelques
+       centimètres. Ici, la section est pleine dès qu'un bon tiers d'écran en
+       est visible, quelle que soit sa hauteur. */
+    .parallaxe-apparition {
+      animation-name: apparition;
+      animation-range: entry 0% entry 35vh;
+    }
+  }
+}
+
+@keyframes derive-fond {
+  from {
+    transform: translate3d(0, -2.5%, 0);
+  }
+  to {
+    transform: translate3d(0, 2.5%, 0);
+  }
+}
+@keyframes derive-lente {
+  from {
+    transform: translate3d(0, 26px, 0);
+  }
+  to {
+    transform: translate3d(0, -26px, 0);
+  }
+}
+@keyframes derive-rapide {
+  from {
+    transform: translate3d(0, 58px, 0) rotate(-8deg);
+  }
+  to {
+    transform: translate3d(0, -58px, 0) rotate(8deg);
+  }
+}
+@keyframes apparition {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* SIGNATURE — la mention de conception, en bas de la vitrine.         */
+/* ------------------------------------------------------------------ */
+/*
+ * Le nom porte un dégradé animé de la palette (jaune → turquoise → rose).
+ * `background-clip: text` n'est pas universel : la couleur pleine est posée
+ * d'abord, et le dégradé ne la remplace que si le navigateur sait le découper
+ * sur le texte. Un navigateur qui l'ignore affiche un nom jaune parfaitement
+ * lisible — jamais un texte transparent et invisible.
+ */
+.signature-nom {
+  @apply font-titre font-bold tracking-tight text-vitrine-jaune;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .signature-nom {
+    background-image: linear-gradient(
+      100deg,
+      theme('colors.vitrine.jaune') 0%,
+      theme('colors.vitrine.turquoise') 25%,
+      theme('colors.vitrine.rose') 50%,
+      theme('colors.vitrine.jaune') 75%,
+      theme('colors.vitrine.jaune') 100%
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Le reflet ne défile que si l'utilisateur accepte le mouvement. */
+  @media (prefers-reduced-motion: no-preference) {
+    .signature-nom {
+      animation: signature-reflet 9s linear infinite;
+    }
+  }
+}
+
+@keyframes signature-reflet {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: -300% 0;
+  }
+}
+
+
+@media print {
+  .sans-impression {
+    display: none !important;
+  }
+}

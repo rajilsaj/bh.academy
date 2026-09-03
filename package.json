@@ -1,0 +1,49 @@
+{
+  "name": "bantuhub-suivi",
+  "version": "1.0.0",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "vercel-build": "tsx scripts/verifier-typo.ts && tsx scripts/cli.ts migrate && next build",
+    "start": "next start",
+    "migrate": "tsx scripts/cli.ts migrate",
+    "seed": "tsx scripts/cli.ts seed",
+    "db:generate": "drizzle-kit generate",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit && tsx scripts/verifier-typo.ts",
+    "photos": "tsx scripts/photos.ts",
+    "lint:typo": "tsx scripts/verifier-typo.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.123.0",
+    "@supabase/supabase-js": "^2.115.0",
+    "bcryptjs": "2.4.3",
+    "drizzle-orm": "0.33.0",
+    "exceljs": "^4.4.0",
+    "next": "14.2.15",
+    "next-auth": "5.0.0-beta.20",
+    "nodemailer": "^6.9.16",
+    "postgres": "3.4.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "three": "^0.169.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "2.4.6",
+    "@types/node": "20.14.10",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "@types/three": "^0.169.0",
+    "autoprefixer": "10.4.19",
+    "drizzle-kit": "0.24.2",
+    "postcss": "8.4.39",
+    "sharp": "^0.35.4",
+    "tailwindcss": "3.4.6",
+    "tsx": "4.16.2",
+    "typescript": "5.5.3"
+  }
+}

@@ -1,0 +1,989 @@
+// Toutes les chaînes de l'application (apprenants + administration).
+// Aucune chaîne visible ne doit être écrite en dur dans un composant.
+export const fr = {
+  app: {
+    nom: 'BantuHub — Suivi IA',
+    baseline: 'Fondation BantuHub, Brazzaville',
+    chargement: 'Chargement…',
+    retour: 'Retour',
+    enregistrer: 'Enregistrer',
+    envoyer: 'Envoyer',
+    valider: 'Valider',
+    annuler: 'Annuler',
+    oui: 'Oui',
+    non: 'Non',
+    obligatoire: 'obligatoire',
+    facultatif: 'facultatif',
+    aucun: 'Aucun',
+    aucuneDonnee: 'Aucune donnée pour le moment.',
+    erreurGenerique: "Une erreur s'est produite. Réessayez.",
+    retourAccueil: 'Retour à l’accueil',
+    copier: 'Copier le lien',
+    copie: 'Lien copié',
+    total: 'Total',
+    date: 'Date',
+    type: 'Type',
+    detail: 'Détail',
+    action: 'Action',
+    fermer: 'Fermer',
+    ouvrir: 'Ouvrir',
+    ouverte: 'Ouverte',
+    fermee: 'Fermée',
+    aVenir: 'À venir',
+  },
+
+  niveaux: {
+    Vert: 'Vert',
+    Orange: 'Orange',
+    Rouge: 'Rouge',
+    Bleu: 'Bleu',
+    legende: {
+      Vert: 'Actif et à jour',
+      Orange: 'Signal faible — à relancer',
+      Rouge: 'Décroché — relance prioritaire',
+      Bleu: 'Résultat obtenu (emploi, stage, mission ou projet)',
+    },
+  },
+
+  learner: {
+    bonjour: 'Bonjour',
+    lienPersonnel: 'Votre lien personnel',
+    rienAFaire: "Rien à faire pour l'instant",
+    rienAFaireDetail:
+      "Vous n'avez aucune action en attente. Revenez quand la Fondation vous enverra un message.",
+    tokenInvalide: 'Lien invalide',
+    tokenInvalideDetail:
+      "Ce lien ne correspond à aucun apprenant. Vérifiez le lien reçu par WhatsApp ou contactez la Fondation.",
+    vosInfos: 'Vos informations',
+    merci: 'Merci !',
+    dejaFait: "C'est déjà fait",
+
+    presence: {
+      titre: 'Marquer ma présence',
+      bouton: 'Je marque ma présence',
+      champ: 'Code du jour',
+      aide: 'Saisissez les 6 caractères affichés à l’écran par le formateur.',
+      succes: 'Présence enregistrée',
+      succesDetail: 'Votre présence a bien été enregistrée pour la session',
+      dejaPresent: 'Vous êtes déjà enregistré pour cette session.',
+      codeInconnu: 'Code inconnu. Vérifiez les 6 caractères.',
+      codeFerme: "Ce code n'est plus valable. La session est fermée.",
+      codePasEncore: "Ce code n'est pas encore actif.",
+      pasVotreCohorte: 'Ce code ne correspond pas à votre promotion.',
+    },
+
+    quiz: {
+      titre: 'Quiz',
+      question: 'Question',
+      sur: 'sur',
+      suivant: 'Question suivante',
+      terminer: 'Terminer le quiz',
+      resultat: 'Votre résultat',
+      score: 'Score',
+      points: 'points',
+      dejaFait: 'Vous avez déjà répondu à ce quiz.',
+      votreScore: 'Votre score',
+      introduction:
+        'Cinq questions, une par écran. Pas de chronomètre. Répondez calmement.',
+      commencer: 'Commencer le quiz',
+      choisirReponse: 'Choisissez une réponse pour continuer.',
+    },
+
+    suivi: {
+      titre: 'Questionnaire de suivi',
+      intro: 'Quelques questions courtes sur votre situation. Cela prend 2 minutes.',
+      bouton: 'Répondre au questionnaire',
+      succes: 'Réponses enregistrées',
+      succesDetail: 'Merci, vos réponses ont bien été enregistrées.',
+      dejaRepondu: 'Vous avez déjà répondu à ce questionnaire.',
+      vagueFermee: "Ce questionnaire n'est plus ouvert.",
+      vaguePasOuverte: "Ce questionnaire n'est pas encore ouvert.",
+    },
+
+    documents: {
+      titre: 'Envoyer un document',
+      bouton: 'Envoyer un document',
+      choisirType: 'Type de document',
+      fichier: 'Fichier',
+      aide: 'Formats acceptés : PDF, Word, Excel, PowerPoint, image. 5 Mo maximum.',
+      succes: 'Document reçu',
+      succesDetail: 'Votre document a bien été enregistré en version',
+      vosDocuments: 'Vos documents déjà envoyés',
+      version: 'Version',
+      erreurFichier: 'Fichier manquant ou trop volumineux (5 Mo maximum).',
+      erreurFormat: 'Format de fichier non accepté.',
+    },
+
+    ressources: {
+      titre: 'Ressources de cours',
+      lien: 'Ressources de cours',
+      intro: 'Les supports de chaque module. Chaque ouverture vous rapporte des points, une seule fois.',
+      points: 'points',
+      ouvrir: 'Ouvrir',
+      aucune: 'Aucune ressource disponible pour le moment.',
+    },
+  },
+
+  docTypes: {
+    cv: 'CV',
+    lettre: 'Lettre de motivation',
+    rapport: 'Rapport',
+    excel: 'Tableur Excel',
+    pptx: 'Présentation PowerPoint',
+    projet: 'Projet',
+  },
+
+  outcomeTypes: {
+    candidature: 'Candidature envoyée',
+    entretien: 'Entretien obtenu',
+    stage: 'Stage',
+    emploi: 'Emploi',
+    mission: 'Mission / freelance',
+    projet: 'Projet lancé',
+  },
+
+  inscription: {
+    titre: 'Inscription au programme',
+    sousTitre: 'Formation à l’intelligence artificielle au service de l’employabilité des jeunes',
+    intro: 'Trois minutes, depuis votre téléphone. Tout est obligatoire sauf mention contraire.',
+    etape: 'Étape',
+    sur: 'sur',
+    nomExemple: 'Ex. : Marie Okemba',
+    objectifExemple: 'Ex. : trouver un emploi dans la communication',
+    confianceMin: 'Pas du tout',
+    confianceMax: 'Très confiant',
+    cohorteIntrouvable: 'Promotion introuvable',
+    cohorteFermee: 'Les inscriptions de cette promotion sont closes.',
+    identite: 'Votre identité',
+    nomComplet: 'Nom et prénom',
+    telephone: 'Téléphone (WhatsApp)',
+    telephoneAide: 'Format : 06 XXX XX XX ou +242 06 XXX XX XX',
+    email: 'Adresse e-mail',
+    situation: 'Votre situation de départ',
+    statutEmploi: 'Situation professionnelle actuelle',
+    statutOptions: {
+      etudiant: 'Étudiant',
+      sans_emploi: 'Sans emploi',
+      emploi_informel: 'Emploi informel / petits travaux',
+      emploi_formel: 'Emploi salarié',
+      independant: 'Indépendant / entrepreneur',
+      stage: 'En stage',
+    },
+    outilsIa: 'Outils d’IA que vous utilisez déjà',
+    outilsIaAide: 'Cochez tout ce qui s’applique. Aucune réponse n’est mauvaise.',
+    outilsOptions: {
+      aucun: 'Aucun',
+      chatgpt: 'ChatGPT',
+      gemini: 'Gemini',
+      copilot: 'Copilot',
+      claude: 'Claude',
+      deepseek: 'DeepSeek',
+      meta_ai: 'Meta AI',
+      traducteur: 'Traducteur automatique',
+      autre: 'Autre',
+    },
+    confiance: 'Votre confiance dans l’usage de l’IA',
+    confianceAide: '1 = pas du tout confiant, 5 = très confiant',
+    objectif: 'Votre objectif professionnel',
+    objectifAide: 'En une ou deux phrases : que voulez-vous obtenir après la formation ?',
+    consentements: 'Consentements',
+    consentCommunaute:
+      "J'accepte de rejoindre le groupe WhatsApp de la communauté BantuHub.",
+    consentDonnees:
+      "J'accepte que la Fondation conserve mes réponses pour le suivi du programme et l'évaluation d'impact.",
+    consentDonneesRequis: 'Le consentement au traitement des données est nécessaire.',
+    soumettre: 'Je m’inscris',
+    succesTitre: 'Inscription enregistrée',
+    succesIntro: 'Votre identifiant apprenant est',
+    succesLien:
+      'Conservez précieusement ce lien. C’est votre seul accès : présence, quiz, questionnaires, documents.',
+    succesConseil:
+      'Enregistrez-le dans vos favoris et envoyez-le-vous par WhatsApp pour ne pas le perdre.',
+    champManquant: 'Ce champ est obligatoire.',
+    telephoneInvalide: 'Numéro de téléphone invalide.',
+  },
+
+  admin: {
+    titre: 'Administration',
+    connexion: 'Connexion',
+    motDePasse: 'Mot de passe',
+    email: 'Adresse e-mail',
+    seConnecter: 'Se connecter',
+    seDeconnecter: 'Se déconnecter',
+    identifiantsInvalides: 'Identifiants invalides.',
+    connexionAide: 'Administrateurs et formateurs : avec votre compte Google ou votre e-mail et mot de passe.',
+    continuerGoogle: 'Continuer avec Google',
+    ou: 'ou',
+    googleRefuse:
+      "Aucun compte n'est associé à cette adresse Google. Demandez à un administrateur de créer votre compte avec cette adresse.",
+    googleErreur: 'La connexion Google a échoué. Réessayez, ou utilisez votre e-mail et mot de passe.',
+    accesRefuse: 'Accès refusé',
+    accesRefuseDetail: "Votre rôle ne permet pas d'accéder à cette page.",
+    nav: {
+      modules: 'Modules',
+      ressources: 'Ressources',
+      utilisateurs: 'Utilisateurs',
+    },
+    sidebar: {
+      personnes: 'Personnes',
+      modules: 'Modules',
+      menu: 'Menu',
+    },
+    roles: {
+      admin: 'Administrateur',
+      formateur: 'Formateur',
+    },
+    compteActive: 'Compte activé. Connectez-vous.',
+
+    dashboard: {
+      titre: 'Tableau de bord',
+      promotion: 'Promotion',
+      effectif: 'Effectif',
+      repartition: 'Répartition par niveau',
+      indicateurs: 'Indicateurs clés',
+      tauxPresence: 'Taux de présence',
+      tauxReponse: 'Taux de réponse',
+      vagueEnCours: 'Vague en cours',
+      aucuneVague: 'Aucune vague ouverte',
+      seanceEnCours: 'Session en cours',
+      aucuneSeance: 'Aucune session ouverte',
+      documents: 'Documents produits',
+      resultats: 'Résultats obtenus',
+      paireQuiz: 'Apprenants avec quiz avant/après',
+      deltaQuiz: 'Progression moyenne',
+      voirRelance: 'Ouvrir la relance',
+    },
+
+    relance: {
+      titre: 'Relance',
+      sousTitre:
+        'Apprenants sans réponse à la vague ouverte ou absents à la dernière session.',
+      aucun: 'Personne à relancer. Tout le monde est à jour.',
+      colonneNom: 'Nom',
+      colonneTelephone: 'Téléphone',
+      colonneNiveau: 'Niveau',
+      colonneMotif: 'Motif',
+      colonneDernierContact: 'Dernier contact',
+      colonneAction: 'Relancer',
+      jours: 'j',
+      jamais: 'Jamais',
+      motifs: {
+        vagueSansReponse: 'Pas de réponse à la vague ouverte',
+        absentDerniereSeance: 'Absent à la dernière session',
+        lesDeux: 'Sans réponse + absent',
+      },
+      boutonWhatsapp: 'WhatsApp',
+      pasDeTelephone: 'Pas de numéro',
+      modeleMessage:
+        'Bonjour {nom}, ici la Fondation BantuHub. {motif} Merci de passer par votre lien personnel : {lien}',
+      motifTexteVague:
+        'Le questionnaire de suivi {vague} vous attend et prend 2 minutes.',
+      motifTexteAbsence:
+        'Vous nous avez manqué à la dernière session, on aimerait avoir de vos nouvelles.',
+      motifTexteLesDeux:
+        'Vous nous avez manqué à la dernière session et le questionnaire {vague} vous attend.',
+    },
+
+    sessions: {
+      titre: 'Sessions',
+      creer: 'Créer une session',
+      module: 'Module',
+      dateSeance: 'Date de la session',
+      ouvreA: 'Ouverture du pointage',
+      fermeA: 'Fermeture du pointage',
+      codeDuJour: 'Code du jour',
+      regenerer: 'Régénérer le code',
+      projeter: 'Afficher en grand',
+      presents: 'Présents',
+      liste: 'Sessions de la promotion',
+      creee: 'Session créée.',
+      codeRegenere: 'Nouveau code généré.',
+      projectionAide: 'Les apprenants saisissent ce code sur leur téléphone.',
+    },
+
+    waves: {
+      titre: 'Vagues de suivi',
+      code: 'Code',
+      libelle: 'Libellé',
+      ouvrir: 'Ouvrir la vague',
+      fermer: 'Fermer la vague',
+      reponses: 'Réponses',
+      statut: 'Statut',
+      ouvertLe: 'Ouverte le',
+      fermeLe: 'Fermée le',
+      confirmationFermer: 'Fermer cette vague recalcule immédiatement les niveaux.',
+      ouverte: 'Vague ouverte.',
+      fermee: 'Vague fermée.',
+    },
+
+    learner: {
+      titre: 'Fiche apprenant',
+      identite: 'Identité',
+      identifiant: 'Identifiant',
+      inscritLe: 'Inscrit le',
+      lienPersonnel: 'Lien personnel',
+      baseline: 'Situation de départ',
+      chronologie: 'Chronologie',
+      presences: 'Présences',
+      quiz: 'Quiz',
+      reponses: 'Réponses aux vagues',
+      documents: 'Documents',
+      resultats: 'Résultats',
+      ajouterResultat: 'Ajouter un résultat',
+      resultatAjoute: 'Résultat ajouté.',
+      survenuLe: 'Survenu le',
+      niveauCalcule: 'Niveau calculé',
+      niveauAide: 'Ce niveau est calculé automatiquement, il ne se modifie pas à la main.',
+      telecharger: 'Télécharger',
+      introuvable: 'Apprenant introuvable.',
+      kit: 'Kit remis',
+      kitAide: 'Cochez ce qui a été remis à l’apprenant.',
+      kitEnregistre: 'Kit mis à jour.',
+      pointsTitre: 'Points par module',
+      completion: 'Complétion de la formation',
+      evenements: {
+        inscription: 'Inscription',
+        presence: 'Présence',
+        quiz: 'Quiz',
+        reponse: 'Réponse',
+        document: 'Document',
+        resultat: 'Résultat',
+      },
+    },
+
+    exportPage: {
+      titre: 'Export CSV',
+      sousTitre:
+        'Chaque table est exportable. Le tableau de bord réunit tout sur une ligne par apprenant.',
+      tableauBord: 'Tableau de bord (une ligne par apprenant)',
+      telecharger: 'Télécharger',
+      tables: 'Tables brutes',
+    },
+
+    /* ---------------------------------------------------- BantuLab */
+    utilisateurs: {
+      titre: 'Utilisateurs',
+      sousTitre: 'Administrateurs, formateurs et apprenants : créer, modifier, inviter, supprimer, exporter en Excel.',
+      equipe: 'Équipe et formateurs',
+      apprenants: 'Apprenants',
+      creer: 'Créer un compte',
+      email: 'Adresse e-mail',
+      role: 'Rôle',
+      motDePasse: 'Mot de passe',
+      motDePasseAide: 'Laissez vide pour un formateur : il recevra une invitation par courriel.',
+      nom: 'Nom complet',
+      telephone: 'Téléphone',
+      linkedin: 'Profil LinkedIn',
+      siteWeb: 'Site web',
+      linktree: 'Linktree',
+      reseaux: 'Réseaux sociaux',
+      statut: 'Statut',
+      confirme: 'Compte confirmé',
+      invite: 'Invitation envoyée',
+      enAttente: 'Invitation en attente d’envoi',
+      vous: 'vous',
+      reinitialiser: 'Nouveau mot de passe',
+      supprimer: 'Supprimer',
+      confirmerSuppression: 'Supprimer définitivement ce compte ?',
+      confirmerSuppressionApprenant: 'Supprimer cet apprenant et toutes ses données ?',
+      renvoyerInvitation: 'Renvoyer l’invitation',
+      rechercher: 'Nom, identifiant ou téléphone',
+      modifier: 'Modifier',
+      promotion: 'Promotion',
+      colonneInscrit: 'Inscrit le',
+      exporter: 'Exporter (Excel)',
+      messages: {
+        cree: 'Compte créé.',
+        invite: 'Compte créé, invitation envoyée par courriel.',
+        inviteEnAttente: 'Compte créé. L’invitation attend un serveur de courriel (variables SMTP).',
+        renvoye: 'Invitation renvoyée.',
+        role: 'Rôle mis à jour.',
+        motDePasse: 'Mot de passe mis à jour.',
+        supprime: 'Compte supprimé.',
+        apprenantModifie: 'Apprenant mis à jour.',
+        apprenantSupprime: 'Apprenant supprimé.',
+        emailPris: 'Cette adresse a déjà un compte.',
+        soiMeme: 'Vous ne pouvez pas supprimer votre propre compte.',
+        manquant: 'Champ obligatoire manquant ou invalide.',
+      },
+    },
+
+    formations: {
+      titre: 'Modules',
+      sousTitre: 'Une formation, ses modules, ses formateurs et ses promotions. Chaque module porte ses ressources.',
+      lectureSeule: 'Vous voyez les modules en lecture. Un administrateur les modifie.',
+      creer: 'Créer une formation',
+      nom: 'Nom de la formation',
+      description: 'Description',
+      debut: 'Date de début',
+      fin: 'Date de fin',
+      horaires: 'Jours et horaires',
+      apprenantsAttendus: 'Apprenants attendus',
+      attentes: 'Attentes',
+      partenaire: 'Partenaire',
+      objectifs: 'Objectifs de la formation',
+      objectifsAide: 'Un objectif par ligne. Le bouton IA les rédige à partir des champs de la fiche ; vous gardez la main.',
+      genererIA: 'Générer avec l’IA',
+      enregistrerObjectifs: 'Enregistrer les objectifs',
+      modules: 'Modules',
+      ajouterModule: 'Ajouter un module',
+      position: 'N°',
+      titreModule: 'Titre du module',
+      duree: 'Durée (h)',
+      pointsTotal: 'Points du module',
+      pointsPresence: 'Points / session',
+      pointsRessource: 'Points / ressource',
+      pointsQuiz: 'Points quiz',
+      poids: 'Poids',
+      seuil: 'Seuil (%)',
+      formateur: 'Formateur',
+      sansFormateur: '— Aucun —',
+      sommePoids: 'Somme des poids = points de complétion :',
+      completionAide: 'Complétion = Σ (poids × % du module) ÷ Σ poids. Un module est validé à partir du seuil (70 % par défaut). Le titre du module doit être celui des sessions.',
+      promotions: 'Promotions rattachées',
+      rattacher: 'Rattacher',
+      detacher: 'Détacher',
+      aucunePromotion: 'Aucune promotion rattachée : les points ne seront pas comptés.',
+      ressources: 'Ressources',
+      exporterModules: 'Modules (CSV)',
+      exporterFormateurs: 'Formateurs (CSV)',
+      supprimer: 'Supprimer la formation',
+      confirmerSuppression: 'Supprimer cette formation, ses modules et ses ressources ?',
+      colonneModules: 'Modules',
+      colonneApprenants: 'Attendus',
+      colonnePeriode: 'Période',
+      messages: {
+        creee: 'Formation créée. Ajoutez ses modules ci-dessous.',
+        modifiee: 'Formation enregistrée.',
+        supprimee: 'Formation supprimée.',
+        objectifsIA: 'Objectifs rédigés par l’IA. Relisez-les et corrigez si besoin.',
+        objectifsRepli: 'Objectifs proposés sans IA (clé absente ou appel échoué). Retouchez-les.',
+        objectifs: 'Objectifs enregistrés.',
+        module: 'Module enregistré.',
+        moduleSupprime: 'Module supprimé.',
+        moduleDoublon: 'Un module de cette formation porte déjà ce titre.',
+        promotion: 'Promotion rattachée.',
+        detachee: 'Promotion détachée.',
+        manquant: 'Champ obligatoire manquant ou invalide.',
+      },
+      objectifsRepli: {
+        former: 'Former {n} apprenants aux usages professionnels de l’intelligence artificielle.',
+        presence: 'Atteindre au moins 80 % de présence à chaque session.',
+        modules: 'Valider chaque module à 70 % des points au minimum.',
+        ressources: 'Mettre à disposition les supports de chaque module (présentation, vidéo, quiz).',
+        quiz: 'Mesurer la progression par un quiz à chaque module.',
+        attentes: 'Répondre aux attentes exprimées : {attentes}',
+        partenaire: 'Rendre compte au partenaire : {partenaire}',
+        certificat: 'Délivrer un certificat aux apprenants ayant complété la formation.',
+      },
+    },
+
+    ressources: {
+      titre: 'Ressources de cours',
+      sousTitre: 'Présentations, vidéos, quiz Kahoot : ce que les apprenants téléchargent, et qui leur rapporte des points.',
+      ajouter: 'Ajouter une ressource',
+      module: 'Module',
+      type: 'Type',
+      types: {
+        presentation: 'Présentation (PPT, PDF)',
+        video: 'Vidéo',
+        quiz: 'Quiz Kahoot',
+        autre: 'Autre',
+      },
+      titreRessource: 'Titre',
+      lien: 'Lien (URL)',
+      fichier: 'Fichier',
+      lienOuFichier: 'Un lien ou un fichier (50 Mo maximum).',
+      points: 'Points au téléchargement',
+      deposePar: 'Déposée par',
+      supprimer: 'Supprimer',
+      aucune: 'Aucune ressource pour le moment.',
+      aucunModule: 'Aucun module ne vous est attribué. L’équipe formation vous rattache à un module depuis la fiche de la formation.',
+      tous: 'Tous les modules',
+      messages: {
+        ajoutee: 'Ressource ajoutée.',
+        supprimee: 'Ressource supprimée.',
+        fichier: 'Fichier manquant, trop volumineux (50 Mo) ou format refusé.',
+        manquant: 'Champ obligatoire manquant : un titre et un lien ou un fichier.',
+      },
+    },
+
+    points: {
+      titre: 'Points et complétion',
+      sousTitre: 'Présence, ressources et quiz créditent des points par module. À 70 % le module est validé ; sinon, le formateur décide.',
+      apprenant: 'Apprenant',
+      completion: 'Complétion',
+      valides: 'Validés',
+      statuts: {
+        valide: 'Validé',
+        a_refaire: 'À refaire',
+        exclu: 'Exclu',
+        non_commence: 'Non commencé',
+        en_cours: 'En cours',
+      },
+      crediter: 'Créditer des points',
+      decider: 'Décision sur un module',
+      module: 'Module',
+      pointsChamp: 'Points (négatif pour retirer)',
+      note: 'Motif',
+      decision: 'Décision',
+      decisionAide: '« À refaire » : l’apprenant repasse le Kahoot. « Exclu » : il sort du programme. La décision prime sur le calcul.',
+      retirerDecision: 'Lever la décision (calcul automatique)',
+      journal: 'Derniers mouvements',
+      sources: {
+        presence: 'Présence',
+        ressource: 'Ressource',
+        quiz: 'Quiz',
+        manuel: 'Manuel',
+      },
+      aucuneFormation: 'Aucune formation rattachée à cette promotion : rattachez-en une depuis',
+      messages: {
+        credite: 'Points enregistrés.',
+        decide: 'Décision enregistrée.',
+        manquant: 'Champ obligatoire manquant ou invalide.',
+      },
+    },
+
+    notifications: {
+      titre: 'Centre de notifications',
+      sousTitre: 'Courriel et SMS, depuis un seul endroit. Les messages non partis restent en attente, jamais perdus.',
+      fournisseurs: 'Fournisseurs',
+      mailOk: 'Courriel : SMTP configuré',
+      mailKo: 'Courriel : SMTP non configuré — renseignez SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM dans .env',
+      smsOk: 'SMS : passerelle configurée',
+      smsKo: 'SMS : passerelle non configurée — renseignez SMS_WEBHOOK_URL (et SMS_WEBHOOK_TOKEN) dans .env',
+      composer: 'Nouveau message',
+      canal: 'Canal',
+      canaux: { mail: 'Courriel', sms: 'SMS' },
+      destinataires: 'Destinataires',
+      cibles: {
+        apprenants: 'Tous les apprenants de la promotion en cours',
+        formateurs: 'Tous les formateurs',
+        apprenant: 'Un apprenant (identifiant)',
+        libre: 'Adresse ou numéro libre',
+      },
+      identifiantApprenant: 'Identifiant de l’apprenant',
+      destinataireLibre: 'Adresse e-mail ou numéro',
+      sujet: 'Sujet (courriel)',
+      corps: 'Message',
+      corpsAide: '{nom} et {lien} sont remplacés pour chaque apprenant par son prénom et son lien personnel.',
+      envoyer: 'Envoyer',
+      reessayer: 'Réessayer les messages en attente',
+      journal: 'Messages',
+      statuts: { en_attente: 'En attente', envoye: 'Envoyé', echec: 'Échec' },
+      colonneDestinataire: 'Destinataire',
+      colonneCanal: 'Canal',
+      colonneStatut: 'Statut',
+      colonneDate: 'Date',
+      aucunDestinataire: 'Aucun destinataire joignable par ce canal.',
+      messages: {
+        envoyes: '{n} message(s) créé(s), {e} envoyé(s) ; le reste attend un fournisseur.',
+        reessayes: '{n} message(s) envoyé(s).',
+        manquant: 'Canal et message sont obligatoires.',
+      },
+    },
+
+    profil: {
+      titre: 'Mon profil',
+      sousTitre: 'Ce que les apprenants verront de leur formateur.',
+      bio: 'Présentation',
+      enregistrer: 'Enregistrer le profil',
+      motDePasse: 'Changer mon mot de passe',
+      nouveau: 'Nouveau mot de passe',
+      confirmer: 'Confirmer',
+      messages: {
+        profil: 'Profil enregistré.',
+        motDePasse: 'Mot de passe changé.',
+        differents: 'Les deux mots de passe diffèrent.',
+        court: 'Huit caractères minimum.',
+      },
+    },
+  },
+
+  /* Le kit remis à chaque apprenant. */
+  kit: {
+    licence: 'Licence',
+    ordinateur: 'Ordinateur',
+    modem: 'Kit modem internet',
+    cle_usb: 'Clé USB',
+    bloc_notes: 'Bloc-notes BantuHub',
+  },
+
+  /* Activation du compte d’un formateur invité. */
+  formateur: {
+    titre: 'Activer mon compte formateur',
+    intro: 'Choisissez un mot de passe pour activer votre compte IALab by BantuHub.',
+    motDePasse: 'Mot de passe',
+    confirmer: 'Confirmer le mot de passe',
+    activer: 'Activer mon compte',
+    invalide: 'Ce lien d’invitation n’est plus valable. Demandez-en un nouveau à la Fondation.',
+    differents: 'Les deux mots de passe diffèrent.',
+    court: 'Huit caractères minimum.',
+    invitationSujet: 'Votre compte formateur — IALab by BantuHub',
+    invitationCorps:
+      'Bonjour {nom},\n\nLa Fondation BantuHub vous a créé un compte formateur pour IALab. Activez-le en choisissant votre mot de passe :\n{lien}\n\nÀ bientôt,\nL’équipe IALab by BantuHub',
+  },
+
+  suiviQuestions: {
+    situation: 'Quelle est votre situation aujourd’hui ?',
+    usageIa: 'À quelle fréquence utilisez-vous l’IA dans votre travail ou vos études ?',
+    usageOptions: {
+      jamais: 'Jamais',
+      rarement: 'Rarement',
+      hebdo: 'Chaque semaine',
+      quotidien: 'Chaque jour',
+    },
+    confiance: 'Votre confiance dans l’usage de l’IA (1 à 5)',
+    candidatures: 'Combien de candidatures avez-vous envoyées ce mois-ci ?',
+    entretiens: 'Combien d’entretiens avez-vous passés ce mois-ci ?',
+    revenu: 'Avez-vous eu un revenu lié à vos compétences ce mois-ci ?',
+    revenuOptions: {
+      aucun: 'Aucun',
+      ponctuel: 'Ponctuel',
+      regulier: 'Régulier',
+    },
+    outilPrincipal: 'Quel outil d’IA utilisez-vous le plus ?',
+    obstacle: 'Quel est votre principal obstacle en ce moment ?',
+    obstacleOptions: {
+      connexion: 'Connexion internet',
+      materiel: 'Matériel / téléphone',
+      temps: 'Manque de temps',
+      competence: 'Manque de compétence',
+      opportunite: 'Manque d’opportunités',
+      aucun: 'Aucun',
+    },
+    besoin: 'De quoi auriez-vous besoin de la part de la Fondation ?',
+    commentaire: 'Un commentaire libre (facultatif)',
+  },
+
+  vitrine: {
+    nav: {
+      accueil: 'Accueil',
+      programme: 'Le programme',
+      apropos: 'À propos',
+      faq: 'Questions',
+      inscription: 'Je m’inscris',
+      connexion: 'Connectez-vous ici',
+      espace: 'Mon espace',
+      menu: 'Menu',
+      fermerMenu: 'Fermer',
+    },
+
+    /* Logo et site institutionnel de la Fondation. */
+    logoAlt: 'Fondation BantuHub',
+    partenairesLabel: 'Nos partenaires : BantuHub, la Fondation, le FONEA et la République du Congo',
+    fondationUrl: 'https://bantuhub.com/',
+    fondationEnSavoirPlus: 'En savoir plus sur la Fondation',
+    /*
+     * Intitulé officiel du programme, repris de l'affiche de la Fondation :
+     * « FORMATION À L'INTELLIGENCE ARTIFICIELLE / AU SERVICE DE
+     * L'EMPLOYABILITÉ DES JEUNES ». La hiérarchie de l'affiche est conservée :
+     * un titre, puis une ligne d'accroche plus petite.
+     */
+    heroTitre: 'Formation à l’intelligence artificielle',
+    heroAccroche: 'au service de l’employabilité',
+    heroManuscrit: 'des jeunes',
+    heroSousTitre:
+      '5 semaines pour apprendre à travailler avec l’intelligence artificielle (IA). Présence sur place obligatoire.',
+    /*
+     * Griffonnages du héros — les « 6 × 3 = 18 » de la maquette, version IA :
+     * un prompt, ce qu'il produit, et l'équation du programme.
+     */
+    griffonnages: ['« Rédige mon CV »', 'prompt → réponse', 'CV + IA = emploi'],
+    heroBouton: 'Rejoindre la cohorte',
+    heroSecondaire: 'Voir le programme',
+    /*
+     * Les pastilles flottantes de la maquette. Deux registres alternés :
+     * les modalités du programme (ce qu'on offre) et les outils qu'on apprend
+     * à manier (ce qu'on y fait). L'alternance évite deux blocs monotones et
+     * fait que chaque pastille surprend un peu la précédente.
+     */
+    pastilles: [
+      'Gratuit',
+      'Prompt',
+      'En présentiel',
+      'ChatGPT',
+      'Certifiant',
+      'Claude',
+      'Suivi 6 mois',
+      'Gemini',
+      'Copilot',
+    ],
+
+    /* Les trois chiffres clés — une seule source, lue par la page et par l'assistant. */
+    chiffres: [
+      { n: '2', k: 'Villes', t: 'Pointe-Noire & Brazzaville' },
+      { n: '5', k: 'Semaines', t: 'de formation en présentiel' },
+      { n: '1 000', k: 'Participants', t: 'attendus sur la promotion' },
+    ],
+
+    /* L'assistant de la FAQ. */
+    assistant: {
+      titre: 'Une autre question ?',
+      sousTitre: 'Demandez à notre assistant personnel 24h/24',
+      placeholder: 'Posez votre question sur la formation…',
+      bouton: 'Demander',
+      reponse: 'Réponse',
+      note: 'L’assistant répond uniquement à partir des informations de cette page.',
+      depuisPage: 'Réponse tirée directement de la page.',
+      limite: 'Beaucoup de questions d’un coup — voici ce que la page en dit. Réessayez dans quelques minutes pour une réponse détaillée.',
+      introuvable: 'Cette page ne répond pas à cette question. Le plus simple : inscrivez-vous, ou écrivez à la Fondation.',
+    },
+
+    /* L'écran de chargement avec R2-D2. */
+    r2d2: 'R2-D2 — le droïde qui accompagne le chargement',
+    chargementAccroche: 'Un instant,',
+    chargementTitre: 'la page se prépare…',
+    chargementSon: 'Touchez l’écran pour l’entendre',
+
+    /* Médaillon FONEA du héros : texte de remplacement et site du partenaire. */
+    partenaireFonea:
+      'FONEA — Fonds national d’appui à l’employabilité et à l’apprentissage',
+    foneaUrl: 'https://www.fonea.cg',
+
+    argumentsTitre: 'Multipliez les',
+    argumentsManuscrit: 'chances.',
+    argumentsTitre2: 'Divisez les',
+    argumentsManuscrit2: 'obstacles.',
+    /*
+     * Chaque argument : un titre, un chiffre avec sa légende, deux points
+     * courts. `texte` reste la phrase complète, lue
+     * par l'assistant. Les espaces insécables (\u00a0) empêchent « 9 h » ou
+     * « 6 mois » de se couper en fin de ligne.
+     */
+    args: {
+      pratique: {
+        titre: 'Prérequis',
+        chiffre: { n: 'FR', t: 'formation en français' },
+        points: ['Saisie au clavier, navigation sur Internet.', 'Rien d’autre à savoir.'],
+        texte:
+          'Avoir des connaissances de base en informatique : saisie au clavier, navigation sur Internet. La formation se déroule en français.',
+      },
+      telephone: {
+        titre: 'Formation en présentiel',
+        chiffre: { n: '3 h', t: 'par session' },
+        points: ['Matin 9 h – 12 h ou après-midi 13 h – 16 h.', 'Pause café à chaque session.'],
+        texte:
+          'Session du matin de 9 h à 12 h, ou session de l’après-midi de 13 h à 16 h. Une pause café rythme chaque session.',
+      },
+      suivi: {
+        titre: 'On ne vous lâche pas après',
+        chiffre: { n: '6', t: 'mois de suivi' },
+        points: ['On suit comment vous utilisez vos acquis.', 'Un forum entre apprenants.'],
+        texte:
+          'Après la formation, un suivi de six mois pour voir comment vous utilisez vos nouvelles connaissances. Un forum de discussion est ouvert entre les apprenants.',
+      },
+      certificat: {
+        titre: 'Un certificat qui compte',
+        chiffre: { n: '16 h', t: 'certifiées' },
+        points: ['4 modules de 4 h, sur une semaine.', 'Vérifiable en ligne par tout employeur.'],
+        texte:
+          'À la fin, un certificat nominatif pour 16 heures de formation : quatre modules de quatre heures, sur une semaine. Un code permet à tout employeur de le vérifier en ligne.',
+      },
+    },
+
+    /*
+     * Les quatre modules, présentés en cartes de couleur comme dans la
+     * maquette. Les titres sont ceux de la Fondation. Les descriptions sont
+     * PROVISOIRES, rédigées d'après chaque titre, en attendant les textes
+     * officiels.
+     */
+    moduleLabel: 'Module',
+    moduleOutils: 'Outils abordés',
+    modules: [
+      {
+        titre: 'Découvrir l’intelligence artificielle et les IA génératives',
+        texte:
+          'Ce que l’IA sait faire, ce qu’elle ne sait pas, et comment lui parler. Premiers essais avec ChatGPT, Claude et Gemini, sans jargon.',
+        outils: ['ChatGPT', 'Claude', 'Gemini'] as const,
+      },
+      {
+        titre: 'Les fondamentaux du Prompt Engineering',
+        texte:
+          'Formuler une demande claire, donner du contexte, itérer sur la réponse. Les règles qui séparent un résultat vague d’un résultat utile.',
+      },
+      {
+        titre: 'Prompt Engineering avancé : cas métiers et mini-projets',
+        texte:
+          'Appliquer le prompt à de vrais cas de travail : rédaction, analyse, synthèse. Un mini-projet par apprenant, présenté à la promotion.',
+      },
+      {
+        titre: 'Gagner du temps dans la bureautique avec l’IA',
+        texte:
+          'Courriers, tableurs, présentations, comptes rendus : automatiser ce qui prend des heures. Chaque session produit un fichier que vous gardez.',
+      },
+    ],
+
+    parcoursTitre: 'Le programme,',
+    parcoursManuscrit: 'session après session.',
+    parcoursSousTitre:
+      'Quatre modules, une session par semaine.',
+
+    prixTitre: 'Formation',
+    prixValeur: 'gratuite',
+    prixDetail: 'Inscription obligatoire, avant le 1er octobre 2026.',
+    /* Cinq semaines à compter du 1er octobre 2026 : jusqu'au jeudi 5 novembre. */
+    prixDureeLabel: 'Durée',
+    prixDuree: 'Du 1er octobre au 5 novembre 2026',
+    prixBouton: 'Je m’inscris',
+
+    faqTitre: 'Vos questions',
+    faq: [
+      {
+        q: 'À qui s’adresse cette formation ?',
+        r: 'À toute personne de Brazzaville et de Pointe-Noire qui cherche un emploi, une mission ou veut faire évoluer son activité.',
+      },
+      {
+        q: 'Combien ça coûte ?',
+        r: 'Rien. La formation est financée par la Fondation BantuHub. Les places sont limitées, c’est la seule contrainte.',
+      },
+      {
+        q: 'Faut-il un ordinateur ?',
+        r: 'Non. Les ordinateurs sont fournis pendant les sessions.',
+      },
+      {
+        q: 'Comment se passe le suivi après la formation ?',
+        r: 'Vous recevez chaque mois, pendant six mois, un lien vers un questionnaire de deux minutes : où vous en êtes, ce qui bloque, ce dont vous auriez besoin. C’est ce qui nous permet d’aider au bon moment.',
+      },
+      {
+        q: 'Qu’est-ce que le certificat prouve exactement ?',
+        r: 'Votre assiduité aux six modules et votre résultat au quiz final. Il porte un code unique : un employeur peut le vérifier sur ce site, sans passer par nous.',
+      },
+      {
+        q: 'Que deviennent mes données ?',
+        r: 'Elles servent au suivi du programme et à mesurer son impact.',
+      },
+    ],
+
+    piedTitre: 'Prêt à commencer ?',
+
+    /* Textes de remplacement des photos — décrivent l'image, pas son rôle. */
+    photos: {
+      heros:
+        'Une salle comble de jeunes apprenants pendant une session du programme, à Brazzaville.',
+      armoiries: 'Armoiries de la République du Congo.',
+      pratique:
+        'Deux femmes travaillent ensemble sur un ordinateur portable, du code affiché sur l’écran voisin.',
+      telephone:
+        'Un ordinateur portable ouvert sur un bureau, un téléphone simple et un smartphone posés à côté.',
+      suivi:
+        'Une personne montre du doigt une ligne de code sur l’écran d’une autre, pour la lui expliquer.',
+      certificat:
+        'Un jeune homme debout, sacoche en tissu wax à l’épaule, travaille sur un ordinateur portable tenu à la main.',
+      final:
+        'Plusieurs personnes autour d’une table, chacune sur son ordinateur portable, pendant un atelier.',
+    },
+
+    /* Signature de fin de page — la mention de conception. */
+    signatureLabel: 'Fièrement propulsé par',
+    signatureNom: 'IALab',
+    signatureNomSuite: 'by',
+    signatureManuscrit: 'de la première ligne à la dernière',
+    signatureGenere: 'Site entièrement généré par',
+    signatureIA: 'Claude AI',
+    signatureRole: 'Ingénierie IA',
+    signatureAuteur: 'rajil.me',
+    signatureAuteurUrl: 'https://rajil.me',
+  },
+
+  parcours: {
+    titre: 'Mon parcours',
+    sousTitre: 'Votre progression, module par module.',
+    avancementGlobal: 'Avancement global',
+    modulesTermines: 'modules terminés',
+    seancesSuivies: 'sessions suivies',
+    scoreQuiz: 'moyenne aux quiz',
+    documentsRendus: 'documents rendus',
+    modules: 'Mes modules',
+    module: 'Module',
+    avancement: 'Avancement',
+    statut: 'Statut',
+    statuts: {
+      a_venir: 'À venir',
+      non_commence: 'Pas encore commencé',
+      en_cours: 'En cours',
+      termine: 'Terminé',
+    },
+    presence: 'Présence',
+    quiz: 'Quiz',
+    certificat: 'Mon certificat',
+    certificatObtenu: 'Certificat obtenu',
+    certificatCode: 'Code de vérification',
+    certificatLe: 'Délivré le',
+    certificatVoir: 'Voir mon certificat',
+    certificatPasEncore: 'Pas encore délivré',
+    certificatEligible:
+      'Vous remplissez les conditions. Votre certificat sera délivré par l’équipe à la fin de la promotion.',
+    certificatEnCours:
+      'Continuez : il faut suivre les sessions de chaque module et passer le quiz final.',
+    prochaineEtape: 'Prochaine étape',
+    retourAccueil: 'Retour à l’accueil',
+  },
+
+  certificat: {
+    titre: 'Certificat de fin de formation',
+    delivreA: 'Délivré à',
+    atteste:
+      'atteste avoir suivi la formation à l’intelligence artificielle au service de l’employabilité des jeunes, organisée par la Fondation BantuHub à Brazzaville.',
+    avancement: 'Avancement du parcours',
+    delivreLe: 'Délivré le',
+    code: 'Code de vérification',
+    verifier: 'Vérifiez l’authenticité de ce certificat',
+    imprimer: 'Imprimer',
+    introuvable: 'Certificat introuvable',
+    introuvableDetail:
+      'Aucun certificat ne correspond à ce code. Vérifiez la saisie, ou contactez la Fondation.',
+    verificationTitre: 'Vérifier un certificat',
+    verificationChamp: 'Code du certificat',
+    verificationBouton: 'Vérifier',
+    valide: 'Certificat valide',
+  },
+
+  backoffice: {
+    titre: 'Back-office',
+    vueEnsemble: 'Vue d’ensemble',
+    modules: 'Modules',
+    apprenants: 'Apprenants',
+    certificats: 'Certificats',
+    partager: 'Partager',
+    rechercher: 'Rechercher un apprenant',
+    promotionEnCours: 'Promotion en cours',
+    avancementMoyen: 'Avancement moyen',
+    heuresCumulees: 'Sessions cumulées',
+    tauxAssiduite: 'Taux d’assiduité',
+    certificatsDelivres: 'Certificats délivrés',
+    eligibles: 'éligibles',
+    avancementParModule: 'Avancement par module',
+    repartitionAvancement: 'Répartition de l’avancement',
+    tranches: {
+      t1: '0 – 20 %',
+      t2: '20 – 40 %',
+      t3: '40 – 60 %',
+      t4: '60 – 80 %',
+      t5: '80 – 100 %',
+    },
+    apprenantsSuivre: 'Apprenants à suivre',
+    voirTout: 'Voir tout',
+    colonneApprenant: 'Apprenant',
+    colonneAvancement: 'Avancement',
+    colonneModules: 'Modules',
+    colonneQuiz: 'Quiz',
+    colonneNiveau: 'Niveau',
+    colonneCertificat: 'Certificat',
+    delivrer: 'Délivrer',
+    delivre: 'Délivré',
+    nonEligible: 'Conditions non remplies',
+    certificatDelivre: 'Certificat délivré.',
+    certificatTitreDefaut: 'Littératie en intelligence artificielle',
+    aucunEligible: 'Aucun apprenant n’est éligible pour le moment.',
+    legendeAssiduite: 'Assiduité',
+    legendeQuiz: 'Quiz',
+    moduleColonneNom: 'Module',
+    moduleColonneSeances: 'Sessions',
+    moduleColonneAvancement: 'Avancement moyen',
+    moduleColonneTermine: 'Terminé par',
+    seances: 'sessions',
+  },
+} as const
+
+export type Fr = typeof fr
