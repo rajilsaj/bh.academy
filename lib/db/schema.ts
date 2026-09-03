@@ -314,9 +314,12 @@ export const trainerProfiles = pgTable('trainer_profiles', {
   bio: text('bio'),
   phone: text('phone'),
   linkedin: text('linkedin'),
+  facebook: text('facebook'),
   website: text('website'),
   linktree: text('linktree'),
   socials: text('socials'),
+  /** Portrait affiché sur la vitrine : chemin dans le stockage. */
+  photoPath: text('photo_path'),
   invitationToken: text('invitation_token').unique(),
   invitedAt: timestamp('invited_at', { withTimezone: true }),
   confirmedAt: timestamp('confirmed_at', { withTimezone: true }),

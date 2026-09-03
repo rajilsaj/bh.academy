@@ -21,6 +21,7 @@ import { Signature } from '@/components/Signature'
 import { Photo } from '@/components/Photo'
 import { LogoFondation } from '@/components/LogoFondation'
 import { Partenaires } from '@/components/Partenaires'
+import { Formateurs } from '@/components/Formateurs'
 import { NettoyerAncre } from '@/components/NettoyerAncre'
 import { Medaillon } from '@/components/Medaillon'
 import { SectionCourante } from '@/components/SectionCourante'
@@ -484,17 +485,8 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
           </div>
         </section>
 
-        {/* ------------------------------------------------- image de clôture */}
-        <section className="parallaxe-apparition px-5 pb-12 sm:px-8 lg:px-12">
-          <div className="overflow-hidden rounded-carte">
-            <Photo
-              nom="final"
-              alt={v.photos.final}
-              sizes="100vw"
-              className="h-56 w-full object-cover sm:h-72 lg:h-80"
-            />
-          </div>
-        </section>
+        {/* ------------------------------------------------- nos formateurs */}
+        <Formateurs />
 
         {/* ----------------------------------------------------------- pied */}
         <footer className="parallaxe-apparition relative border-t border-white/15 px-5 py-8 text-center sm:px-8 lg:px-12 lg:py-12">

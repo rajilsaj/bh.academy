@@ -11,10 +11,19 @@ import { requirePermission } from '@/lib/auth'
 import { appUrl } from '@/lib/config'
 import { fr } from '@/lib/i18n/fr'
 import { notifier, remplir } from '@/lib/notifications'
+import { enregistrerPhotoFormateur, MAX_PHOTO_BYTES, photoAcceptee } from '@/lib/formateurs'
 
 const BASE = '/admin/utilisateurs'
 const champ = (f: FormData, nom: string) => String(f.get(nom) ?? '').trim()
 const ouNull = (s: string) => (s ? s : null)
+
+/** Le portrait du formulaire, rangé dans le stockage ; `undefined` si aucun fichier, `null` s'il est refusé. */
+async function lirePhoto(formData: FormData, staffId: string): Promise<string | null | undefined> {
+  const photo = formData.get('photo')
+  if (!(photo instanceof File) || photo.size === 0) return undefined
+  if (photo.size > MAX_PHOTO_BYTES || !photoAcceptee(photo.name)) return null
+  return enregistrerPhotoFormateur(staffId, photo.name, Buffer.from(await photo.arrayBuffer()))
+}
 
 /** Envoie (ou met en attente) l'invitation d'un formateur ; renvoie le statut. */
 async function inviter(staffId: string, email: string, nom: string, createdBy: string) {
@@ -57,11 +66,18 @@ export async function creerCompte(formData: FormData) {
 
   let ok = 'cree'
   if (role === 'formateur') {
+    const photoPath = await lirePhoto(formData, compte.id)
+    if (photoPath === null) {
+      await db.delete(staff).where(eq(staff.id, compte.id))
+      redirect(`${BASE}?e=photo`)
+    }
     await db.insert(trainerProfiles).values({
       staffId: compte.id,
       fullName: nom,
+      photoPath: photoPath ?? null,
       phone: ouNull(champ(formData, 'phone')),
       linkedin: ouNull(champ(formData, 'linkedin')),
+      facebook: ouNull(champ(formData, 'facebook')),
       website: ouNull(champ(formData, 'website')),
       linktree: ouNull(champ(formData, 'linktree')),
       socials: ouNull(champ(formData, 'socials')),
@@ -91,6 +107,31 @@ export async function renvoyerInvitation(formData: FormData) {
   const statut = await inviter(compte.id, compte.email, compte.nom, session.user.id)
   revalidatePath(BASE)
   redirect(`${BASE}?ok=${statut === 'envoye' ? 'renvoye' : 'inviteEnAttente'}`)
+}
+
+/** La fiche vitrine d'un formateur : nom, présentation, réseaux, portrait. */
+export async function modifierFormateur(formData: FormData) {
+  const session = await requirePermission('gererUtilisateurs')
+  if (!session) redirect('/admin')
+  const staffId = champ(formData, 'staffId')
+  const fullName = champ(formData, 'fullName')
+  if (!staffId || !fullName) redirect(`${BASE}?e=manquant`)
+  const photoPath = await lirePhoto(formData, staffId)
+  if (photoPath === null) redirect(`${BASE}?fiche=${staffId}&e=photo`)
+  await db
+    .update(trainerProfiles)
+    .set({
+      fullName,
+      bio: ouNull(champ(formData, 'bio')),
+      linkedin: ouNull(champ(formData, 'linkedin')),
+      facebook: ouNull(champ(formData, 'facebook')),
+      website: ouNull(champ(formData, 'website')),
+      ...(photoPath ? { photoPath } : {}),
+    })
+    .where(eq(trainerProfiles.staffId, staffId))
+  revalidatePath(BASE)
+  revalidatePath('/')
+  redirect(`${BASE}?ok=formateurModifie`)
 }
 
 export async function changerRole(formData: FormData) {

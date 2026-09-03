@@ -374,6 +374,11 @@ export const fr = {
       nom: 'Nom complet',
       telephone: 'Téléphone',
       linkedin: 'Profil LinkedIn',
+      facebook: 'Profil Facebook',
+      photo: 'Photo (JPG, PNG, WebP, 3 Mo max.)',
+      photoAide: 'Affichée sur la vitrine, dans « Nos formateurs ». LinkedIn et Facebook ne permettent pas de récupérer le portrait automatiquement : déposez-le ici.',
+      bio: 'Courte présentation',
+      modifierFormateur: 'Fiche vitrine',
       siteWeb: 'Site web',
       linktree: 'Linktree',
       reseaux: 'Réseaux sociaux',
@@ -402,6 +407,8 @@ export const fr = {
         supprime: 'Compte supprimé.',
         apprenantModifie: 'Apprenant mis à jour.',
         apprenantSupprime: 'Apprenant supprimé.',
+        formateurModifie: 'Fiche du formateur mise à jour.',
+        photo: 'Photo refusée : JPG, PNG ou WebP, 3 Mo au plus.',
         emailPris: 'Cette adresse a déjà un compte.',
         soiMeme: 'Vous ne pouvez pas supprimer votre propre compte.',
         manquant: 'Champ obligatoire manquant ou invalide.',
@@ -716,6 +723,17 @@ export const fr = {
       { n: '5', k: 'Semaines', t: 'de formation en présentiel' },
       { n: '1 000', k: 'Participants', t: 'attendus sur la promotion' },
     ],
+
+    /* « Nos formateurs », lus en base. */
+    formateurs: {
+      titre: 'Nos',
+      manuscrit: 'formateurs.',
+      sousTitre: 'Des praticiens qui utilisent l’IA au quotidien, et qui vous accompagnent module après module.',
+      linkedin: 'LinkedIn',
+      facebook: 'Facebook',
+      site: 'Site web',
+      linktree: 'Linktree',
+    },
 
     /* L'assistant de la FAQ. */
     assistant: {

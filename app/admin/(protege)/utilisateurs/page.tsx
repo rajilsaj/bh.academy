@@ -10,6 +10,7 @@ import {
   changerRole,
   creerCompte,
   modifierApprenant,
+  modifierFormateur,
   reinitialiserMotDePasse,
   renvoyerInvitation,
   supprimerApprenant,
@@ -28,7 +29,7 @@ const t = fr.admin.utilisateurs
 export default async function UtilisateursPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; e?: string; q?: string; modifier?: string; supprimer?: string; supprimerApprenant?: string }
+  searchParams: { ok?: string; e?: string; q?: string; modifier?: string; supprimer?: string; supprimerApprenant?: string; fiche?: string }
 }) {
   const session = await requirePermission('gererUtilisateurs')
   if (!session) return <AccesRefuse />
@@ -42,6 +43,9 @@ export default async function UtilisateursPage({
         role: staff.role,
         nom: trainerProfiles.fullName,
         linkedin: trainerProfiles.linkedin,
+        facebook: trainerProfiles.facebook,
+        bio: trainerProfiles.bio,
+        photoPath: trainerProfiles.photoPath,
         website: trainerProfiles.website,
         linktree: trainerProfiles.linktree,
         confirme: trainerProfiles.confirmedAt,
@@ -112,6 +116,7 @@ export default async function UtilisateursPage({
             <tbody>
               {equipe.map((m) => {
                 const estFormateur = m.role === 'formateur'
+                const ficheOuverte = estFormateur && searchParams.fiche === m.id
                 const statut = !estFormateur
                   ? '—'
                   : m.confirme
@@ -166,6 +171,11 @@ export default async function UtilisateursPage({
                             {fr.app.valider}
                           </button>
                         </form>
+                        {estFormateur ? (
+                          <Link href={`/admin/utilisateurs?fiche=${m.id}`} className="bo-bouton-discret !px-3 !py-1.5 !text-xs">
+                            {t.modifierFormateur}
+                          </Link>
+                        ) : null}
                         {estFormateur && !m.confirme ? (
                           <form action={renvoyerInvitation}>
                             <input type="hidden" name="staffId" value={m.id} />
@@ -201,8 +211,55 @@ export default async function UtilisateursPage({
           </table>
         </div>
 
+        {/* La fiche vitrine d'un formateur : photo, présentation, réseaux. */}
+        {equipe.filter((m) => m.role === 'formateur' && searchParams.fiche === m.id).map((m) => (
+          <form key={m.id} action={modifierFormateur} encType="multipart/form-data" className="bo-sous-panneau mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <input type="hidden" name="staffId" value={m.id} />
+            <div className="flex items-center gap-3 sm:col-span-2 lg:col-span-3">
+              {m.photoPath ? (
+                <img src={`/api/formateurs/${m.id}/photo`} alt="" width={56} height={56} className="h-14 w-14 rounded-full object-cover" />
+              ) : (
+                <span className="grid h-14 w-14 place-items-center rounded-full bg-bo-panneau-2 text-sm font-bold text-bo-doux">—</span>
+              )}
+              <div>
+                <p className="font-semibold">{m.nom ?? m.email}</p>
+                <p className="bo-doux">{t.modifierFormateur}</p>
+              </div>
+            </div>
+            <div>
+              <label className="bo-doux mb-1 block" htmlFor="f-nom">{t.nom}</label>
+              <input id="f-nom" name="fullName" required maxLength={120} defaultValue={m.nom ?? ''} className="bo-champ" />
+            </div>
+            <div>
+              <label className="bo-doux mb-1 block" htmlFor="f-linkedin">{t.linkedin}</label>
+              <input id="f-linkedin" name="linkedin" type="url" defaultValue={m.linkedin ?? ''} placeholder="https://linkedin.com/in/…" className="bo-champ" />
+            </div>
+            <div>
+              <label className="bo-doux mb-1 block" htmlFor="f-facebook">{t.facebook}</label>
+              <input id="f-facebook" name="facebook" type="url" defaultValue={m.facebook ?? ''} placeholder="https://facebook.com/…" className="bo-champ" />
+            </div>
+            <div>
+              <label className="bo-doux mb-1 block" htmlFor="f-website">{t.siteWeb}</label>
+              <input id="f-website" name="website" type="url" defaultValue={m.website ?? ''} placeholder="https://" className="bo-champ" />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="bo-doux mb-1 block" htmlFor="f-photo">{t.photo}</label>
+              <input id="f-photo" name="photo" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" className="bo-champ !py-1.5 file:mr-3 file:rounded-full file:border-0 file:bg-white file:px-3 file:py-1 file:text-xs file:font-semibold file:text-bo-fond" />
+              <p className="bo-doux mt-1">{t.photoAide}</p>
+            </div>
+            <div className="sm:col-span-2 lg:col-span-3">
+              <label className="bo-doux mb-1 block" htmlFor="f-bio">{t.bio}</label>
+              <textarea id="f-bio" name="bio" rows={3} maxLength={400} defaultValue={m.bio ?? ''} className="bo-champ" />
+            </div>
+            <div className="flex items-center gap-2 sm:col-span-2 lg:col-span-3">
+              <button type="submit" className="bo-bouton">{fr.app.enregistrer}</button>
+              <Link href="/admin/utilisateurs" className="bo-bouton-discret">{fr.app.annuler}</Link>
+            </div>
+          </form>
+        ))}
+
         <h3 className="mb-3 mt-6 font-semibold">{t.creer}</h3>
-        <form action={creerCompte} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <form action={creerCompte} encType="multipart/form-data" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <div>
             <label className="bo-doux mb-1 block" htmlFor="email">{t.email}</label>
             <input id="email" name="email" type="email" required autoComplete="off" className="bo-champ" />
@@ -233,8 +290,16 @@ export default async function UtilisateursPage({
             <input id="linkedin" name="linkedin" type="url" placeholder="https://linkedin.com/in/…" className="bo-champ" />
           </div>
           <div>
+            <label className="bo-doux mb-1 block" htmlFor="facebook">{t.facebook}</label>
+            <input id="facebook" name="facebook" type="url" placeholder="https://facebook.com/…" className="bo-champ" />
+          </div>
+          <div>
             <label className="bo-doux mb-1 block" htmlFor="website">{t.siteWeb}</label>
             <input id="website" name="website" type="url" placeholder="https://" className="bo-champ" />
+          </div>
+          <div>
+            <label className="bo-doux mb-1 block" htmlFor="photo">{t.photo}</label>
+            <input id="photo" name="photo" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" className="bo-champ !py-1.5 file:mr-3 file:rounded-full file:border-0 file:bg-white file:px-3 file:py-1 file:text-xs file:font-semibold file:text-bo-fond" />
           </div>
           <div>
             <label className="bo-doux mb-1 block" htmlFor="linktree">{t.linktree}</label>

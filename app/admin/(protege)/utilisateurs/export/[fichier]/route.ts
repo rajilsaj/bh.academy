@@ -14,7 +14,7 @@ const FICHIERS: Record<string, { feuille: string; sql: string }> = {
   equipe: {
     feuille: 'Équipe',
     sql: `select s.email as "E-mail", s.role as "Rôle", t.full_name as "Nom complet",
-                 t.phone as "Téléphone", t.linkedin as "LinkedIn", t.website as "Site web",
+                 t.phone as "Téléphone", t.bio as "Présentation", t.linkedin as "LinkedIn", t.facebook as "Facebook", t.website as "Site web",
                  t.linktree as "Linktree", t.socials as "Réseaux sociaux",
                  t.invited_at as "Invité le", t.confirmed_at as "Confirmé le"
           from staff s
