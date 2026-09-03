@@ -4,7 +4,6 @@ import { CopierLien } from '@/components/CopierLien'
 import { db } from '@/lib/db'
 import { cohorts, learners } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
-import { formatDate } from '@/lib/format'
 import { appUrl } from '@/lib/config'
 import { inscrire } from './actions'
 
@@ -89,9 +88,7 @@ export default async function InscriptionPage({
 
   return (
     <LearnerShell title={fr.inscription.titre} vitrine avecAccent accueilHref="/" fond="espace">
-      <p className="-mt-3 mb-5 text-sm text-white/75">
-        {fr.inscription.sousTitre} — {cohort.name} ({formatDate(cohort.startsOn)})
-      </p>
+      <p className="-mt-3 mb-5 text-sm text-white/75">{fr.inscription.sousTitre}</p>
       {erreur ? <Alerte>{erreur}</Alerte> : null}
 
       <form action={inscrire} className="space-y-3">
