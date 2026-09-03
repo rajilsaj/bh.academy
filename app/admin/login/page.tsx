@@ -62,8 +62,8 @@ export default async function LoginPage({
     <div className={`${policeTitre.variable} bo grid place-items-center px-4 py-16`}>
       <main className="w-full max-w-sm">
         <div className="mb-6 flex items-center gap-3">
-          {/* La marque de la Fondation, en blanc sur le violet. */}
-          <LogoFondation hauteur="h-9" href="/" />
+          {/* La marque de la Fondation, en couleur sur le fond clair. */}
+          <LogoFondation variante="couleur" hauteur="h-10" href="/" />
           <div>
             <p className="titre text-2xl leading-tight">{fr.backoffice.titre}</p>
             <p className="bo-doux">{fr.backoffice.baseline}</p>

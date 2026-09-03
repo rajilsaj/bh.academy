@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { AccesRefuse, SuccesSombre } from '@/components/AccesRefuse'
+import { EnTete } from '@/components/admin/Cockpit'
 import { BarresPages } from '@/components/VisitesVisiteur'
 import { requirePermission } from '@/lib/auth'
 import { fr } from '@/lib/i18n/fr'
@@ -37,16 +38,16 @@ export default async function VisitesPage({ searchParams }: { searchParams: { ok
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-bold">{t.titre}</h1>
-          <p className="mt-1 text-sm text-bo-doux">{t.sousTitre}</p>
-        </div>
-        <form action={purger} className="flex items-center gap-2">
-          <input type="hidden" name="jours" value="90" />
-          <button type="submit" className="bo-bouton-discret">{t.purger}</button>
-        </form>
-      </div>
+      <EnTete
+        titre={t.titre}
+        sousTitre={t.sousTitre}
+        actions={
+          <form action={purger}>
+            <input type="hidden" name="jours" value="90" />
+            <button type="submit" className="bo-bouton-discret">{t.purger}</button>
+          </form>
+        }
+      />
       {message ? <SuccesSombre>{message}</SuccesSombre> : null}
 
       {/* ------------------------------------------------------ compteurs */}

@@ -3,7 +3,7 @@
 import { randomBytes } from 'node:crypto'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { eq } from 'drizzle-orm'
+import { eq, inArray } from 'drizzle-orm'
 import bcrypt from 'bcryptjs'
 import { db } from '@/lib/db'
 import { learners, ROLES, staff, trainerProfiles, type Role } from '@/lib/db/schema'
@@ -186,6 +186,30 @@ export async function modifierApprenant(formData: FormData) {
     .where(eq(learners.id, learnerId))
   revalidatePath(BASE)
   redirect(`${BASE}?ok=apprenantModifie`)
+}
+
+/** Actions groupées sur les apprenants cochés : changer de promotion, ou supprimer. */
+export async function apprenantsEnMasse(formData: FormData) {
+  const session = await requirePermission('gererUtilisateurs')
+  if (!session) redirect('/admin')
+  const ids = formData.getAll('learnerIds').map(String).filter(Boolean)
+  const action = champ(formData, 'action')
+  if (ids.length === 0) redirect(`${BASE}?e=selection`)
+
+  if (action === 'deplacer') {
+    const cohortId = champ(formData, 'cohortId')
+    if (!cohortId) redirect(`${BASE}?e=manquant`)
+    await db.update(learners).set({ cohortId }).where(inArray(learners.id, ids))
+    revalidatePath(BASE)
+    redirect(`${BASE}?ok=deplaces&n=${ids.length}`)
+  }
+  if (action === 'supprimer') {
+    await db.delete(learners).where(inArray(learners.id, ids))
+    revalidatePath(BASE)
+    revalidatePath('/admin')
+    redirect(`${BASE}?ok=supprimes&n=${ids.length}`)
+  }
+  redirect(BASE)
 }
 
 export async function supprimerApprenant(formData: FormData) {

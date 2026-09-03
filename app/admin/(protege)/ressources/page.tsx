@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { asc, desc, eq, inArray, sql as raw } from 'drizzle-orm'
 import { AccesRefuse, AlerteSombre, SuccesSombre } from '@/components/AccesRefuse'
+import { EnTete } from '@/components/admin/Cockpit'
 import { requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { programModules, programs, RESOURCE_KINDS, resources, staff, trainerProfiles } from '@/lib/db/schema'
@@ -53,10 +54,7 @@ export default async function RessourcesPage({ searchParams }: { searchParams: {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-bold">{t.titre}</h1>
-        <p className="mt-1 text-sm text-bo-doux">{t.sousTitre}</p>
-      </div>
+      <EnTete titre={t.titre} sousTitre={t.sousTitre} />
       {messageOk ? <SuccesSombre>{messageOk}</SuccesSombre> : null}
       {messageErreur ? <AlerteSombre>{messageErreur}</AlerteSombre> : null}
 
@@ -65,14 +63,14 @@ export default async function RessourcesPage({ searchParams }: { searchParams: {
       ) : (
         <>
           <nav className="flex flex-wrap gap-1" aria-label={t.module}>
-            <Link href="/admin/ressources" className={selection ? 'bo-puce' : 'bo-puce !bg-white !text-bo-fond'}>
+            <Link href="/admin/ressources" className={selection ? 'bo-puce' : 'bo-puce !bg-bo-bleu !text-white'}>
               {t.tous}
             </Link>
             {modules.map((m) => (
               <Link
                 key={m.id}
                 href={`/admin/ressources?module=${m.id}`}
-                className={selection === m.id ? 'bo-puce !bg-white !text-bo-fond' : 'bo-puce'}
+                className={selection === m.id ? 'bo-puce !bg-bo-bleu !text-white' : 'bo-puce'}
               >
                 {m.position}. {m.title}
               </Link>
@@ -161,7 +159,7 @@ export default async function RessourcesPage({ searchParams }: { searchParams: {
               </div>
               <div>
                 <label className="bo-doux mb-1 block" htmlFor="fichier">{t.fichier}</label>
-                <input id="fichier" name="fichier" type="file" className="bo-champ !py-1.5 file:mr-3 file:rounded-full file:border-0 file:bg-white file:px-3 file:py-1 file:text-xs file:font-semibold file:text-bo-fond" />
+                <input id="fichier" name="fichier" type="file" className="bo-champ !py-1.5 file:mr-3 file:rounded-full file:border-0 file:bg-bo-bleu file:px-3 file:py-1 file:text-xs file:font-semibold file:text-white" />
                 <p className="bo-doux mt-1">{t.lienOuFichier}</p>
               </div>
               <div>

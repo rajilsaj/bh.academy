@@ -34,22 +34,25 @@ const config: Config = {
           rose: '#F26FC0',
         },
         /*
-         * Le cockpit (back-office) reprend la vitrine : violet quadrillé, panneaux
-         * translucides, jaune pour l'action. Les noms `bo-*` restent ceux que les
-         * écrans utilisent ; seules les valeurs changent.
+         * Le cockpit (back-office) : fond bleu très clair, cartes blanches,
+         * bleu profond pour l'action. Les noms `bo-*` restent ceux que les écrans
+         * utilisent ; seules les valeurs changent.
          */
         bo: {
-          fond: '#4726AE',
-          panneau: 'rgb(255 255 255 / 0.10)',
-          'panneau-2': 'rgb(255 255 255 / 0.16)',
-          bordure: 'rgb(255 255 255 / 0.20)',
-          texte: '#FFFFFF',
-          doux: 'rgb(255 255 255 / 0.68)',
-          menthe: '#4FE0D2',
-          rose: '#F26FC0',
-          jaune: '#FCC63C',
-          violet: '#FCC63C',
-          cyan: '#4FE0D2',
+          fond: '#EEF3FA',
+          panneau: '#FFFFFF',
+          'panneau-2': '#F3F7FC',
+          bordure: '#DCE5F2',
+          texte: '#15213A',
+          doux: '#6B7A99',
+          bleu: '#3B6BA5',
+          'bleu-fonce': '#274C7A',
+          'bleu-clair': '#D6E6FA',
+          menthe: '#2BB673',
+          rose: '#E5484D',
+          jaune: '#F5B84A',
+          violet: '#3B6BA5',
+          cyan: '#5AA7E8',
         },
         /* Couleurs de marques tierces citées sur le site — jamais les nôtres. */
         marque: {

@@ -1,12 +1,14 @@
 import Link from 'next/link'
 import { asc, desc, eq, ilike, or, sql as raw } from 'drizzle-orm'
 import { AccesRefuse, AlerteSombre, SuccesSombre } from '@/components/AccesRefuse'
+import { BarreSelection, EnTete } from '@/components/admin/Cockpit'
 import { requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { cohorts, learners, ROLES, staff, trainerProfiles } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
 import { formatDateTime } from '@/lib/format'
 import {
+  apprenantsEnMasse,
   changerRole,
   creerCompte,
   modifierApprenant,
@@ -29,7 +31,7 @@ const t = fr.admin.utilisateurs
 export default async function UtilisateursPage({
   searchParams,
 }: {
-  searchParams: { ok?: string; e?: string; q?: string; modifier?: string; supprimer?: string; supprimerApprenant?: string; fiche?: string }
+  searchParams: { ok?: string; e?: string; n?: string; q?: string; modifier?: string; supprimer?: string; supprimerApprenant?: string; fiche?: string }
 }) {
   const session = await requirePermission('gererUtilisateurs')
   if (!session) return <AccesRefuse />
@@ -82,15 +84,12 @@ export default async function UtilisateursPage({
   ])
 
   const aModifier = searchParams.modifier ? apprenants.find((a) => a.id === searchParams.modifier) : null
-  const messageOk = searchParams.ok ? t.messages[searchParams.ok as keyof typeof t.messages] : null
+  const messageOk = searchParams.ok ? (t.messages[searchParams.ok as keyof typeof t.messages] ?? '').replace('{n}', searchParams.n ?? '') : null
   const messageErreur = searchParams.e ? t.messages[searchParams.e as keyof typeof t.messages] : null
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-bold">{t.titre}</h1>
-        <p className="mt-1 text-sm text-bo-doux">{t.sousTitre}</p>
-      </div>
+      <EnTete titre={t.titre} sousTitre={t.sousTitre} />
       {messageOk ? <SuccesSombre>{messageOk}</SuccesSombre> : null}
       {messageErreur ? <AlerteSombre>{messageErreur}</AlerteSombre> : null}
 
@@ -244,7 +243,7 @@ export default async function UtilisateursPage({
             </div>
             <div className="sm:col-span-2">
               <label className="bo-doux mb-1 block" htmlFor="f-photo">{t.photo}</label>
-              <input id="f-photo" name="photo" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" className="bo-champ !py-1.5 file:mr-3 file:rounded-full file:border-0 file:bg-white file:px-3 file:py-1 file:text-xs file:font-semibold file:text-bo-fond" />
+              <input id="f-photo" name="photo" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" className="bo-champ !py-1.5 file:mr-3 file:rounded-full file:border-0 file:bg-bo-bleu file:px-3 file:py-1 file:text-xs file:font-semibold file:text-white" />
               <p className="bo-doux mt-1">{t.photoAide}</p>
             </div>
             <div className="sm:col-span-2 lg:col-span-3">
@@ -299,7 +298,7 @@ export default async function UtilisateursPage({
           </div>
           <div>
             <label className="bo-doux mb-1 block" htmlFor="photo">{t.photo}</label>
-            <input id="photo" name="photo" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" className="bo-champ !py-1.5 file:mr-3 file:rounded-full file:border-0 file:bg-white file:px-3 file:py-1 file:text-xs file:font-semibold file:text-bo-fond" />
+            <input id="photo" name="photo" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" className="bo-champ !py-1.5 file:mr-3 file:rounded-full file:border-0 file:bg-bo-bleu file:px-3 file:py-1 file:text-xs file:font-semibold file:text-white" />
           </div>
           <div>
             <label className="bo-doux mb-1 block" htmlFor="linktree">{t.linktree}</label>
@@ -316,7 +315,7 @@ export default async function UtilisateursPage({
       </section>
 
       {/* --------------------------------------------- apprenants */}
-      <section className="bo-panneau">
+      <section className="bo-panneau group/selection">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-semibold">
             {t.apprenants} <span className="bo-doux">({apprenants.length})</span>
@@ -360,10 +359,28 @@ export default async function UtilisateursPage({
           </form>
         ) : null}
 
+        <div className="mb-3">
+          <BarreSelection formId="masse-apprenants">
+            <span className="text-sm font-semibold">{t.selection}</span>
+            <label className="flex items-center gap-2 text-sm">
+              {t.deplacerVers}
+              <select name="cohortId" className="bo-champ !w-auto !py-1" aria-label={t.promotion}>
+                {promotions.map((p) => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
+            </label>
+            <button formAction={apprenantsEnMasse} name="action" value="deplacer" type="submit" className="bo-bouton-discret">{t.deplacer}</button>
+            <span className="bo-doux">·</span>
+            <button formAction={apprenantsEnMasse} name="action" value="supprimer" type="submit" className="bo-bouton-discret !border-bo-rose/50 !text-bo-rose">{t.supprimerSelection}</button>
+          </BarreSelection>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="bo-tableau">
             <thead>
               <tr>
+                <th className="w-8"><span className="sr-only">{t.selection}</span></th>
                 <th>{fr.backoffice.colonneApprenant}</th>
                 <th>{t.promotion}</th>
                 <th>{t.telephone}</th>
@@ -375,6 +392,9 @@ export default async function UtilisateursPage({
             <tbody>
               {apprenants.map((a) => (
                 <tr key={a.id}>
+                  <td>
+                    <input form="masse-apprenants" type="checkbox" name="learnerIds" value={a.id} aria-label={a.fullName} className="h-4 w-4 accent-bo-bleu" />
+                  </td>
                   <td>
                     <span className="font-medium">{a.fullName}</span>
                     <span className="bo-doux block">{a.id}</span>

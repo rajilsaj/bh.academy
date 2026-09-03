@@ -115,6 +115,7 @@ export const PERMISSIONS = {
   voirCoordonnees: ['admin'],
   gererUtilisateurs: ['admin'],
   gererFormations: ['admin'],
+  gererSessions: ['admin'],
   voirVisites: ['admin'],
   gererConfiguration: ['admin'],
 } as const satisfies Record<string, readonly Role[]>

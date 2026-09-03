@@ -3,13 +3,13 @@ import { redirect } from 'next/navigation'
 import { auth, can, signOut } from '@/lib/auth'
 import { fr } from '@/lib/i18n/fr'
 import type { Permission } from '@/lib/auth'
-import { AdminSidebar, type GroupeNav } from '@/components/AdminSidebar'
+import { AdminSidebar, type GroupeNav, type IconeNav } from '@/components/AdminSidebar'
 import { LogoFondation } from '@/components/LogoFondation'
 import { policeTitre } from '@/lib/fonts'
 
 export const dynamic = 'force-dynamic'
 
-type Lien = { href: string; label: string; permission: Permission }
+type Lien = { href: string; label: string; permission: Permission; icone: IconeNav }
 
 /**
  * Trois groupes : les personnes, la matière enseignée, la configuration. Un
@@ -17,21 +17,26 @@ type Lien = { href: string; label: string; permission: Permission }
  */
 const GROUPES: { titre: string; liens: Lien[] }[] = [
   {
+    titre: '',
+    liens: [{ href: '/admin', label: fr.admin.nav.tableau, permission: 'voirTableauBord', icone: 'tableau' }],
+  },
+  {
     titre: fr.admin.sidebar.personnes,
-    liens: [{ href: '/admin/utilisateurs', label: fr.admin.nav.utilisateurs, permission: 'gererUtilisateurs' }],
+    liens: [{ href: '/admin/utilisateurs', label: fr.admin.nav.utilisateurs, permission: 'gererUtilisateurs', icone: 'personnes' }],
   },
   {
     titre: fr.admin.sidebar.modules,
     liens: [
-      { href: '/admin/modules', label: fr.admin.nav.modules, permission: 'voirModules' },
-      { href: '/admin/ressources', label: fr.admin.nav.ressources, permission: 'gererRessources' },
+      { href: '/admin/modules', label: fr.admin.nav.modules, permission: 'voirModules', icone: 'modules' },
+      { href: '/admin/sessions', label: fr.admin.nav.sessions, permission: 'voirModules', icone: 'sessions' },
+      { href: '/admin/ressources', label: fr.admin.nav.ressources, permission: 'gererRessources', icone: 'ressources' },
     ],
   },
   {
     titre: fr.admin.sidebar.configuration,
     liens: [
-      { href: '/admin/configuration', label: fr.admin.nav.configuration, permission: 'gererConfiguration' },
-      { href: '/admin/visites', label: fr.admin.nav.visites, permission: 'voirVisites' },
+      { href: '/admin/configuration', label: fr.admin.nav.configuration, permission: 'gererConfiguration', icone: 'parametres' },
+      { href: '/admin/visites', label: fr.admin.nav.visites, permission: 'voirVisites', icone: 'visites' },
     ],
   },
 ]
@@ -49,13 +54,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const groupes: GroupeNav[] = GROUPES.map((g) => ({
     titre: g.titre,
-    liens: g.liens.filter((l) => can(role, l.permission)).map(({ href, label }) => ({ href, label })),
+    liens: g.liens.filter((l) => can(role, l.permission)).map(({ href, label, icone }) => ({ href, label, icone })),
   })).filter((g) => g.liens.length > 0)
 
   const compte = (
     <div className="flex items-center gap-3">
       <span
-        className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-bo-panneau-2 text-xs font-semibold text-bo-doux"
+        className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-bo-bleu-clair text-xs font-semibold text-bo-bleu-fonce"
         title={session.user.email ?? ''}
       >
         {initiales}
@@ -77,7 +82,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       {/* ------------------------------------------------ barre latérale */}
       <aside className="bo-sidebar hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col">
         <div className="border-b border-bo-bordure px-4 py-4">
-          <LogoFondation hauteur="h-7" href="/" />
+          <LogoFondation variante="couleur" hauteur="h-8" href="/" />
           <Link href="/admin" className="mt-3 block">
             <span className="titre block text-xl leading-tight">{fr.backoffice.titre}</span>
             <span className="bo-doux block">{fr.backoffice.baseline}</span>
@@ -91,13 +96,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
       <div className="min-w-0 flex-1">
         {/* ------------------------------------------- en-tête petit écran */}
-        <header className="border-b border-bo-bordure bg-vitrine-violet-fonce/70 backdrop-blur-md lg:hidden">
+        <header className="border-b border-bo-bordure bg-white lg:hidden">
           <div className="flex items-center gap-3 px-4 py-3">
-            <LogoFondation hauteur="h-6" href="/" />
+            <LogoFondation variante="couleur" hauteur="h-7" href="/" />
             <span className="titre text-lg">{fr.backoffice.titre}</span>
             <details className="ml-auto">
               <summary className="bo-bouton-discret cursor-pointer list-none">{fr.admin.sidebar.menu}</summary>
-              <div className="absolute inset-x-0 z-40 mt-2 border-y border-bo-bordure bg-vitrine-violet-fonce pb-3 shadow-2xl">
+              <div className="absolute inset-x-0 z-40 mt-2 border-y border-bo-bordure bg-white pb-3 shadow-2xl">
                 <AdminSidebar groupes={groupes} />
                 <div className="mt-3 border-t border-bo-bordure px-4 pt-3">{compte}</div>
               </div>

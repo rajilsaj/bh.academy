@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { count } from 'drizzle-orm'
 import { AccesRefuse } from '@/components/AccesRefuse'
+import { EnTete } from '@/components/admin/Cockpit'
 import { googleActive, requirePermission } from '@/lib/auth'
 import { appUrl } from '@/lib/config'
 import { db } from '@/lib/db'
@@ -92,10 +93,7 @@ export default async function ConfigurationPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl">{t.titre}</h1>
-        <p className="mt-1 text-sm text-bo-doux">{t.sousTitre}</p>
-      </div>
+      <EnTete titre={t.titre} sousTitre={t.sousTitre} />
 
       {/* ------------------------------------------------------ en un coup d'œil */}
       <section className="grid gap-4 sm:grid-cols-3">
@@ -120,13 +118,13 @@ export default async function ConfigurationPage() {
       {/* ------------------------------------------------------------- services */}
       <section className="bo-panneau">
         <h2 className="mb-3 font-semibold">{t.services.titre}</h2>
-        <ul className="divide-y divide-white/10">
+        <ul className="divide-y divide-bo-bordure">
           {services.map((s) => (
             <li key={s.nom} className="grid gap-2 py-4 sm:grid-cols-[1.5rem_1fr_auto] sm:gap-4">
               <span
                 aria-label={s.actif ? t.actif : t.inactif}
                 className={`mt-0.5 grid h-6 w-6 place-items-center rounded-full text-xs font-bold ${
-                  s.actif ? 'bg-bo-menthe text-vitrine-violet-fonce' : 'border-2 border-white/30 text-bo-doux'
+                  s.actif ? 'bg-bo-menthe text-white' : 'border-2 border-bo-bordure text-bo-doux'
                 }`}
               >
                 {s.actif ? '✓' : '·'}

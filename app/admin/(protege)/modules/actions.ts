@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { and, eq, sql as raw } from 'drizzle-orm'
+import { and, eq, inArray, sql as raw } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { cohorts, programModules, programs } from '@/lib/db/schema'
 import { requirePermission } from '@/lib/auth'
@@ -168,4 +168,22 @@ export async function detacherPromotion(formData: FormData) {
   await db.update(cohorts).set({ programId: null }).where(eq(cohorts.id, cohortId))
   revalidatePath(`${BASE}/${programId}`)
   redirect(`${BASE}/${programId}?ok=detachee`)
+}
+
+/** Attribution groupée : les modules cochés passent au formateur choisi (ou à personne). */
+export async function attribuerFormateurs(formData: FormData) {
+  const session = await requirePermission('gererFormations')
+  if (!session) redirect('/admin')
+  const programId = champ(formData, 'programId')
+  const moduleIds = formData.getAll('moduleIds').map(String).filter(Boolean)
+  const trainerId = ouNull(champ(formData, 'trainerId'))
+  if (!programId) redirect(BASE)
+  if (moduleIds.length === 0) redirect(`${BASE}/${programId}?e=selectionVide`)
+  await db
+    .update(programModules)
+    .set({ trainerId })
+    .where(and(eq(programModules.programId, programId), inArray(programModules.id, moduleIds)))
+  revalidatePath(`${BASE}/${programId}`)
+  revalidatePath('/')
+  redirect(`${BASE}/${programId}?ok=attribues&n=${moduleIds.length}`)
 }

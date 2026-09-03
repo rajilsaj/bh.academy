@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { asc, eq, sql as raw } from 'drizzle-orm'
 import { AccesRefuse, AlerteSombre, SuccesSombre } from '@/components/AccesRefuse'
+import { BarreSelection, EnTete } from '@/components/admin/Cockpit'
 import { can, requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { cohorts, programModules, programs, resources, staff, trainerProfiles } from '@/lib/db/schema'
@@ -8,6 +9,7 @@ import { fr } from '@/lib/i18n/fr'
 import { formatDate } from '@/lib/format'
 import {
   ajouterModule,
+  attribuerFormateurs,
   detacherPromotion,
   enregistrerObjectifs,
   genererObjectifsFormation,
@@ -47,7 +49,7 @@ export default async function FormationPage({
   searchParams,
 }: {
   params: { id: string }
-  searchParams: { ok?: string; e?: string; supprimer?: string }
+  searchParams: { ok?: string; e?: string; n?: string; supprimer?: string }
 }) {
   const session = await requirePermission('voirModules')
   if (!session) return <AccesRefuse />
@@ -85,23 +87,17 @@ export default async function FormationPage({
   const rattachees = promotions.filter((p) => p.programId === formation.id)
   const libres = promotions.filter((p) => p.programId !== formation.id)
 
-  const messageOk = searchParams.ok ? t.messages[searchParams.ok as keyof typeof t.messages] : null
+  const messageOk = searchParams.ok ? (t.messages[searchParams.ok as keyof typeof t.messages] ?? '').replace('{n}', searchParams.n ?? '') : null
   const messageErreur = searchParams.e ? t.messages[searchParams.e as keyof typeof t.messages] : null
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="bo-doux">
-            <Link href="/admin/modules" className="underline">{t.titre}</Link>
-          </p>
-          <h1 className="text-xl font-bold">{formation.name}</h1>
-          <p className="mt-1 text-sm text-bo-doux">
-            {formation.startsOn ? formatDate(formation.startsOn) : '—'} → {formation.endsOn ? formatDate(formation.endsOn) : '—'}
-            {formation.schedule ? ` · ${formation.schedule}` : ''}
-          </p>
-        </div>
-      </div>
+      <EnTete
+        retour={{ href: '/admin/modules', label: t.titre }}
+        titre={formation.name}
+        sousTitre={`${formation.startsOn ? formatDate(formation.startsOn) : '—'} → ${formation.endsOn ? formatDate(formation.endsOn) : '—'}${formation.schedule ? ` · ${formation.schedule}` : ''}`}
+        actions={peutModifier ? <Link href="/admin/sessions" className="bo-bouton-discret">{fr.admin.tableau.planifier}</Link> : null}
+      />
       {messageOk ? <SuccesSombre>{messageOk}</SuccesSombre> : null}
       {messageErreur ? <AlerteSombre>{messageErreur}</AlerteSombre> : null}
       {!peutModifier ? <p className="bo-doux">{t.lectureSeule}</p> : null}
@@ -203,7 +199,7 @@ export default async function FormationPage({
       )}
 
       {/* ------------------------------------------------------ modules */}
-      <section className="bo-panneau">
+      <section className="bo-panneau group/selection">
         <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="font-semibold">{t.modules}</h2>
           <p className="bo-doux">
@@ -211,10 +207,29 @@ export default async function FormationPage({
           </p>
         </div>
         <p className="bo-doux mb-3">{t.completionAide}</p>
+        {peutModifier ? (
+          <div className="mb-3">
+            <BarreSelection formId="attribution">
+              <input type="hidden" name="programId" value={formation.id} />
+              <span className="text-sm font-semibold">{t.selectionModules}</span>
+              <label className="flex items-center gap-2 text-sm">
+                {t.attribuerA}
+                <select name="trainerId" className="bo-champ !w-auto !py-1" aria-label={t.formateur}>
+                  <option value="">{t.sansFormateur}</option>
+                  {formateurs.map((f) => (
+                    <option key={f.id} value={f.id}>{f.nom ?? f.email}</option>
+                  ))}
+                </select>
+              </label>
+              <button formAction={attribuerFormateurs} type="submit" className="bo-bouton-discret">{t.attribuer}</button>
+            </BarreSelection>
+          </div>
+        ) : null}
         <div className="overflow-x-auto">
           <table className="bo-tableau">
             <thead>
               <tr>
+                {peutModifier ? <th className="w-8"><span className="sr-only">{t.selectionModules}</span></th> : null}
                 <th>{t.position}</th>
                 <th>{t.titreModule}</th>
                 <th>{t.duree}</th>
@@ -232,7 +247,7 @@ export default async function FormationPage({
             <tbody>
               {modules.length === 0 ? (
                 <tr>
-                  <td colSpan={12} className="text-bo-doux">{fr.app.aucuneDonnee}</td>
+                  <td colSpan={13} className="text-bo-doux">{fr.app.aucuneDonnee}</td>
                 </tr>
               ) : null}
               {modules.map(({ m, formateur, formateurEmail }) => {
@@ -267,6 +282,9 @@ export default async function FormationPage({
                 }
                 return (
                   <tr key={m.id}>
+                    <td>
+                      <input form="attribution" type="checkbox" name="moduleIds" value={m.id} aria-label={m.title} className="h-4 w-4 accent-bo-bleu" />
+                    </td>
                     <td>
                       <form id={idForm} action={modifierModule}>
                         <input type="hidden" name="programId" value={formation.id} />

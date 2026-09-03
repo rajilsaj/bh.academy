@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { asc, desc, eq, sql as raw } from 'drizzle-orm'
 import { AccesRefuse, AlerteSombre, SuccesSombre } from '@/components/AccesRefuse'
+import { EnTete } from '@/components/admin/Cockpit'
 import { can, requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { cohorts, programModules, programs } from '@/lib/db/schema'
@@ -36,10 +37,7 @@ export default async function FormationsPage({ searchParams }: { searchParams: {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-bold">{t.titre}</h1>
-        <p className="mt-1 text-sm text-bo-doux">{t.sousTitre}</p>
-      </div>
+      <EnTete titre={t.titre} sousTitre={t.sousTitre} />
       {messageOk ? <SuccesSombre>{messageOk}</SuccesSombre> : null}
       {messageErreur ? <AlerteSombre>{messageErreur}</AlerteSombre> : null}
 
