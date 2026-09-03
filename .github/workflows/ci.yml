@@ -1,0 +1,43 @@
+# Intégration continue : à chaque push et pull request, on vérifie que le
+# projet compile. Le déploiement lui-même est fait par Vercel, branché sur le
+# dépôt GitHub : un push sur `main` met la production à jour, une pull request
+# reçoit une URL de prévisualisation.
+#
+# Aucun secret n'est nécessaire ici : `next build` ne touche ni à la base ni à
+# Supabase (toutes les pages sont rendues à la demande). Les migrations sont
+# appliquées par Vercel au déploiement, avec ses propres variables.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verifier:
+    name: Types, typographie, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Aucun fichier .env dans le dépôt
+        run: |
+          if git ls-files | grep -E '(^|/)\.env(\..*)?$' | grep -v '\.env\.example$'; then
+            echo "::error::Un fichier .env est suivi par git. Retirez-le : il contient des secrets."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: TypeScript et garde-fou typographique
+        run: npm run typecheck
+
+      - name: Build Next.js
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
