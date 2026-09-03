@@ -415,6 +415,9 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
           </ol>
         </section>
 
+        {/* ----------------------------------------------------- nos experts */}
+        <Formateurs />
+
         {/* ------------------------------------------------------------ FAQ */}
         <section id="questions" className="parallaxe-apparition px-5 pb-12 sm:px-8 lg:px-12 lg:pb-16">
           <h2 className="titre mb-5 text-3xl sm:text-4xl lg:text-5xl">
@@ -484,9 +487,6 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
             ) : null}
           </div>
         </section>
-
-        {/* ------------------------------------------------- nos formateurs */}
-        <Formateurs />
 
         {/* ----------------------------------------------------------- pied */}
         <footer className="parallaxe-apparition relative border-t border-white/15 px-5 py-8 text-center sm:px-8 lg:px-12 lg:py-12">
