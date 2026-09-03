@@ -200,6 +200,14 @@ export const fr = {
       'Enregistrez-le dans vos favoris et envoyez-le-vous par WhatsApp pour ne pas le perdre.',
     champManquant: 'Ce champ est obligatoire.',
     telephoneInvalide: 'Numéro de téléphone invalide.',
+    emailInvalide: 'Adresse e-mail invalide.',
+    tropLong: 'Texte trop long.',
+    precedent: 'Retour',
+    suivant: 'Continuer',
+    recapTitre: 'Vérifiez vos réponses',
+    recapAide: 'Utilisez « Retour » pour corriger, puis validez les consentements ci-dessous.',
+    erreursTitre: 'Quelques corrections avant de continuer :',
+    nonRenseigne: 'Non renseigné',
   },
 
   admin: {

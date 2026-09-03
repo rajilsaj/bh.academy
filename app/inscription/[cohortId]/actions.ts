@@ -5,30 +5,19 @@ import { eq, sql as raw } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { cohorts, learners, responses, waves } from '@/lib/db/schema'
 import { formatLearnerId, generateLearnerToken } from '@/lib/ids'
-import { fr } from '@/lib/i18n/fr'
+import { lireFormData, schemaInscription, type CodeErreur } from '@/lib/inscription'
 
-const STATUTS = Object.keys(fr.inscription.statutOptions)
-const OUTILS = Object.keys(fr.inscription.outilsOptions)
-
-/** Accepte 9 chiffres locaux ou un format international. */
-function normalizePhone(input: string): string | null {
-  const digits = input.replace(/\D/g, '')
-  if (digits.length < 9 || digits.length > 15) return null
-  return input.trim()
+/** Le code d'erreur du schéma devient le paramètre `e` de l'URL de retour. */
+const RETOURS: Record<CodeErreur, string> = {
+  requis: 'manquant',
+  trop_long: 'manquant',
+  telephone: 'telephone',
+  email: 'email',
+  consent: 'consent',
 }
 
 export async function inscrire(formData: FormData) {
   const cohortId = String(formData.get('cohortId') ?? '')
-  const fullName = String(formData.get('fullName') ?? '').trim()
-  const phoneRaw = String(formData.get('phone') ?? '').trim()
-  const email = String(formData.get('email') ?? '').trim()
-  const statut = String(formData.get('statut') ?? '')
-  const confiance = Number(formData.get('confiance'))
-  const objectif = String(formData.get('objectif') ?? '').trim()
-  const outils = formData.getAll('outils').map(String).filter((o) => OUTILS.includes(o))
-  const consentCommunity = formData.get('consentCommunity') === 'on'
-  const consentData = formData.get('consentData') === 'on'
-
   const base = `/inscription/${cohortId}`
   function back(query: string): never {
     redirect(`${base}?${query}`)
@@ -37,12 +26,13 @@ export async function inscrire(formData: FormData) {
   const [cohort] = await db.select().from(cohorts).where(eq(cohorts.id, cohortId)).limit(1)
   if (!cohort) back('e=cohorte')
 
-  if (!fullName || !statut || !STATUTS.includes(statut) || !objectif) back('e=manquant')
-  if (!Number.isInteger(confiance) || confiance < 1 || confiance > 5) back('e=manquant')
-  if (!consentData) back('e=consent')
-
-  const phone = phoneRaw ? normalizePhone(phoneRaw) : null
-  if (phoneRaw && !phone) back('e=telephone')
+  // Le même schéma que le navigateur : ce qui passe côté client repasse ici.
+  const resultat = schemaInscription.safeParse(lireFormData(formData))
+  if (!resultat.success) {
+    const code = (resultat.error.issues[0]?.message ?? 'requis') as CodeErreur
+    back(`e=${RETOURS[code] ?? 'manquant'}`)
+  }
+  const { fullName, phone, email, statut, outils, confiance, objectif, consentCommunity, consentData } = resultat.data
 
   // Identifiant lisible séquentiel. En cas de collision (deux inscriptions
   // simultanées) on retente : la clé primaire garantit l'unicité.
@@ -61,7 +51,7 @@ export async function inscrire(formData: FormData) {
         id: learnerId,
         cohortId,
         fullName,
-        phone,
+        phone: phone || null,
         email: email || null,
         token,
         consentCommunity,
