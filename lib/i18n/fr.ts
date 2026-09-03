@@ -145,7 +145,6 @@ export const fr = {
   inscription: {
     titre: 'Inscription au programme',
     sousTitre: 'Formation à l’intelligence artificielle au service de l’employabilité des jeunes',
-    intro: 'Trois minutes, depuis votre téléphone. Tout est obligatoire sauf mention contraire.',
     etape: 'Étape',
     sur: 'sur',
     nomExemple: 'Ex. : Marie Okemba',

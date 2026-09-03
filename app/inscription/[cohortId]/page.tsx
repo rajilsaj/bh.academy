@@ -89,11 +89,9 @@ export default async function InscriptionPage({
 
   return (
     <LearnerShell title={fr.inscription.titre} vitrine avecAccent accueilHref="/" fond="espace">
-      <p className="-mt-3 text-sm text-white/75">
+      <p className="-mt-3 mb-5 text-sm text-white/75">
         {fr.inscription.sousTitre} — {cohort.name} ({formatDate(cohort.startsOn)})
       </p>
-      {/* Ce qui attend la personne, dit une fois : durée, support, règle. */}
-      <p className="mb-5 mt-2 text-sm font-semibold text-vitrine-jaune">{fr.inscription.intro}</p>
       {erreur ? <Alerte>{erreur}</Alerte> : null}
 
       <form action={inscrire} className="space-y-3">
