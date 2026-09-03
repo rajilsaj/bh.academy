@@ -248,29 +248,29 @@
 
   /* Le sélecteur pilule de la maquette : l'onglet actif est jaune. */
   .bo-onglets {
-    @apply inline-flex items-center gap-1 rounded-full border border-bo-bordure bg-bo-panneau p-1;
+    @apply inline-flex items-center gap-1 rounded-xl border border-bo-bordure bg-bo-panneau p-1;
   }
   .bo-onglet {
-    @apply rounded-full px-4 py-1.5 text-sm font-medium text-bo-doux hover:text-bo-texte;
+    @apply rounded-lg px-4 py-1.5 text-sm font-medium text-bo-doux hover:text-bo-texte;
   }
   .bo-onglet-actif {
-    @apply rounded-full bg-vitrine-jaune px-4 py-1.5 text-sm font-bold text-vitrine-violet-fonce;
+    @apply rounded-lg bg-vitrine-jaune px-4 py-1.5 text-sm font-bold text-vitrine-violet-fonce;
   }
 
   .bo-puce {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-bo-bordure
+    @apply inline-flex items-center gap-1.5 rounded-md border border-bo-bordure
            bg-bo-panneau px-2.5 py-1 text-xs font-medium text-bo-doux;
   }
   .bo-bouton {
-    @apply inline-flex items-center gap-2 rounded-full bg-vitrine-jaune px-4 py-2 text-sm
+    @apply inline-flex items-center gap-2 rounded-lg bg-vitrine-jaune px-4 py-2 text-sm
            font-bold tracking-fort text-vitrine-violet-fonce transition-colors hover:bg-vitrine-jaune-fonce;
   }
   .bo-bouton-discret {
-    @apply inline-flex items-center gap-2 rounded-full border-2 border-white/30
-           px-4 py-1.5 text-sm font-semibold text-bo-texte transition-colors hover:bg-white/10;
+    @apply inline-flex items-center gap-2 rounded-lg border border-white/35
+           px-4 py-1.5 text-sm font-semibold text-bo-texte transition-colors hover:border-white/70 hover:bg-white/10;
   }
   .bo-champ {
-    @apply w-full rounded-bloc border-2 border-white/25 bg-white/10 px-3 py-2.5 text-sm
+    @apply w-full rounded-lg border border-white/30 bg-white/10 px-3 py-2.5 text-sm
            text-bo-texte placeholder:text-white/45 focus:border-vitrine-jaune focus:outline-none;
   }
   /* Les listes déroulantes natives s'ouvrent sur fond clair : le texte doit y rester lisible. */
@@ -305,7 +305,7 @@
     @apply px-4 pb-1 pt-4 text-[11px] font-bold uppercase tracking-wider text-bo-doux;
   }
   .bo-nav-lien {
-    @apply flex items-center rounded-full px-3 py-2 text-sm font-medium text-bo-doux
+    @apply flex items-center rounded-lg px-3 py-2 text-sm font-medium text-bo-doux
            hover:bg-white/10 hover:text-bo-texte
            aria-[current=page]:bg-vitrine-jaune aria-[current=page]:font-bold aria-[current=page]:text-vitrine-violet-fonce;
   }
