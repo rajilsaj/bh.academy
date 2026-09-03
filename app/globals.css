@@ -220,11 +220,11 @@
 
 /* ------------------------------------------------------------------ */
 /* LE COCKPIT — le back-office, dans la peau de la vitrine : violet          */
-/* quadrillé, panneaux translucides, jaune pour l'action, titres Fredoka.     */
+/* quadrillé (fond fixe, sans animation), panneaux translucides, jaune.      */
 /* ------------------------------------------------------------------ */
 @layer components {
   .bo {
-    @apply relative z-10 min-h-screen bg-vitrine-violet/90 bg-quadrillage bg-grille44 text-bo-texte;
+    @apply relative min-h-screen bg-vitrine-violet bg-quadrillage bg-grille44 text-bo-texte;
     color-scheme: dark;
   }
   .bo h1 {

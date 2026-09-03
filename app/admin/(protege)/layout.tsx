@@ -4,7 +4,6 @@ import { auth, can, signOut } from '@/lib/auth'
 import { fr } from '@/lib/i18n/fr'
 import type { Permission } from '@/lib/auth'
 import { AdminSidebar, type GroupeNav } from '@/components/AdminSidebar'
-import { Hyperespace } from '@/components/Hyperespace'
 import { LogoFondation } from '@/components/LogoFondation'
 import { policeTitre } from '@/lib/fonts'
 
@@ -75,9 +74,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className={`${policeTitre.variable} bo lg:flex lg:min-h-screen`}>
-      {/* Le même ciel en vitesse lumière que la vitrine, derrière le violet. */}
-      <Hyperespace />
-
       {/* ------------------------------------------------ barre latérale */}
       <aside className="bo-sidebar hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col">
         <div className="border-b border-bo-bordure px-4 py-4">

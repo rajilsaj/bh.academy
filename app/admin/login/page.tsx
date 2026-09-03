@@ -5,7 +5,6 @@ import { auth, googleActive, signIn } from '@/lib/auth'
 import { AlerteSombre, SuccesSombre } from '@/components/AccesRefuse'
 import { fr } from '@/lib/i18n/fr'
 import { LogoFondation } from '@/components/LogoFondation'
-import { Hyperespace } from '@/components/Hyperespace'
 import { policeTitre } from '@/lib/fonts'
 
 export const dynamic = 'force-dynamic'
@@ -61,7 +60,6 @@ export default async function LoginPage({
 
   return (
     <div className={`${policeTitre.variable} bo grid place-items-center px-4 py-16`}>
-      <Hyperespace />
       <main className="w-full max-w-sm">
         <div className="mb-6 flex items-center gap-3">
           {/* La marque de la Fondation, en blanc sur le violet. */}
