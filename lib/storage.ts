@@ -15,7 +15,10 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 export const BUCKET = process.env.SUPABASE_BUCKET ?? 'fichiers'
 const LOCAL_ROOT = path.resolve(process.cwd(), 'data', 'uploads')
 
-export const supabaseActif = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY)
+/** Évalué à l'appel, pas à l'import : les scripts chargent `.env` après avoir importé ce module. */
+export function supabaseActif(): boolean {
+  return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY)
+}
 
 let client: SupabaseClient | null = null
 function supabase(): SupabaseClient {
@@ -39,7 +42,7 @@ export async function envoyerFichier(chemin: string, octets: Buffer, contentType
   const sur = cheminSur(chemin)
   if (!sur) throw new Error(`Chemin de fichier refusé : ${chemin}`)
 
-  if (!supabaseActif) {
+  if (!supabaseActif()) {
     const absolu = path.join(LOCAL_ROOT, sur)
     await mkdir(path.dirname(absolu), { recursive: true })
     await writeFile(absolu, octets)
@@ -56,7 +59,7 @@ export async function lireFichier(chemin: string): Promise<Buffer | null> {
   const sur = cheminSur(chemin)
   if (!sur) return null
 
-  if (!supabaseActif) {
+  if (!supabaseActif()) {
     try {
       return await readFile(path.join(LOCAL_ROOT, sur))
     } catch {
@@ -74,7 +77,7 @@ export async function lireFichier(chemin: string): Promise<Buffer | null> {
  * pour qu'un projet Supabase neuf soit prêt sans passer par le Studio.
  */
 export async function assurerBucket(): Promise<void> {
-  if (!supabaseActif) return
+  if (!supabaseActif()) return
   const { data } = await supabase().storage.getBucket(BUCKET)
   if (data) return
   const { error } = await supabase().storage.createBucket(BUCKET, { public: false })
