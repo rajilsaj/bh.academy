@@ -19,6 +19,10 @@ const GROUPES: { titre: string; liens: Lien[] }[] = [
     liens: [{ href: '/admin/utilisateurs', label: fr.admin.nav.utilisateurs, permission: 'gererUtilisateurs' }],
   },
   {
+    titre: fr.admin.sidebar.audience,
+    liens: [{ href: '/admin/visites', label: fr.admin.nav.visites, permission: 'voirVisites' }],
+  },
+  {
     titre: fr.admin.sidebar.modules,
     liens: [
       { href: '/admin/modules', label: fr.admin.nav.modules, permission: 'voirModules' },

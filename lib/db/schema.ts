@@ -420,3 +420,24 @@ export const notifications = pgTable(
     statusIdx: index('notifications_status_idx').on(t.status, t.createdAt),
   }),
 )
+
+/** Mesure d'audience : une ligne par page vue sur le site public. */
+export const visits = pgTable(
+  'visits',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    /** Identifiant posé en cookie par le middleware : la même personne, d'une visite à l'autre. */
+    visitorId: text('visitor_id').notNull(),
+    ip: text('ip'),
+    country: text('country'),
+    city: text('city'),
+    path: text('path').notNull(),
+    referer: text('referer'),
+    userAgent: text('user_agent'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    visitorIdx: index('visits_visitor_idx').on(t.visitorId, t.createdAt),
+    createdIdx: index('visits_created_idx').on(t.createdAt),
+  }),
+)

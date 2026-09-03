@@ -43,6 +43,13 @@
       "when": 1735689605000,
       "tag": "0005_formateurs",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1735689606000,
+      "tag": "0006_visites",
+      "breakpoints": true
     }
   ]
 }
