@@ -978,6 +978,8 @@ export const fr = {
       facebook: 'Facebook',
       site: 'Site web',
       linktree: 'Linktree',
+      precedent: 'Faire défiler vers la gauche',
+      suivant: 'Faire défiler vers la droite',
     },
 
     /* L'assistant de la FAQ. */
