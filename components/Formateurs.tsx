@@ -30,6 +30,13 @@ function IconeSite() {
   )
 }
 
+/** La première phrase de la présentation, jamais plus de ~90 caractères. */
+function resume(bio: string | null): string | null {
+  if (!bio) return null
+  const premiere = bio.split(/(?<=[.!?])\s/)[0] ?? bio
+  return premiere.length > 90 ? `${premiere.slice(0, 87).trimEnd()}…` : premiere
+}
+
 function Carte({ f, eco }: { f: FormateurPublic; eco: boolean }) {
   const liens = [
     f.linkedin ? { href: f.linkedin, label: v.formateurs.linkedin, icone: <IconeLinkedin /> } : null,
@@ -37,59 +44,60 @@ function Carte({ f, eco }: { f: FormateurPublic; eco: boolean }) {
     f.website ? { href: f.website, label: v.formateurs.site, icone: <IconeSite /> } : null,
     f.linktree ? { href: f.linktree, label: v.formateurs.linktree, icone: <IconeSite /> } : null,
   ].filter((l): l is NonNullable<typeof l> => l !== null)
+  const texte = resume(f.bio)
 
   return (
-    <article className="carte-violette flex gap-4 lg:p-6">
-      {/* Le portrait, ou les initiales sur un disque jaune s'il n'y en a pas encore. */}
+    <article className="carte-violette flex w-64 shrink-0 flex-col items-center px-5 py-6 text-center">
+      {/* Le portrait, grand ; ou les initiales sur un disque jaune. */}
       {f.aPhoto && !eco ? (
         <img
           src={`/api/formateurs/${f.id}/photo`}
           alt={f.nom}
-          width={96}
-          height={96}
+          width={144}
+          height={144}
           loading="lazy"
           decoding="async"
-          className="h-20 w-20 shrink-0 rounded-full object-cover ring-4 ring-white/20 sm:h-24 sm:w-24"
+          className="h-36 w-36 rounded-full object-cover ring-4 ring-white/25"
         />
       ) : (
         <span
           aria-hidden
-          className="titre grid h-20 w-20 shrink-0 place-items-center rounded-full bg-vitrine-jaune text-3xl text-vitrine-violet-fonce ring-4 ring-white/20 sm:h-24 sm:w-24"
+          className="titre grid h-36 w-36 place-items-center rounded-full bg-vitrine-jaune text-5xl text-vitrine-violet-fonce ring-4 ring-white/25"
         >
           {initiales(f.nom)}
         </span>
       )}
 
-      <div className="min-w-0 flex-1">
-        <h3 className="titre text-xl leading-tight lg:text-2xl">{f.nom}</h3>
-        {f.modules.length > 0 ? (
-          <p className="mt-1 text-lg font-semibold text-vitrine-jaune">{f.modules.join(' · ')}</p>
-        ) : null}
-        {f.bio ? <p className="texte-leger mt-2 text-lg text-pretty leading-snug text-white">{f.bio}</p> : null}
-        {liens.length > 0 ? (
-          <p className="mt-3 flex flex-wrap gap-2">
-            {liens.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/30 px-3 py-1 text-sm font-bold text-white transition-colors hover:bg-white hover:text-vitrine-violet-fonce"
-              >
-                {l.icone}
-                {l.label}
-              </a>
-            ))}
-          </p>
-        ) : null}
-      </div>
+      <h3 className="titre mt-4 text-balance text-xl leading-tight">{f.nom}</h3>
+      {f.modules.length > 0 ? <p className="mt-1 text-lg font-semibold text-vitrine-jaune">{f.modules[0]}</p> : null}
+      {texte ? <p className="texte-leger mt-2 line-clamp-2 text-lg leading-snug text-white">{texte}</p> : null}
+
+      {liens.length > 0 ? (
+        <p className="mt-auto flex gap-2 pt-4">
+          {liens.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${l.label} — ${f.nom}`}
+              title={l.label}
+              className="grid h-9 w-9 place-items-center rounded-full border border-white/30 text-white transition-colors hover:bg-white hover:text-vitrine-violet-fonce"
+            >
+              {l.icone}
+            </a>
+          ))}
+        </p>
+      ) : null}
     </article>
   )
 }
 
 /**
- * « Nos formateurs » : lu en base à chaque affichage. Sans formateur — ou si
- * la base ne répond pas — la section disparaît, la page reste entière.
+ * « Nos experts », en défilement continu de gauche à droite, qui s'arrête au
+ * survol (voir `.defilement-*` dans globals.css). Aucun JavaScript : la piste
+ * est doublée pour boucler sans couture. Sans formateur — ou si la base ne
+ * répond pas — la section disparaît, la page reste entière.
  */
 export async function Formateurs() {
   let liste: FormateurPublic[]
@@ -101,18 +109,26 @@ export async function Formateurs() {
   }
   if (liste.length === 0) return null
   const eco = modeEconomie()
+  // Environ six secondes par carte : lisible, jamais frénétique.
+  const duree = `${Math.max(24, liste.length * 6)}s`
 
   return (
-    <section id="formateurs" className="parallaxe-apparition px-5 pb-12 sm:px-8 lg:px-12 lg:pb-16">
-      <h2 className="titre text-balance text-3xl sm:text-4xl lg:text-5xl">
-        {v.formateurs.titre} <span className="manuscrit text-vitrine-jaune">{v.formateurs.manuscrit}</span>
-      </h2>
-      <p className="texte-leger mt-3 max-w-2xl text-pretty text-white">{v.formateurs.sousTitre}</p>
+    <section id="formateurs" className="parallaxe-apparition pb-12 lg:pb-16">
+      <div className="px-5 sm:px-8 lg:px-12">
+        <h2 className="titre text-balance text-3xl sm:text-4xl lg:text-5xl">
+          {v.formateurs.titre} <span className="manuscrit text-vitrine-jaune">{v.formateurs.manuscrit}</span>
+        </h2>
+        <p className="texte-leger mt-3 max-w-2xl text-pretty text-white">{v.formateurs.sousTitre}</p>
+      </div>
 
-      <div className="mt-6 grid gap-3 md:grid-cols-2 lg:mt-8 lg:gap-5">
-        {liste.map((f) => (
-          <Carte key={f.id} f={f} eco={eco} />
-        ))}
+      <div className="defilement-cadre mt-6 lg:mt-8">
+        <ul className="defilement-piste" style={{ animationDuration: duree }}>
+          {[...liste, ...liste].map((f, i) => (
+            <li key={`${f.id}-${i}`} aria-hidden={i >= liste.length ? true : undefined}>
+              <Carte f={f} eco={eco} />
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )
