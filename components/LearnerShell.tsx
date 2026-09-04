@@ -23,6 +23,7 @@ export async function LearnerShell({
   fond = 'violet',
   vitrine = false,
   avecAccent = false,
+  large = false,
   children,
 }: {
   title?: string
@@ -36,6 +37,8 @@ export async function LearnerShell({
   vitrine?: boolean
   /** Charge en plus la police manuscrite (50 Ko). Vitrine uniquement. */
   avecAccent?: boolean
+  /** Colonne plus large (deux cartes côte à côte). */
+  large?: boolean
   children: React.ReactNode
 }) {
   // En mode économie, aucune police : le système fait l'affaire.
@@ -51,7 +54,7 @@ export async function LearnerShell({
     .join(' ')
   return (
     <div className={`${polices} ${fond === 'espace' ? 'fond-espace' : 'panneau-violet'} min-h-screen`}>
-      <main className="mx-auto max-w-md px-4 py-6">
+      <main className={`mx-auto ${large ? 'max-w-2xl' : 'max-w-md'} px-4 py-6`}>
         <header className="mb-5 flex items-center justify-between gap-3">
           {/* La marque, pas le mot : 4 Ko de PNG, loin sous le budget de 100 Ko. */}
           <LogoFondation hauteur="h-6" href={accueilHref} />

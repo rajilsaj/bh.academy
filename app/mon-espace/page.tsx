@@ -80,28 +80,34 @@ export default async function MonEspacePage({ searchParams }: { searchParams: { 
     )
   }
 
+  /* Deux portes, côte à côte : l'apprenant, et l'équipe. */
   return (
-    <LearnerShell title={t.titre} vitrine avecAccent accueilHref="/" fond="espace">
-      <Bloc className="space-y-4">
-        <p className="titre text-2xl">{t.accrocheTitre}</p>
-        <p className="text-sm text-slate-700">{t.accrocheTexte}</p>
-        {googleActive ? (
-          <form action={connexionGoogleEspace}>
-            <button type="submit" className="bouton-principal !gap-3">
-              <MarqueGoogle />
-              {t.bouton}
-            </button>
-          </form>
-        ) : (
-          <p className="rounded-bloc bg-vitrine-lavande px-3 py-2 text-sm text-vitrine-violet-fonce">{fr.inscription.google.indisponible}</p>
-        )}
-        <p className="text-sm text-slate-500">
-          {t.personnel}{' '}
-          <Link href="/admin/login" className="font-semibold text-vitrine-violet underline underline-offset-2">
-            {t.personnelLien}
+    <LearnerShell title={t.titre} vitrine avecAccent accueilHref="/" fond="espace" large>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Bloc className="flex flex-col gap-3">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-vitrine-violet">{t.apprenantTitre}</p>
+          <p className="titre text-2xl">{t.apprenantTexte}</p>
+          <p className="flex-1 text-sm text-slate-700">{t.accrocheTexte}</p>
+          {googleActive ? (
+            <form action={connexionGoogleEspace}>
+              <button type="submit" className="bouton-principal !gap-3 !py-3 !text-base">
+                <MarqueGoogle />
+                {t.bouton}
+              </button>
+            </form>
+          ) : (
+            <p className="rounded-bloc bg-vitrine-lavande px-3 py-2 text-sm text-vitrine-violet-fonce">{fr.inscription.google.indisponible}</p>
+          )}
+        </Bloc>
+        <Bloc className="flex flex-col gap-3 !bg-vitrine-violet-clair !text-white">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-vitrine-turquoise">{t.cockpitTitre}</p>
+          <p className="titre text-2xl">{t.cockpitTexte}</p>
+          <p className="flex-1 text-sm text-white/80">{fr.admin.connexionAide}</p>
+          <Link href="/admin/login" className="bouton-principal !py-3 !text-base">
+            {t.cockpitBouton}
           </Link>
-        </p>
-      </Bloc>
+        </Bloc>
+      </div>
     </LearnerShell>
   )
 }
