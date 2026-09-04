@@ -21,17 +21,24 @@ const config: Config = {
         accent: ['var(--police-accent, "Segoe Script")', 'cursive'],
       },
       colors: {
+        /*
+         * La palette du dossier « Formation à l'IA » (FORMATION BH AI v2.pdf) :
+         * marine profond en fond, bleu roi pour les titres, cyan en accent,
+         * orange pour l'action, gris clair pour les panneaux. Les noms des
+         * jetons sont restés ceux de la première maquette (violet, jaune…) ;
+         * seules les valeurs ont changé, pour ne rien réécrire dans les écrans.
+         */
         vitrine: {
-          violet: '#5A32D5',
-          'violet-fonce': '#4726AE',
-          'violet-clair': '#7048E8',
-          lavande: '#E7DDFA',
-          'lavande-fonce': '#CBB8F2',
-          jaune: '#FCC63C',
-          'jaune-fonce': '#E8AF17',
-          turquoise: '#4FE0D2',
-          vert: '#17C08B',
-          rose: '#F26FC0',
+          violet: '#0B1D3F',
+          'violet-fonce': '#061229',
+          'violet-clair': '#24408F',
+          lavande: '#E4EEF8',
+          'lavande-fonce': '#C6D8EE',
+          jaune: '#DC4D28',
+          'jaune-fonce': '#B93D1E',
+          turquoise: '#00AEEF',
+          vert: '#0D6EB7',
+          rose: '#00719F',
         },
         /*
          * Le cockpit (back-office) : fond bleu très clair, cartes blanches,
@@ -45,14 +52,14 @@ const config: Config = {
           bordure: '#DCE5F2',
           texte: '#15213A',
           doux: '#6B7A99',
-          bleu: '#3B6BA5',
-          'bleu-fonce': '#274C7A',
-          'bleu-clair': '#D6E6FA',
+          bleu: '#0D6EB7',
+          'bleu-fonce': '#0B1D3F',
+          'bleu-clair': '#D6E9F8',
           menthe: '#2BB673',
-          rose: '#E5484D',
-          jaune: '#F5B84A',
-          violet: '#3B6BA5',
-          cyan: '#5AA7E8',
+          rose: '#DC4D28',
+          jaune: '#E8891F',
+          violet: '#0D6EB7',
+          cyan: '#00AEEF',
         },
         /* Couleurs de marques tierces citées sur le site — jamais les nôtres. */
         marque: {

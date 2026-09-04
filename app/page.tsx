@@ -42,9 +42,9 @@ const v = fr.vitrine
  */
 const ARGUMENTS = [
   { cle: 'pratique', fond: 'bg-vitrine-turquoise', texte: 'text-slate-900' },
-  { cle: 'telephone', fond: 'bg-vitrine-vert', texte: 'text-slate-900' },
-  { cle: 'suivi', fond: 'bg-vitrine-jaune', texte: 'text-vitrine-violet-fonce' },
-  { cle: 'certificat', fond: 'bg-vitrine-rose', texte: 'text-slate-900' },
+  { cle: 'telephone', fond: 'bg-vitrine-vert', texte: 'text-white' },
+  { cle: 'suivi', fond: 'bg-vitrine-jaune', texte: 'text-white' },
+  { cle: 'certificat', fond: 'bg-vitrine-rose', texte: 'text-white' },
 ] as const
 
 /**
@@ -57,8 +57,8 @@ const ARGUMENTS = [
 const MODULES_STYLE = [
   { fond: 'bg-vitrine-violet-clair', texte: 'text-white', Icone: Reseau },
   { fond: 'bg-vitrine-turquoise', texte: 'text-slate-900', Icone: Prompt },
-  { fond: 'bg-vitrine-jaune', texte: 'text-vitrine-violet-fonce', Icone: Mallette },
-  { fond: 'bg-vitrine-vert', texte: 'text-slate-900', Icone: Tableur },
+  { fond: 'bg-vitrine-jaune', texte: 'text-white', Icone: Mallette },
+  { fond: 'bg-vitrine-vert', texte: 'text-white', Icone: Tableur },
 ] as const
 
 /* Dans l'ordre de la page : ce qu'on promet, le programme lui-même, les questions. */
