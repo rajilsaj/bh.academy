@@ -48,6 +48,8 @@ export default async function LoginPage({
 }) {
   const session = await auth()
   if (session?.user?.role) redirect('/admin')
+  // Connecté avec Google, mais sans compte dans Utilisateurs : on le dit.
+  const sansAcces = Boolean(session?.user?.email && !session.user.role)
 
   // `error` est posé par Auth.js quand Google a répondu mais que l'adresse
   // n'a pas de compte chez nous (AccessDenied) ou que l'échange a échoué.
@@ -74,6 +76,10 @@ export default async function LoginPage({
           {erreur ? (
             <div className="mb-4">
               <AlerteSombre>{erreur}</AlerteSombre>
+            </div>
+          ) : sansAcces ? (
+            <div className="mb-4">
+              <AlerteSombre>{fr.admin.sansAcces}</AlerteSombre>
             </div>
           ) : null}
           {searchParams.ok === 'confirme' ? (

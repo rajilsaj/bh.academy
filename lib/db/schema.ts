@@ -60,6 +60,8 @@ export const learners = pgTable(
     fullName: text('full_name').notNull(),
     phone: text('phone'),
     email: text('email'),
+    /** Identifiant Google stable du compte qui s'est inscrit ; un compte, une inscription. */
+    googleSub: text('google_sub').unique(),
     token: varchar('token', { length: 32 }).notNull().unique(),
     consentCommunity: boolean('consent_community').notNull().default(false),
     consentData: boolean('consent_data').notNull().default(false),

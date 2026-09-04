@@ -50,6 +50,13 @@
       "when": 1735689606000,
       "tag": "0006_visites",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1735689607000,
+      "tag": "0007_google_apprenants",
+      "breakpoints": true
     }
   ]
 }

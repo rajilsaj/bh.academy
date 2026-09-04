@@ -42,6 +42,8 @@ export type TextesAssistant = {
 type Props = {
   action: (formData: FormData) => Promise<void>
   cohortId: string
+  /** Le nombre d'étapes déjà franchies avant l'assistant (la connexion Google). */
+  decalage?: number
   etapes: EtapeInscription[]
   textes: TextesAssistant
   /** Libellé de chaque champ, pour les erreurs et le récapitulatif. */
@@ -53,7 +55,7 @@ type Props = {
 
 type Erreurs = Partial<Record<ChampInscription, CodeErreur>>
 
-export function AssistantInscription({ action, cohortId, etapes, textes, champs, options, messages }: Props) {
+export function AssistantInscription({ action, cohortId, decalage = 0, etapes, textes, champs, options, messages }: Props) {
   const formulaire = useRef<HTMLFormElement>(null)
   const [hydrate, setHydrate] = useState(false)
   const [courante, setCourante] = useState(0)
@@ -129,7 +131,7 @@ export function AssistantInscription({ action, cohortId, etapes, textes, champs,
 
       {/* ------------------------------------------------ barre de progression */}
       {hydrate ? (
-        <ol className="mb-5 flex items-center gap-2" aria-label={`${textes.etape} ${courante + 1} ${textes.sur} ${etapes.length}`}>
+        <ol className="mb-5 flex items-center gap-2" aria-label={`${textes.etape} ${courante + 1 + decalage} ${textes.sur} ${etapes.length + decalage}`}>
           {etapes.map((e, i) => {
             const faite = i < courante
             const active = i === courante
@@ -145,7 +147,7 @@ export function AssistantInscription({ action, cohortId, etapes, textes, champs,
                         : 'bg-white/20 text-white'
                   }`}
                 >
-                  {faite ? '✓' : i + 1}
+                  {faite ? '✓' : i + 1 + decalage}
                 </span>
                 <span className={`truncate text-sm font-semibold ${active ? 'text-white' : 'hidden text-white/60 sm:inline'}`}>
                   {e.titre}

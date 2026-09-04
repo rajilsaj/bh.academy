@@ -212,6 +212,18 @@ export const fr = {
     champManquant: 'Ce champ est obligatoire.',
     telephoneInvalide: 'Numéro de téléphone invalide.',
     emailInvalide: 'Adresse e-mail invalide.',
+    googleRequis: 'Connectez-vous d’abord avec votre compte Google.',
+    dejaInscrit: 'Ce compte Google est déjà inscrit : voici votre lien personnel.',
+    google: {
+      etape: 'Votre compte Google',
+      titre: 'Commencez avec votre compte Google',
+      texte: 'Votre adresse Gmail devient votre identifiant : pas de mot de passe à retenir, et la Fondation sait vous joindre. Vos réponses restent privées.',
+      bouton: 'Continuer avec Google',
+      indisponible: 'La connexion Google n’est pas encore activée sur ce site. Réessayez plus tard.',
+      connecte: 'Connecté avec',
+      changer: 'Ce n’est pas vous ? Changer de compte',
+      emailVerifie: 'Adresse vérifiée par Google',
+    },
     tropLong: 'Texte trop long.',
     precedent: 'Retour',
     suivant: 'Continuer',
@@ -235,6 +247,7 @@ export const fr = {
     googleRefuse:
       "Aucun compte n'est associé à cette adresse Google. Demandez à un administrateur de créer votre compte avec cette adresse.",
     googleErreur: 'La connexion Google a échoué. Réessayez, ou utilisez votre e-mail et mot de passe.',
+    sansAcces: 'Ce compte Google n’a pas accès au Cockpit. Demandez à un administrateur de l’ajouter dans Utilisateurs.',
     accesRefuse: 'Accès refusé',
     accesRefuseDetail: "Votre rôle ne permet pas d'accéder à cette page.",
     nav: {

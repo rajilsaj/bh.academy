@@ -12,7 +12,7 @@ const BASE = '/admin/ressources'
 const champ = (f: FormData, nom: string) => String(f.get(nom) ?? '').trim()
 
 /** Un formateur ne touche qu'aux modules qui lui sont attribués. */
-async function moduleAutorise(moduleId: string, userId: string, role: string) {
+async function moduleAutorise(moduleId: string, userId: string, role: string | undefined) {
   const [m] = await db.select().from(programModules).where(eq(programModules.id, moduleId)).limit(1)
   if (!m) return null
   if (role === 'formateur' && m.trainerId !== userId) return null

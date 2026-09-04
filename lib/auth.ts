@@ -6,9 +6,22 @@ import bcrypt from 'bcryptjs'
 import { db } from '@/lib/db'
 import { staff, trainerProfiles, type Role } from '@/lib/db/schema'
 
+/**
+ * Deux publics, une seule session :
+ *
+ *  - **Le personnel** (admin, formateur) entre par e-mail + mot de passe, ou
+ *    par Google si son adresse est déjà enregistrée dans Utilisateurs. Il a
+ *    un `role`, et c'est ce rôle qui ouvre le Cockpit.
+ *
+ *  - **Les apprenants** s'identifient avec Google avant de s'inscrire à la
+ *    formation : l'adresse est vérifiée par Google, on ne la ressaisit pas.
+ *    Leur session n'a pas de `role` — le Cockpit leur reste fermé — mais
+ *    porte `googleSub`, l'identifiant Google stable, qui relie l'inscription
+ *    au compte.
+ */
 declare module 'next-auth' {
   interface Session {
-    user: { id: string; role: Role } & DefaultSession['user']
+    user: { id: string; role?: Role; googleSub?: string } & DefaultSession['user']
   }
   interface User {
     role?: Role
@@ -62,31 +75,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers,
   callbacks: {
     /**
-     * Google ne crée jamais de compte : seule une adresse déjà enregistrée par un
-     * administrateur dans Utilisateurs peut entrer. Un formateur invité qui
-     * arrive par Google confirme son compte du même coup.
+     * Google : l'adresse doit être vérifiée par Google, c'est tout. Un
+     * formateur invité qui arrive par Google confirme son compte du même coup.
+     * Le rôle (ou son absence) est décidé dans `jwt`.
      */
     async signIn({ account, profile }) {
       if (account?.provider !== 'google') return true
       const email = String(profile?.email ?? '')
       if (!email || profile?.email_verified === false) return false
       const member = await compteParEmail(email)
-      if (!member) return false
-      await db
-        .update(trainerProfiles)
-        .set({ confirmedAt: new Date(), invitationToken: null })
-        .where(and(eq(trainerProfiles.staffId, member.id), isNull(trainerProfiles.confirmedAt)))
+      if (member) {
+        await db
+          .update(trainerProfiles)
+          .set({ confirmedAt: new Date(), invitationToken: null })
+          .where(and(eq(trainerProfiles.staffId, member.id), isNull(trainerProfiles.confirmedAt)))
+      }
       return true
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, profile }) {
       if (account?.provider === 'google') {
-        // L'identité vient de notre table, pas du profil Google.
-        const member = await compteParEmail(String(user?.email ?? token.email ?? ''))
-        if (member) {
-          token.uid = member.id
-          token.role = member.role
-          token.email = member.email
-        }
+        // L'identité du personnel vient de notre table, pas du profil Google.
+        const email = String(profile?.email ?? user?.email ?? token.email ?? '')
+        const member = await compteParEmail(email)
+        token.uid = member?.id ?? ''
+        token.role = member?.role
+        token.email = member?.email ?? email.toLowerCase()
+        token.googleSub = account.providerAccountId
       } else if (user) {
         token.uid = user.id
         token.role = user.role
@@ -97,7 +111,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user = {
         ...session.user,
         id: String(token.uid ?? ''),
-        role: token.role as Role,
+        role: token.role as Role | undefined,
+        googleSub: typeof token.googleSub === 'string' ? token.googleSub : undefined,
       }
       return session
     },
@@ -132,4 +147,11 @@ export async function requirePermission(permission: Permission) {
   const session = await auth()
   if (!session?.user?.role) return null
   return can(session.user.role, permission) ? session : null
+}
+
+/** L'identité Google de la personne connectée (apprenant ou personnel), ou `null`. */
+export async function identiteGoogle() {
+  const session = await auth()
+  if (!session?.user?.googleSub || !session.user.email) return null
+  return { sub: session.user.googleSub, email: session.user.email, nom: session.user.name ?? '', image: session.user.image ?? null }
 }

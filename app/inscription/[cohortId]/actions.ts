@@ -5,6 +5,7 @@ import { eq, sql as raw } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { cohorts, learners, responses, waves } from '@/lib/db/schema'
 import { formatLearnerId, generateLearnerToken } from '@/lib/ids'
+import { identiteGoogle, signIn, signOut } from '@/lib/auth'
 import { lireFormData, schemaInscription, type CodeErreur } from '@/lib/inscription'
 
 /** Le code d'erreur du schéma devient le paramètre `e` de l'URL de retour. */
@@ -14,6 +15,18 @@ const RETOURS: Record<CodeErreur, string> = {
   telephone: 'telephone',
   email: 'email',
   consent: 'consent',
+}
+
+/** Étape 1 : Google. La personne revient sur cette même page, identifiée. */
+export async function connexionGoogleInscription(formData: FormData) {
+  const cohortId = String(formData.get('cohortId') ?? '')
+  await signIn('google', { redirectTo: `/inscription/${cohortId}` })
+}
+
+/** « Ce n'est pas vous ? » : on oublie la session et on revient à l'étape Google. */
+export async function changerCompteInscription(formData: FormData) {
+  const cohortId = String(formData.get('cohortId') ?? '')
+  await signOut({ redirectTo: `/inscription/${cohortId}` })
 }
 
 export async function inscrire(formData: FormData) {
@@ -26,13 +39,21 @@ export async function inscrire(formData: FormData) {
   const [cohort] = await db.select().from(cohorts).where(eq(cohorts.id, cohortId)).limit(1)
   if (!cohort) back('e=cohorte')
 
+  // Google d'abord : sans identité vérifiée, pas d'inscription.
+  const google = await identiteGoogle()
+  if (!google) back('e=google')
+
+  // Déjà inscrit avec ce compte Google : on renvoie le lien personnel existant.
+  const [deja] = await db.select({ token: learners.token }).from(learners).where(eq(learners.googleSub, google.sub)).limit(1)
+  if (deja) redirect(`${base}?nouveau=${deja.token}&deja=1`)
+
   // Le même schéma que le navigateur : ce qui passe côté client repasse ici.
-  const resultat = schemaInscription.safeParse(lireFormData(formData))
+  const resultat = schemaInscription.safeParse({ ...lireFormData(formData), email: google.email })
   if (!resultat.success) {
     const code = (resultat.error.issues[0]?.message ?? 'requis') as CodeErreur
     back(`e=${RETOURS[code] ?? 'manquant'}`)
   }
-  const { fullName, phone, email, statut, outils, confiance, objectif, consentCommunity, consentData } = resultat.data
+  const { fullName, phone, statut, outils, confiance, objectif, consentCommunity, consentData } = resultat.data
 
   // Identifiant lisible séquentiel. En cas de collision (deux inscriptions
   // simultanées) on retente : la clé primaire garantit l'unicité.
@@ -52,7 +73,8 @@ export async function inscrire(formData: FormData) {
         cohortId,
         fullName,
         phone: phone || null,
-        email: email || null,
+        email: google.email,
+        googleSub: google.sub,
         token,
         consentCommunity,
         consentData,
