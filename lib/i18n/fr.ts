@@ -1089,8 +1089,6 @@ export const fr = {
     signatureAuteurUrl: 'https://rajil.me',
     /* La ligne tout en bas de la page, sur le fond, sans cartouche. */
     copyright: '© {annee} Fondation BantuHub',
-    developpePar: 'Développé par',
-    developpeur: 'Rajil',
   },
 
   parcours: {
