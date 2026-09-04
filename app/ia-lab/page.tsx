@@ -61,7 +61,7 @@ export default async function IaLabPage() {
           <h2 className="titre mt-1 text-2xl">{t.projetsTitre}</h2>
           <div className="mt-4 rounded-bloc border border-white/20 bg-white/10 p-4">
             <p className="manuscrit text-2xl text-vitrine-turquoise">{t.projetFormationAccroche}</p>
-            <p className="titre mt-1 text-xl">{fr.vitrine.sousTitre}</p>
+            <p className="titre mt-1 text-xl">{fr.inscription.sousTitre}</p>
             <p className="mt-2 text-sm leading-relaxed text-white/85">{t.projetFormationTexte}</p>
             <div className="mt-4 flex flex-col gap-2 sm:flex-row">
               <Link href="/#programme" className="bouton-principal !py-3 !text-base sm:w-auto">
