@@ -45,6 +45,31 @@ export const PHOTOS: Record<string, PhotoVitrine> = {
     photographe: null,
     unsplashId: null,
   },
+  /* Les visuels de la page IA Lab, fournis par la Fondation. */
+  ialabPourquoi: {
+    slot: 'ialab/pourquoi',
+    largeurs: [400, 543],
+    largeurRef: 543,
+    hauteurRef: 295,
+    photographe: null,
+    unsplashId: null,
+  },
+  ialabApproche: {
+    slot: 'ialab/approche',
+    largeurs: [400, 543],
+    largeurRef: 543,
+    hauteurRef: 295,
+    photographe: null,
+    unsplashId: null,
+  },
+  ialabIntervention: {
+    slot: 'ialab/intervention',
+    largeurs: [400, 543],
+    largeurRef: 543,
+    hauteurRef: 295,
+    photographe: null,
+    unsplashId: null,
+  },
   pratique: {
     slot: 'arguments/pratique',
     largeurs: [400, 640, 900],

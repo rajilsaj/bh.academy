@@ -67,6 +67,13 @@ const PHOTOS: Photo[] = [
     largeurs: [160, 240, 320],
     fond: '#ffffff',
   },
+  /*
+   * Les trois visuels de la page IA Lab, fournis par la Fondation (543 × 295) :
+   * on reste sous leur largeur native, en deux tailles.
+   */
+  { source: 'ialab-pourquoi.png', slot: 'ialab/pourquoi', ratio: 543 / 295, largeurs: [400, 543] },
+  { source: 'ialab-approche.png', slot: 'ialab/approche', ratio: 543 / 295, largeurs: [400, 543] },
+  { source: 'ialab-intervention.png', slot: 'ialab/intervention', ratio: 543 / 295, largeurs: [400, 543] },
   {
     source: 'christina-wocintechchat-com-m-6U4n-I2_R2M-unsplash.jpg',
     slot: 'arguments/pratique',

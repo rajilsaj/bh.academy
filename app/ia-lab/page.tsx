@@ -39,7 +39,7 @@ function Section({
         <div className="mt-4 space-y-3 text-lg leading-relaxed text-slate-800">{children}</div>
       </div>
       <div className={`overflow-hidden rounded-carte shadow-lg ${inverse ? 'md:order-1' : ''}`}>
-        <Photo nom={photo} alt={alt} sizes="(min-width: 768px) 45vw, 100vw" className="h-64 w-full object-cover md:h-80" />
+        <Photo nom={photo} alt={alt} sizes="(min-width: 768px) 45vw, 100vw" className="h-auto w-full object-cover" />
       </div>
     </section>
   )
@@ -88,15 +88,15 @@ export default async function IaLabPage() {
 
       {/* ---------------------------------------------------------- sections */}
       <div className="mx-auto max-w-6xl space-y-16 px-5 py-12 sm:px-8 lg:space-y-24 lg:py-16">
-        <Section titre={t.pourquoiTitre} photo="suivi" alt={v.photos.suivi}>
+        <Section titre={t.pourquoiTitre} photo="ialabPourquoi" alt={t.photoPourquoi}>
           <p>{t.pourquoiTexte}</p>
         </Section>
 
-        <Section titre={t.approcheTitre} photo="pratique" alt={v.photos.pratique} inverse>
+        <Section titre={t.approcheTitre} photo="ialabApproche" alt={t.photoApproche} inverse>
           <p>{t.approcheTexte}</p>
         </Section>
 
-        <Section titre={t.domainesTitre} photo="telephone" alt={v.photos.telephone}>
+        <Section titre={t.domainesTitre} photo="ialabIntervention" alt={t.photoIntervention}>
           <p>{t.domainesTexte}</p>
           <ul className="flex flex-wrap gap-2 pt-2">
             {t.domainesListe.map((d) => (
