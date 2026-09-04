@@ -19,7 +19,7 @@ import { ChargementR2 } from '@/components/ChargementR2'
 import { Hyperespace } from '@/components/Hyperespace'
 import { Signature } from '@/components/Signature'
 import { Photo } from '@/components/Photo'
-import { LogoFondation } from '@/components/LogoFondation'
+import { MarqueIalab } from '@/components/MarqueIalab'
 import { Partenaires } from '@/components/Partenaires'
 import { Formateurs } from '@/components/Formateurs'
 import { NettoyerAncre } from '@/components/NettoyerAncre'
@@ -115,7 +115,7 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
           section visible se souligne en jaune (voir `SectionCourante`).
         */}
         <header className="sticky top-0 z-30 flex flex-wrap items-center gap-4 bg-vitrine-violet/75 px-5 py-4 backdrop-blur-md sm:px-8 lg:px-12">
-          <LogoFondation />
+          <MarqueIalab href="/" taille="text-3xl sm:text-4xl" />
 
           {/* Liens en 300 à 18 px ; le survol et la section courante passent en 700, en douceur. */}
           <nav className="nav-principale hidden gap-6 text-lg font-light tracking-leger text-white md:flex lg:gap-8">
