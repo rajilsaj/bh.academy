@@ -517,6 +517,23 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
         aria-hidden="true"
       />
 
+      {/*
+        Copyright et crédit, posés directement sur le fond, sans cartouche.
+        `mix-blend-difference` sur du blanc : clair sur le ciel noir de
+        l'hyperespace, sombre sur la lavande quand le canvas n'existe pas.
+      */}
+      <p className="relative z-10 mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-2 gap-y-1 px-5 pb-8 pt-2 text-center text-sm font-semibold text-white mix-blend-difference">
+        <span>{v.copyright.replace('{annee}', String(new Date().getFullYear()))}</span>
+        <span aria-hidden="true">·</span>
+        <span>
+          {v.developpePar}{' '}
+          <a href={v.signatureAuteurUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+            {v.developpeur}
+          </a>{' '}
+          — {v.signatureAuteur}
+        </span>
+      </p>
+
       <SectionCourante />
       <NettoyerAncre />
     </div>

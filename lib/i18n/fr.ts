@@ -1087,6 +1087,10 @@ export const fr = {
     signatureRole: 'Ingénierie IA',
     signatureAuteur: 'rajil.me',
     signatureAuteurUrl: 'https://rajil.me',
+    /* La ligne tout en bas de la page, sur le fond, sans cartouche. */
+    copyright: '© {annee} Fondation BantuHub. Tous droits réservés.',
+    developpePar: 'Système conçu et développé par',
+    developpeur: 'Rajil',
   },
 
   parcours: {
