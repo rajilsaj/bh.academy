@@ -515,15 +515,6 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
               </span>
             </Link>
           </div>
-          {/* Espace presse et mode économie, aussi accessibles sur petit écran où le menu n'existe pas. */}
-          <p className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
-            <Link href="/presse" className="text-lg font-semibold text-white/80 underline decoration-white/40 underline-offset-4 hover:text-white">
-              {v.nav.presse}
-            </Link>
-            <a href={eco ? '?eco=0' : '?eco=1'} className="text-lg font-semibold text-white/80 underline decoration-white/40 underline-offset-4 hover:text-white">
-              {eco ? fr.economie.desactiver : fr.economie.activer}
-            </a>
-          </p>
           <Signature />
         </footer>
       </div>
