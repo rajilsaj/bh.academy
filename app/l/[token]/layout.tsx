@@ -17,7 +17,7 @@ export const dynamic = 'force-dynamic'
 export default async function EspaceApprenantLayout({ children, params }: { children: React.ReactNode; params: { token: string } }) {
   if (isWellFormedToken(params.token)) {
     const [apprenant] = await db
-      .select({ id: learners.id, validatedAt: learners.validatedAt, createdAt: learners.createdAt })
+      .select({ validatedAt: learners.validatedAt, createdAt: learners.createdAt })
       .from(learners)
       .where(eq(learners.token, params.token))
       .limit(1)
@@ -29,7 +29,7 @@ export default async function EspaceApprenantLayout({ children, params }: { chil
             <p className="titre text-2xl">{t.enAttenteTitre}</p>
             <p className="text-sm text-slate-700">{t.enAttenteTexte}</p>
             <p className="text-sm text-slate-500">
-              {t.inscritLe} {formatDate(apprenant.createdAt)} · {apprenant.id}
+              {t.inscritLe} {formatDate(apprenant.createdAt)}
             </p>
           </Bloc>
         </LearnerShell>

@@ -30,13 +30,13 @@ function MarqueGoogle() {
  * apprenant validé vers ses pages ; un apprenant en attente voit où il en
  * est ; un compte Google inconnu est invité à s'inscrire.
  */
-export default async function MonEspacePage() {
+export default async function MonEspacePage({ searchParams }: { searchParams: { inscrit?: string } }) {
   const session = await auth()
   if (session?.user?.role) redirect('/admin')
 
   if (session?.user?.googleSub) {
     const [apprenant] = await db
-      .select({ id: learners.id, token: learners.token, fullName: learners.fullName, validatedAt: learners.validatedAt, createdAt: learners.createdAt })
+      .select({ token: learners.token, validatedAt: learners.validatedAt, createdAt: learners.createdAt })
       .from(learners)
       .where(eq(learners.googleSub, session.user.googleSub))
       .limit(1)
@@ -49,11 +49,11 @@ export default async function MonEspacePage() {
         <Bloc className="space-y-3 text-center">
           {apprenant ? (
             <>
-              <p className="manuscrit text-4xl">{t.enAttenteAccroche}</p>
+              {searchParams.inscrit ? <p className="manuscrit text-4xl">{t.enAttenteAccroche}</p> : null}
               <p className="titre text-2xl">{t.enAttenteTitre}</p>
               <p className="text-sm text-slate-700">{t.enAttenteTexte}</p>
               <p className="text-sm text-slate-500">
-                {t.inscritLe} {formatDate(apprenant.createdAt)} · {apprenant.id}
+                {t.inscritLe} {formatDate(apprenant.createdAt)}
               </p>
             </>
           ) : (

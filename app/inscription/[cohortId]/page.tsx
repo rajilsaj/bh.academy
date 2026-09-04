@@ -1,11 +1,9 @@
 import { eq } from 'drizzle-orm'
 import { Alerte, Bloc, LearnerShell } from '@/components/LearnerShell'
-import { CopierLien } from '@/components/CopierLien'
 import { AssistantInscription, type QuestionInscription } from '@/components/inscription/AssistantInscription'
 import { db } from '@/lib/db'
-import { cohorts, learners } from '@/lib/db/schema'
+import { cohorts } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
-import { appUrl } from '@/lib/config'
 import { googleActive, identiteGoogle } from '@/lib/auth'
 import { changerCompteInscription, connexionGoogleInscription, inscrire } from './actions'
 
@@ -52,7 +50,7 @@ export default async function InscriptionPage({
   searchParams,
 }: {
   params: { cohortId: string }
-  searchParams: { e?: string; nouveau?: string; deja?: string }
+  searchParams: { e?: string }
 }) {
   const [cohort] = await db
     .select()
@@ -68,42 +66,6 @@ export default async function InscriptionPage({
         </Bloc>
       </LearnerShell>
     )
-  }
-
-  // Confirmation : le lien personnel est le seul accès de l'apprenant.
-  if (searchParams.nouveau) {
-    const [learner] = await db
-      .select()
-      .from(learners)
-      .where(eq(learners.token, searchParams.nouveau))
-      .limit(1)
-
-    if (learner) {
-      const lien = `${appUrl()}/l/${learner.token}`
-      return (
-        <LearnerShell title={t.succesTitre} vitrine avecAccent accueilHref="/" fond="espace">
-          <Bloc className="text-center">
-            {searchParams.deja ? <p className="mb-3 text-sm font-semibold text-vitrine-violet">{t.dejaInscrit}</p> : null}
-            <p className="manuscrit text-4xl">{fr.learner.merci}</p>
-            <p className="mt-4 text-sm text-slate-600">{t.succesIntro}</p>
-            <p className="titre mt-1 text-3xl text-vitrine-violet">{learner.id}</p>
-          </Bloc>
-
-          <Bloc className="mt-3">
-            <p className="etiquette">{fr.learner.lienPersonnel}</p>
-            <a
-              href={lien}
-              className="block break-all rounded-bloc bg-vitrine-lavande px-3 py-2 text-sm text-vitrine-violet-fonce underline"
-            >
-              {lien}
-            </a>
-            <CopierLien lien={lien} />
-            <p className="mt-4 text-sm text-slate-700">{t.succesLien}</p>
-            <p className="mt-2 text-sm text-slate-500">{t.succesConseil}</p>
-          </Bloc>
-        </LearnerShell>
-      )
-    }
   }
 
   const erreur = searchParams.e ? MESSAGES[searchParams.e] : null

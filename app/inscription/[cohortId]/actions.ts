@@ -43,9 +43,9 @@ export async function inscrire(formData: FormData) {
   const google = await identiteGoogle()
   if (!google) back('e=google')
 
-  // Déjà inscrit avec ce compte Google : on renvoie le lien personnel existant.
-  const [deja] = await db.select({ token: learners.token }).from(learners).where(eq(learners.googleSub, google.sub)).limit(1)
-  if (deja) redirect(`${base}?nouveau=${deja.token}&deja=1`)
+  // Déjà inscrit avec ce compte Google : direction « Mon espace », qui sait où il en est.
+  const [deja] = await db.select({ id: learners.id }).from(learners).where(eq(learners.googleSub, google.sub)).limit(1)
+  if (deja) redirect('/mon-espace')
 
   // Le même schéma que le navigateur : ce qui passe côté client repasse ici.
   const resultat = schemaInscription.safeParse({ ...lireFormData(formData), email: google.email })
@@ -104,5 +104,6 @@ export async function inscrire(formData: FormData) {
       .onConflictDoNothing()
   }
 
-  redirect(`${base}?nouveau=${token}`)
+  // Inscription reçue : la personne attend la validation sur « Mon espace ».
+  redirect('/mon-espace?inscrit=1')
 }
