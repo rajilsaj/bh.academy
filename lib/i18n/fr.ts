@@ -887,6 +887,7 @@ export const fr = {
       apropos: 'À propos',
       faq: 'Questions',
       presse: 'Espace presse',
+      iaLab: 'IA Lab',
       inscription: 'Je m’inscris',
       connexion: 'Mon espace',
       espace: 'Mon espace',
@@ -941,6 +942,49 @@ export const fr = {
       { n: '5', k: 'Semaines', t: 'de formation en présentiel' },
       { n: '1 000', k: 'Participants', t: 'attendus sur la promotion' },
     ],
+
+    /* « Qui sommes-nous » de l'IA Lab. */
+    iaLab: {
+      titre: 'L’IA Lab',
+      intro:
+        'L’IA Lab conçoit, développe et déploie des solutions d’intelligence artificielle adaptées au contexte congolais, au service des administrations, des entreprises et des projets d’intérêt général. Une structure de services, pensée pour transformer des problèmes concrets en solutions opérationnelles.',
+      pourquoiKicker: 'Le constat',
+      pourquoiTitre: 'Pourquoi maintenant',
+      pourquoiTexte:
+        'Le Congo forme des talents en intelligence artificielle, sans toujours disposer de la structure pour transformer ces compétences en solutions concrètes. Des administrations et des entreprises font face à des problèmes que l’intelligence artificielle pourrait résoudre, sans les ressources internes pour le faire. L’IA Lab se positionne à cette intersection, en concevant des solutions et en renforçant les compétences locales par la formation.',
+      approcheKicker: 'La méthode',
+      approcheTitre: 'Notre approche',
+      approcheTexte:
+        'L’IA Lab part d’une réalité simple : une organisation, entreprise, administration ou collectivité, fait face à un problème que la technologie pourrait résoudre. L’IA Lab évalue la faisabilité, conçoit la solution adaptée puis la développe. Cette démarche peut être engagée par l’organisation qui vient avec son besoin, ou par le lab lorsqu’il identifie une opportunité dans l’écosystème.',
+      domainesKicker: 'Le terrain',
+      domainesTitre: 'Domaines d’intervention',
+      domainesTexte:
+        'L’IA Lab intervient auprès de l’administration publique, du secteur financier, des télécommunications, des collectivités locales, ainsi que de la société civile et des ONG. Les solutions développées s’adaptent à la nature du problème posé, pas à un secteur prédéfini.',
+      domainesListe: [
+        'Traitement de documents',
+        'Automatisation',
+        'Aide à la décision',
+        'Détection d’anomalies',
+        'Optimisation de processus',
+        'Accessibilité',
+        'Données ouvertes',
+      ],
+      projetsKicker: 'Nos projets',
+      projetsTitre: 'Ce que le lab a lancé',
+      projetFormationAccroche: 'Projet en cours',
+      projetFormationTexte:
+        'Le premier programme du lab : former les jeunes de Brazzaville et Pointe-Noire aux outils d’IA générative, du premier prompt au certificat, avec un suivi de six mois après la formation.',
+      projetFormationBouton: 'Découvrir la formation',
+      contactTitre: 'Vous portez un projet, une administration ou une entreprise avec un problème précis à résoudre ?',
+      contactTexte: 'L’IA Lab peut vous accompagner.',
+      contactBouton: 'Nous contacter',
+      contactTelephone: '(+242) 06 529 60 60',
+      contactTelephoneLien: '+242065296060',
+      contactEmail: 'contact@bantuhub.com',
+      contactAdresse: '8e étage, Tour Jumelles, Mpila — Brazzaville, République du Congo',
+      fondation:
+        'La Fondation BantuHub est le catalyseur de l’écosystème numérique congolais. Nous sensibilisons, formons et accompagnons la jeunesse pour bâtir l’économie de demain.',
+    },
 
     /* L'espace presse : les documents officiels, à télécharger. */
     presse: {

@@ -63,6 +63,7 @@ const MODULES_STYLE = [
 
 /* Dans l'ordre de la page : ce qu'on promet, le programme lui-même, les questions. */
 const LIENS_NAV = [
+  { href: '/ia-lab', label: v.nav.iaLab },
   { href: '#apropos', label: v.nav.apropos },
   { href: '#programme', label: v.nav.programme },
   { href: '#questions', label: v.nav.faq },
