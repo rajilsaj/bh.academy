@@ -99,10 +99,10 @@ export default async function MonEspacePage({ searchParams }: { searchParams: { 
             <p className="rounded-bloc bg-vitrine-lavande px-3 py-2 text-sm text-vitrine-violet-fonce">{fr.inscription.google.indisponible}</p>
           )}
         </Bloc>
-        <Bloc className="flex flex-col gap-3 !bg-vitrine-violet-clair !text-white">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-vitrine-turquoise">{t.cockpitTitre}</p>
+        <Bloc className="flex flex-col gap-3 !bg-vitrine-lavande !text-vitrine-violet">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-vitrine-vert">{t.cockpitTitre}</p>
           <p className="titre text-2xl">{t.cockpitTexte}</p>
-          <p className="flex-1 text-sm text-white/80">{fr.admin.connexionAide}</p>
+          <p className="flex-1 text-sm text-vitrine-violet/80">{fr.admin.connexionAide}</p>
           <Link href="/admin/login" className="bouton-principal !py-3 !text-base">
             {t.cockpitBouton}
           </Link>
