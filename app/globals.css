@@ -625,3 +625,57 @@ html.r2-vu .chargement-r2 {
     opacity: 1 !important;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* DÉFILEMENT — les experts, de gauche à droite, en boucle, sans script. */
+/* La piste contient deux fois la liste ; on la fait glisser d'une moitié */
+/* et la boucle se referme sans couture. Le survol (ou le focus clavier)   */
+/* met en pause. Mouvement réduit ou mode économie : liste défilable à la  */
+/* main, rien ne bouge tout seul.                                          */
+/* ------------------------------------------------------------------ */
+@keyframes defilement-gauche-droite {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.defilement-cadre {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+.defilement-piste {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  padding: 0.25rem 0.5rem;
+  animation: defilement-gauche-droite 60s linear infinite;
+  will-change: transform;
+}
+.defilement-piste > li {
+  display: flex;
+}
+.defilement-cadre:hover .defilement-piste,
+.defilement-cadre:focus-within .defilement-piste {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .defilement-piste {
+    animation: none;
+  }
+  .defilement-cadre {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+html[data-eco='1'] .defilement-piste {
+  animation: none;
+}
+html[data-eco='1'] .defilement-cadre {
+  overflow-x: auto;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
