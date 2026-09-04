@@ -1,5 +1,6 @@
 import { fr } from '@/lib/i18n/fr'
 import { getFormateursPublics, initiales, type FormateurPublic } from '@/lib/formateurs'
+import { modeEconomie } from '@/lib/economie'
 
 const v = fr.vitrine
 
@@ -29,7 +30,7 @@ function IconeSite() {
   )
 }
 
-function Carte({ f }: { f: FormateurPublic }) {
+function Carte({ f, eco }: { f: FormateurPublic; eco: boolean }) {
   const liens = [
     f.linkedin ? { href: f.linkedin, label: v.formateurs.linkedin, icone: <IconeLinkedin /> } : null,
     f.facebook ? { href: f.facebook, label: v.formateurs.facebook, icone: <IconeFacebook /> } : null,
@@ -40,7 +41,7 @@ function Carte({ f }: { f: FormateurPublic }) {
   return (
     <article className="carte-violette flex gap-4 lg:p-6">
       {/* Le portrait, ou les initiales sur un disque jaune s'il n'y en a pas encore. */}
-      {f.aPhoto ? (
+      {f.aPhoto && !eco ? (
         <img
           src={`/api/formateurs/${f.id}/photo`}
           alt={f.nom}
@@ -99,6 +100,7 @@ export async function Formateurs() {
     return null
   }
   if (liste.length === 0) return null
+  const eco = modeEconomie()
 
   return (
     <section id="formateurs" className="parallaxe-apparition px-5 pb-12 sm:px-8 lg:px-12 lg:pb-16">
@@ -109,7 +111,7 @@ export async function Formateurs() {
 
       <div className="mt-6 grid gap-3 md:grid-cols-2 lg:mt-8 lg:gap-5">
         {liste.map((f) => (
-          <Carte key={f.id} f={f} />
+          <Carte key={f.id} f={f} eco={eco} />
         ))}
       </div>
     </section>

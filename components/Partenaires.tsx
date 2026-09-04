@@ -1,5 +1,6 @@
 import { fr } from '@/lib/i18n/fr'
 import { PHOTOS } from '@/lib/photos'
+import { modeEconomie } from '@/lib/economie'
 
 const v = fr.vitrine
 
@@ -17,6 +18,8 @@ const FONEA_RATIO = 1600 / 950
  * tiennent pas sur le violet. Le logo BantuHub, déjà blanc, garde le violet.
  */
 export function Partenaires({ className }: { className?: string }) {
+  // Mode économie : quatre logos de moins. Le nom des partenaires reste dans l'aria-label.
+  if (modeEconomie()) return null
   const armoiries = PHOTOS.armoiries
   const srcArmoiries = (ext: string) =>
     armoiries.largeurs.map((l) => `/photos/${armoiries.slot}-${l}.${ext} ${l}w`).join(', ')
@@ -26,7 +29,7 @@ export function Partenaires({ className }: { className?: string }) {
     'inline-flex h-12 items-center justify-center rounded-2xl bg-white px-3 transition-transform hover:scale-105 sm:h-14 sm:px-4'
 
   return (
-    <nav aria-label={v.partenairesLabel} className={`flex flex-wrap items-center justify-center gap-3 ${className ?? ''}`}>
+    <nav aria-label={v.partenairesLabel} className={`eco-cacher flex flex-wrap items-center justify-center gap-3 ${className ?? ''}`}>
       {/* 1. BantuHub — logo blanc, sur une pastille translucide. */}
       <a
         href={v.fondationUrl}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { connexionLente } from '@/lib/economie-client'
 
 /**
  * Hyperespace — le fond du site.
@@ -30,6 +31,8 @@ export function Hyperespace() {
   useEffect(() => {
     const canvas = ref.current
     if (!canvas) return
+    // Réseau lent ou données économisées : pas d'animation, le CSS masque le canvas.
+    if (connexionLente()) return
     return demarrer(canvas)
   }, [])
 

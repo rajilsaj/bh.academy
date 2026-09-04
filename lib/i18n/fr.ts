@@ -1,6 +1,17 @@
 // Toutes les chaînes de l'application (apprenants + administration).
 // Aucune chaîne visible ne doit être écrite en dur dans un composant.
 export const fr = {
+  /* Mode économie : réseau lent ou données économisées. */
+  economie: {
+    photoNonChargee: 'Image non chargée : mode économie',
+    actif: 'Mode économie : les images, les polices et les animations ne sont pas chargées.',
+    raisonChoix: 'Vous l’avez activé.',
+    raisonSaveData: 'Votre téléphone demande à économiser les données.',
+    raisonReseau: 'Votre connexion est lente.',
+    desactiver: 'Charger la version complète',
+    activer: 'Mode économie (2G, données limitées)',
+  },
+
   app: {
     nom: 'BantuHub — Suivi IA',
     baseline: 'Fondation BantuHub, Brazzaville',
@@ -1079,7 +1090,7 @@ export const fr = {
 
     /* Signature de fin de page — la mention de conception. */
     signatureLabel: 'Fièrement propulsé par',
-    signatureNom: 'IALab',
+    signatureNom: 'ia.lab',
     signatureNomSuite: 'by',
     signatureManuscrit: 'de la première ligne à la dernière',
     signatureGenere: 'Site entièrement généré par',
@@ -1147,8 +1158,9 @@ export const fr = {
   backoffice: {
     /* Le back-office s'appelle le cockpit : on y pilote la formation. */
     titre: 'Le Cockpit',
-    baseline: 'IALab · Fondation BantuHub',
+    baseline: 'ia.lab · Fondation BantuHub',
     marque: ['ia', 'lab'],
+    marqueSousTitre: 'Laboratoire d’intelligence artificielle appliquée',
     voirSite: 'Voir le site',
     vueEnsemble: 'Vue d’ensemble',
     modules: 'Modules',

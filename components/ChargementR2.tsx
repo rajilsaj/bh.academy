@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { fr } from '@/lib/i18n/fr'
+import { connexionLente } from '@/lib/economie-client'
 import { Croix, Etincelle, Etoile, Spirale } from './Decor'
 
 /**
@@ -55,7 +56,7 @@ export function ChargementR2() {
       !dejaVu() &&
       window.matchMedia('(min-width: 1024px)').matches &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
-      !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData
+      !connexionLente()
     if (!convient) {
       setEtat('fini')
       return

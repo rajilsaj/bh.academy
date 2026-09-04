@@ -571,3 +571,57 @@ html.r2-vu .chargement-r2 {
     display: none !important;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* MODE ÉCONOMIE — réseau lent ou données économisées (lib/economie.ts). */
+/* `html[data-eco="1"]` est posé par le serveur (cookie, Save-Data, ECT)  */
+/* ou par le script de tête (navigator.connection), avant le premier      */
+/* rendu. Une image paresseuse masquée n'est jamais téléchargée ; une     */
+/* police qu'aucun élément n'utilise n'est jamais demandée.               */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .substitut-photo {
+    @apply flex w-full flex-col items-center justify-center gap-1 rounded-carte border-2 border-dashed
+           border-white/30 bg-white/5 p-4 text-center;
+  }
+  .substitut-photo-texte {
+    @apply text-lg font-semibold text-white;
+  }
+  .substitut-photo-note {
+    @apply text-sm font-semibold text-white/60;
+  }
+  /* Avec une vraie image devant lui, le substitut attend le mode économie. */
+  .photo-reelle + .substitut-photo {
+    display: none;
+  }
+  html[data-eco='1'] .photo-reelle {
+    display: none;
+  }
+  html[data-eco='1'] .photo-reelle + .substitut-photo {
+    display: flex;
+  }
+  /* Polices : aucun élément ne cite la face, le fichier n'est pas demandé. */
+  html[data-eco='1'] .titre,
+  html[data-eco='1'] .font-titre {
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  }
+  html[data-eco='1'] .manuscrit,
+  html[data-eco='1'] .font-accent {
+    font-family: 'Segoe Script', 'Bradley Hand', cursive;
+  }
+  /* Décors animés, images de fond, logos et portraits : rien. */
+  html[data-eco='1'] canvas,
+  html[data-eco='1'] .fondu-hyperespace,
+  html[data-eco='1'] .eco-cacher,
+  html[data-eco='1'] img[src^='/api/formateurs/'] {
+    display: none;
+  }
+  html[data-eco='1'] .parallaxe-apparition,
+  html[data-eco='1'] .parallaxe-lent,
+  html[data-eco='1'] .parallaxe-rapide,
+  html[data-eco='1'] .parallaxe-fond {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

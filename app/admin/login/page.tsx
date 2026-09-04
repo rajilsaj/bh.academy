@@ -6,6 +6,7 @@ import { AlerteSombre, SuccesSombre } from '@/components/AccesRefuse'
 import { fr } from '@/lib/i18n/fr'
 import { LogoFondation } from '@/components/LogoFondation'
 import { policeTitre } from '@/lib/fonts'
+import { MarqueIalab } from '@/components/MarqueIalab'
 
 export const dynamic = 'force-dynamic'
 
@@ -61,13 +62,9 @@ export default async function LoginPage({
   return (
     <div className={`${policeTitre.variable} bo grid place-items-center px-4 py-16`}>
       <main className="w-full max-w-sm">
-        <div className="mb-6 flex items-center gap-3">
-          {/* La marque de la Fondation, en couleur sur le fond clair. */}
-          <LogoFondation variante="couleur" hauteur="h-10" href="/" />
-          <div>
-            <p className="titre text-2xl leading-tight">{fr.backoffice.titre}</p>
-            <p className="bo-doux">{fr.backoffice.baseline}</p>
-          </div>
+        <div className="mb-6 flex items-end justify-between gap-3">
+          <MarqueIalab variante="cockpit" href="/" taille="text-4xl" sousTitre />
+          <LogoFondation variante="couleur" hauteur="h-8" />
         </div>
 
         <div className="bo-panneau">

@@ -5,6 +5,7 @@ import { fr } from '@/lib/i18n/fr'
 import type { Permission } from '@/lib/auth'
 import { AdminSidebar, type GroupeNav, type IconeNav } from '@/components/AdminSidebar'
 import { policeTitre } from '@/lib/fonts'
+import { MarqueIalab } from '@/components/MarqueIalab'
 
 export const dynamic = 'force-dynamic'
 
@@ -56,16 +57,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     liens: g.liens.filter((l) => can(role, l.permission)).map(({ href, label, icone }) => ({ href, label, icone })),
   })).filter((g) => g.liens.length > 0)
 
-  /* La marque, en texte : « ia » bleu, « lab » marine, un point jaune. */
+  /* La marque ia.lab et sa signature, puis le nom de l'espace en petit. */
   const marque = (
-    <Link href="/admin" className="block" aria-label={fr.backoffice.titre}>
-      <span className="titre flex items-baseline text-3xl leading-none">
-        <span className="text-bo-bleu">{fr.backoffice.marque[0]}</span>
-        <span>{fr.backoffice.marque[1]}</span>
-        <span className="ml-1 inline-block h-2 w-2 rounded-full bg-bo-jaune" aria-hidden="true" />
-      </span>
-      <span className="mt-1.5 block text-[11px] font-bold uppercase tracking-[0.25em] text-bo-doux">{fr.backoffice.titre}</span>
-    </Link>
+    <div>
+      <MarqueIalab variante="cockpit" href="/admin" taille="text-4xl" sousTitre />
+      <span className="mt-3 block text-[11px] font-bold uppercase tracking-[0.25em] text-bo-doux">{fr.backoffice.titre}</span>
+    </div>
   )
 
   const compte = (
@@ -116,11 +113,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         {/* ------------------------------------------- en-tête petit écran */}
         <header className="border-b border-bo-bordure bg-white lg:hidden">
           <div className="flex items-center gap-3 px-4 py-3">
-            <Link href="/admin" className="titre flex items-baseline text-2xl leading-none" aria-label={fr.backoffice.titre}>
-              <span className="text-bo-bleu">{fr.backoffice.marque[0]}</span>
-              <span>{fr.backoffice.marque[1]}</span>
-              <span className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-bo-jaune" aria-hidden="true" />
-            </Link>
+            <MarqueIalab variante="cockpit" href="/admin" taille="text-2xl" />
             <details className="ml-auto">
               <summary className="bo-bouton-discret cursor-pointer list-none">{fr.admin.sidebar.menu}</summary>
               <div className="absolute inset-x-0 z-40 mt-2 border-y border-bo-bordure bg-white pb-3 shadow-2xl">

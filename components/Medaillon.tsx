@@ -23,7 +23,7 @@ export function Medaillon() {
   const srcSet = LARGEURS.map((l) => `/photos/logo/fonea-marque-${l}.png ${l}w`).join(', ')
 
   return (
-    <div className="parallaxe-lent absolute left-6 top-24 hidden xl:block 2xl:left-12">
+    <div className="eco-cacher parallaxe-lent absolute left-6 top-24 hidden xl:block 2xl:left-12">
       {/* Le disque est un lien vers le site du FONEA. */}
       <a
         href={v.foneaUrl}

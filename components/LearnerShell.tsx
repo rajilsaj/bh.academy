@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { fr } from '@/lib/i18n/fr'
 import { policeAccent, policeTitre } from '@/lib/fonts'
+import { modeEconomie } from '@/lib/economie'
 import { LogoFondation } from '@/components/LogoFondation'
 
 /**
@@ -36,9 +37,11 @@ export function LearnerShell({
   avecAccent?: boolean
   children: React.ReactNode
 }) {
+  // En mode économie, aucune police : le système fait l'affaire.
+  const eco = modeEconomie()
   const polices = [
-    vitrine || avecAccent ? policeTitre.variable : '',
-    avecAccent ? policeAccent.variable : '',
+    !eco && (vitrine || avecAccent) ? policeTitre.variable : '',
+    !eco && avecAccent ? policeAccent.variable : '',
   ]
     .filter(Boolean)
     .join(' ')

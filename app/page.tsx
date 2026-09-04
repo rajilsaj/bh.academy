@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { cohorts } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
 import { policeAccent, policeTitre } from '@/lib/fonts'
+import { modeEconomie, raisonEconomie } from '@/lib/economie'
 import {
   Fleche,
   Gribouillis,
@@ -69,6 +70,10 @@ const LIENS_NAV = [
 ] as const
 
 export default async function Accueil({ searchParams }: { searchParams?: { q?: string } }) {
+  // Mode économie : ni polices, ni écran de chargement 3D, ni hyperespace.
+  const eco = modeEconomie()
+  const raison = raisonEconomie()
+  const polices = eco ? '' : `${policeTitre.variable} ${policeAccent.variable}`
   const [cohorte] = await db.select().from(cohorts).orderBy(asc(cohorts.startsOn)).limit(1)
   const lienInscription = cohorte ? `/inscription/${cohorte.id}` : '/admin'
 
@@ -83,7 +88,7 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
 
   return (
     <div
-      className={`${policeTitre.variable} ${policeAccent.variable} relative z-10 overflow-x-clip px-3 pt-3 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8`}
+      className={`${polices} relative z-10 overflow-x-clip px-3 pt-3 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8`}
     >
       {/*
         Le fond du site : l'hyperespace, un canvas fixé derrière tout. Sans
@@ -91,9 +96,9 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
         L'enveloppe passe en `relative z-10` pour rester au-dessus.
       */}
       {/* L'écran de chargement : R2-D2 roule pendant que la page arrive, puis s'efface. */}
-      <ChargementR2 />
+      {eco ? null : <ChargementR2 />}
 
-      <Hyperespace />
+      {eco ? null : <Hyperespace />}
 
       {/*
         Le panneau encadré de la maquette : centré, plafonné en largeur, posé
@@ -114,8 +119,17 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
           au-dessus du contenu, qui transparaît flouté derrière. Le lien de la
           section visible se souligne en jaune (voir `SectionCourante`).
         */}
+        {eco ? (
+          <p className="flex flex-wrap items-center justify-between gap-2 bg-vitrine-jaune px-5 py-2 text-sm font-semibold text-vitrine-violet-fonce sm:px-8 lg:px-12">
+            <span>
+              {fr.economie.actif}{' '}
+              {raison === 'choix' ? fr.economie.raisonChoix : raison === 'save-data' ? fr.economie.raisonSaveData : fr.economie.raisonReseau}
+            </span>
+            <a href="?eco=0" className="underline underline-offset-2">{fr.economie.desactiver}</a>
+          </p>
+        ) : null}
         <header className="sticky top-0 z-30 flex flex-wrap items-center gap-4 bg-vitrine-violet/75 px-5 py-4 backdrop-blur-md sm:px-8 lg:px-12">
-          <MarqueIalab href="/" taille="text-3xl sm:text-4xl" />
+          <MarqueIalab href="/" taille="text-3xl sm:text-4xl" className="[&>span+span]:hidden md:[&>span+span]:block" sousTitre />
 
           {/* Liens en 300 à 18 px ; le survol et la section courante passent en 700, en douceur. */}
           <nav className="nav-principale hidden gap-6 text-lg font-light tracking-leger text-white md:flex lg:gap-8">
@@ -501,11 +515,14 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
               </span>
             </Link>
           </div>
-          {/* Le lien vers l'espace presse, aussi accessible sur petit écran où le menu n'existe pas. */}
-          <p className="mt-4">
+          {/* Espace presse et mode économie, aussi accessibles sur petit écran où le menu n'existe pas. */}
+          <p className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
             <Link href="/presse" className="text-lg font-semibold text-white/80 underline decoration-white/40 underline-offset-4 hover:text-white">
               {v.nav.presse}
             </Link>
+            <a href={eco ? '?eco=0' : '?eco=1'} className="text-lg font-semibold text-white/80 underline decoration-white/40 underline-offset-4 hover:text-white">
+              {eco ? fr.economie.desactiver : fr.economie.activer}
+            </a>
           </p>
           <Signature />
         </footer>
