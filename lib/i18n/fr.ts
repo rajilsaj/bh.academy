@@ -35,6 +35,8 @@ export const fr = {
     baseline: 'Fondation BantuHub, Brazzaville',
     chargement: 'Chargement…',
     retour: 'Retour',
+    seDeconnecter: 'Se déconnecter',
+    deconnecte: 'Vous êtes déconnecté.',
     enregistrer: 'Enregistrer',
     envoyer: 'Envoyer',
     valider: 'Valider',

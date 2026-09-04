@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { fr } from '@/lib/i18n/fr'
 import { policeAccent, policeTitre } from '@/lib/fonts'
 import { modeEconomie } from '@/lib/economie'
+import { auth } from '@/lib/auth'
 import { LogoFondation } from '@/components/LogoFondation'
 
 /**
@@ -14,7 +15,7 @@ import { LogoFondation } from '@/components/LogoFondation'
  * 16 Ko pour un simple effet de titre — l'identité tient déjà au bleu, au
  * jaune et aux rondeurs. Seules les pages vitrine (`vitrine`) la chargent.
  */
-export function LearnerShell({
+export async function LearnerShell({
   title,
   backHref,
   parcoursHref,
@@ -39,6 +40,9 @@ export function LearnerShell({
 }) {
   // En mode économie, aucune police : le système fait l'affaire.
   const eco = modeEconomie()
+  // Une session (Google ou personnel) : on propose de la fermer, par un simple lien.
+  const session = await auth()
+  const connecte = Boolean(session?.user?.email)
   const polices = [
     !eco && (vitrine || avecAccent) ? policeTitre.variable : '',
     !eco && avecAccent ? policeAccent.variable : '',
@@ -73,11 +77,18 @@ export function LearnerShell({
             </Link>
           </p>
         ) : null}
-        {accueilHref ? (
-          <p className="mt-8 text-center">
-            <Link href={accueilHref} className="bouton-fantome">
-              ← {fr.app.retourAccueil}
-            </Link>
+        {accueilHref || connecte ? (
+          <p className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            {accueilHref ? (
+              <Link href={accueilHref} className="bouton-fantome">
+                ← {fr.app.retourAccueil}
+              </Link>
+            ) : null}
+            {connecte ? (
+              <a href="/deconnexion" className="bouton-fantome !border-white/25 text-white/80" title={session?.user?.email ?? ''}>
+                {fr.app.seDeconnecter}
+              </a>
+            ) : null}
           </p>
         ) : null}
       </main>
