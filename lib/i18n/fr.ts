@@ -1148,6 +1148,8 @@ export const fr = {
     /* Le back-office s'appelle le cockpit : on y pilote la formation. */
     titre: 'Le Cockpit',
     baseline: 'IALab · Fondation BantuHub',
+    marque: ['ia', 'lab'],
+    voirSite: 'Voir le site',
     vueEnsemble: 'Vue d’ensemble',
     modules: 'Modules',
     apprenants: 'Apprenants',
