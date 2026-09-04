@@ -152,7 +152,7 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
               secondaire à côté de l'inscription dès `md` ; sur mobile, elle
               rejoint le menu hamburger pour ne pas encombrer l'en-tête.
             */}
-            <Link href="/admin" className="bouton-fantome hidden px-6 py-3 text-base md:inline-flex">
+            <Link href="/mon-espace" className="bouton-fantome hidden px-6 py-3 text-base md:inline-flex">
               {v.nav.connexion}
             </Link>
             <Link href={lienInscription} className="bouton-pilule px-6 py-3 text-base">

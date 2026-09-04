@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { and, asc, count, eq, gte } from 'drizzle-orm'
+import { and, asc, count, eq, gte, isNull } from 'drizzle-orm'
 import { EnTete, Stat, TitreSection, Vide } from '@/components/admin/Cockpit'
 import { auth, can } from '@/lib/auth'
 import { db } from '@/lib/db'
@@ -24,8 +24,9 @@ export default async function AccueilCockpit() {
   const admin = can(role, 'gererUtilisateurs')
 
   const maintenant = new Date()
-  const [[apprenants], [formateurs], [modules], prochaines, visites] = await Promise.all([
+  const [[apprenants], [enAttente], [formateurs], [modules], prochaines, visites] = await Promise.all([
     db.select({ n: count() }).from(learners),
+    db.select({ n: count() }).from(learners).where(isNull(learners.validatedAt)),
     db.select({ n: count() }).from(staff).where(eq(staff.role, 'formateur')),
     db.select({ n: count() }).from(programModules),
     db
@@ -67,7 +68,13 @@ export default async function AccueilCockpit() {
 
       {/* ------------------------------------------------------------ chiffres */}
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Stat label={t.apprenants} valeur={apprenants.n} href={admin ? '/admin/utilisateurs' : undefined} />
+        <Stat
+          label={enAttente.n > 0 && admin ? t.enAttente : t.apprenants}
+          valeur={enAttente.n > 0 && admin ? enAttente.n : apprenants.n}
+          detail={enAttente.n > 0 && admin ? `${apprenants.n} ${t.apprenants.toLowerCase()}` : undefined}
+          accent={enAttente.n > 0 && admin ? 'jaune' : 'blanc'}
+          href={admin ? '/admin/utilisateurs' : undefined}
+        />
         <Stat label={t.formateurs} valeur={formateurs.n} accent="menthe" href={admin ? '/admin/utilisateurs' : undefined} />
         <Stat label={t.modules} valeur={modules.n} accent="blanc" href="/admin/modules" />
         {visites ? (

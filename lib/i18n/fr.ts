@@ -1,6 +1,24 @@
 // Toutes les chaînes de l'application (apprenants + administration).
 // Aucune chaîne visible ne doit être écrite en dur dans un composant.
 export const fr = {
+  /* « Mon espace » : la porte des apprenants, et l'attente de validation. */
+  espace: {
+    titre: 'Mon espace',
+    accrocheTitre: 'Retrouvez votre espace',
+    accrocheTexte: 'Connectez-vous avec le compte Google utilisé à l’inscription : présence, quiz, ressources et parcours vous attendent.',
+    bouton: 'Continuer avec Google',
+    personnel: 'Vous faites partie de l’équipe ?',
+    personnelLien: 'Entrée du Cockpit',
+    enAttenteAccroche: 'Bien reçu !',
+    enAttenteTitre: 'Votre inscription est en cours de validation',
+    enAttenteTexte: 'Un administrateur de la Fondation vérifie les inscriptions avant l’ouverture de l’espace. Revenez ici dès que vous avez la confirmation : votre espace s’ouvrira avec ce même compte Google.',
+    inscritLe: 'Inscription reçue le',
+    inconnuTitre: 'Aucune inscription avec ce compte',
+    inconnuTexte: 'Ce compte Google n’est rattaché à aucune inscription. Inscrivez-vous à la formation, ou changez de compte.',
+    connecteAvec: 'Connecté avec',
+    changerCompte: 'Changer de compte',
+  },
+
   /* Mode économie : réseau lent ou données économisées. */
   economie: {
     photoNonChargee: 'Image non chargée : mode économie',
@@ -376,6 +394,7 @@ export const fr = {
       titre: 'Vue d’ensemble',
       sousTitre: 'Les chiffres du programme, les prochaines sessions, et les gestes du quotidien.',
       apprenants: 'Apprenants inscrits',
+      enAttente: 'Inscriptions à valider',
       formateurs: 'Formateurs',
       modules: 'Modules',
       sessionsAVenir: 'Sessions à venir',
@@ -563,6 +582,17 @@ export const fr = {
       promotion: 'Promotion',
       colonneInscrit: 'Inscrit le',
       exporter: 'Exporter (Excel)',
+      tous: 'Tous les comptes',
+      tousAide: 'Administrateurs, formateurs et apprenants dans une seule liste. Les formateurs sont ajoutés à la main par un administrateur ; les apprenants s’inscrivent avec Google et attendent votre validation.',
+      colonnePersonne: 'Personne',
+      colonneProgression: 'Progression',
+      statutInscription: 'Statut',
+      enAttenteValidation: 'En attente de validation',
+      valide: 'Inscrit',
+      valider: 'Valider',
+      validerSelection: 'Valider',
+      apprenant: 'Apprenant',
+      filtreTous: 'Tous',
       selection: 'Apprenants cochés :',
       deplacerVers: 'Déplacer vers',
       deplacer: 'Déplacer',
@@ -578,6 +608,8 @@ export const fr = {
         apprenantModifie: 'Apprenant mis à jour.',
         apprenantSupprime: 'Apprenant supprimé.',
         deplaces: '{n} apprenants déplacés.',
+        valides: '{n} apprenants validés.',
+        apprenantValide: 'Inscription validée : l’espace apprenant est ouvert.',
         supprimes: '{n} apprenants supprimés.',
         selection: 'Cochez au moins un apprenant.',
         formateurModifie: 'Fiche du formateur mise à jour.',
@@ -849,7 +881,7 @@ export const fr = {
       faq: 'Questions',
       presse: 'Espace presse',
       inscription: 'Je m’inscris',
-      connexion: 'Connectez-vous ici',
+      connexion: 'Mon espace',
       espace: 'Mon espace',
       menu: 'Menu',
       fermerMenu: 'Fermer',

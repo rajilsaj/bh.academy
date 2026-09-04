@@ -65,6 +65,8 @@ export const learners = pgTable(
     token: varchar('token', { length: 32 }).notNull().unique(),
     consentCommunity: boolean('consent_community').notNull().default(false),
     consentData: boolean('consent_data').notNull().default(false),
+    /** Posé par un administrateur : avant, l'espace apprenant reste fermé. */
+    validatedAt: timestamp('validated_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({

@@ -203,6 +203,12 @@ export async function apprenantsEnMasse(formData: FormData) {
     revalidatePath(BASE)
     redirect(`${BASE}?ok=deplaces&n=${ids.length}`)
   }
+  if (action === 'valider') {
+    await db.update(learners).set({ validatedAt: new Date() }).where(inArray(learners.id, ids))
+    revalidatePath(BASE)
+    revalidatePath('/admin')
+    redirect(`${BASE}?ok=valides&n=${ids.length}`)
+  }
   if (action === 'supprimer') {
     await db.delete(learners).where(inArray(learners.id, ids))
     revalidatePath(BASE)
@@ -210,6 +216,18 @@ export async function apprenantsEnMasse(formData: FormData) {
     redirect(`${BASE}?ok=supprimes&n=${ids.length}`)
   }
   redirect(BASE)
+}
+
+/** Validation d'une inscription : l'espace apprenant s'ouvre. */
+export async function validerApprenant(formData: FormData) {
+  const session = await requirePermission('gererUtilisateurs')
+  if (!session) redirect('/admin')
+  const learnerId = champ(formData, 'learnerId')
+  if (!learnerId) redirect(BASE)
+  await db.update(learners).set({ validatedAt: new Date() }).where(eq(learners.id, learnerId))
+  revalidatePath(BASE)
+  revalidatePath('/admin')
+  redirect(`${BASE}?ok=apprenantValide`)
 }
 
 export async function supprimerApprenant(formData: FormData) {
