@@ -130,7 +130,7 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
           </p>
         ) : null}
         <header className="sticky top-0 z-30 flex flex-wrap items-center gap-4 bg-vitrine-violet/75 px-5 py-4 backdrop-blur-md sm:px-8 lg:px-12">
-          <MarqueIalab href="/" taille="text-3xl sm:text-4xl" className="[&>span+span]:hidden md:[&>span+span]:block" sousTitre />
+          <MarqueIalab href="/" hauteur="h-8 sm:h-10" className="[&>span]:hidden md:[&>span]:block" sousTitre />
 
           {/* Liens en 300 à 18 px ; le survol et la section courante passent en 700, en douceur. */}
           <nav className="nav-principale hidden gap-6 text-lg font-light tracking-leger text-white md:flex lg:gap-8">

@@ -66,7 +66,7 @@ export default async function LoginPage({
     <div className={`${policeTitre.variable} bo grid place-items-center px-4 py-16`}>
       <main className="w-full max-w-sm">
         <div className="mb-6 flex items-end justify-between gap-3">
-          <MarqueIalab variante="cockpit" href="/" taille="text-4xl" sousTitre />
+          <MarqueIalab variante="cockpit" href="/" hauteur="h-10" sousTitre />
           <LogoFondation variante="couleur" hauteur="h-8" />
         </div>
 

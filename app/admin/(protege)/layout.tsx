@@ -60,7 +60,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   /* La marque ia.lab et sa signature, puis le nom de l'espace en petit. */
   const marque = (
     <div>
-      <MarqueIalab variante="cockpit" href="/admin" taille="text-4xl" sousTitre />
+      <MarqueIalab variante="cockpit" href="/admin" hauteur="h-10" sousTitre />
       <span className="mt-3 block text-[11px] font-bold uppercase tracking-[0.25em] text-bo-doux">{fr.backoffice.titre}</span>
     </div>
   )
@@ -113,7 +113,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         {/* ------------------------------------------- en-tête petit écran */}
         <header className="border-b border-bo-bordure bg-white lg:hidden">
           <div className="flex items-center gap-3 px-4 py-3">
-            <MarqueIalab variante="cockpit" href="/admin" taille="text-2xl" />
+            <MarqueIalab variante="cockpit" href="/admin" hauteur="h-7" />
             <details className="ml-auto">
               <summary className="bo-bouton-discret cursor-pointer list-none">{fr.admin.sidebar.menu}</summary>
               <div className="absolute inset-x-0 z-40 mt-2 border-y border-bo-bordure bg-white pb-3 shadow-2xl">

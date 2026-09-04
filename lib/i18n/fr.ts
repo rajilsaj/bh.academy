@@ -978,6 +978,8 @@ export const fr = {
       contactTitre: 'Vous portez un projet, une administration ou une entreprise avec un problème précis à résoudre ?',
       contactTexte: 'L’IA Lab peut vous accompagner.',
       contactBouton: 'Nous contacter',
+      contactKicker: 'Contact',
+      explorer: 'Explorer',
       contactTelephone: '(+242) 06 529 60 60',
       contactTelephoneLien: '+242065296060',
       contactEmail: 'contact@bantuhub.com',

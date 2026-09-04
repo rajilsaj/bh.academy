@@ -39,6 +39,9 @@ const config: Config = {
           turquoise: '#00AEEF',
           vert: '#0D6EB7',
           rose: '#00719F',
+          /* Le bleu du logo ia.lab et du site de la Fondation, et son fond clair. */
+          bleu: '#3A7FD0',
+          'bleu-clair': '#DCEBFA',
         },
         /*
          * Le cockpit (back-office) : fond bleu très clair, cartes blanches,
