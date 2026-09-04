@@ -48,7 +48,7 @@ export function LogoFondation({
       href={href}
       {...(externe ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       title={v.fondationEnSavoirPlus}
-      className={`inline-flex items-center rounded transition-opacity hover:opacity-80 ${className ?? ''}`}
+      className={`eco-cacher inline-flex items-center rounded transition-opacity hover:opacity-80 ${className ?? ''}`}
     >
       <img
         src={`/photos/${slot}-${plusGrande}.png`}
@@ -58,6 +58,7 @@ export function LogoFondation({
         width={plusGrande}
         height={Math.round(plusGrande / ratio)}
         className={`${hauteur} w-auto`}
+        loading="lazy"
         decoding="async"
       />
     </a>
