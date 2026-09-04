@@ -1,7 +1,6 @@
 import { fr } from '@/lib/i18n/fr'
 import { getFormateursPublics, initiales, type FormateurPublic } from '@/lib/formateurs'
 import { modeEconomie } from '@/lib/economie'
-import { FlechesDefilement } from '@/components/FlechesDefilement'
 
 const v = fr.vitrine
 
@@ -115,17 +114,14 @@ export async function Formateurs() {
 
   return (
     <section id="formateurs" className="parallaxe-apparition pb-12 lg:pb-16">
-      <div className="flex flex-wrap items-end justify-between gap-4 px-5 sm:px-8 lg:px-12">
-        <div>
-          <h2 className="titre text-balance text-3xl sm:text-4xl lg:text-5xl">
-            {v.formateurs.titre} <span className="manuscrit text-vitrine-jaune">{v.formateurs.manuscrit}</span>
-          </h2>
-          <p className="texte-leger mt-3 max-w-2xl text-pretty text-white">{v.formateurs.sousTitre}</p>
-        </div>
-        <FlechesDefilement cible="experts-ruban" precedent={v.formateurs.precedent} suivant={v.formateurs.suivant} />
+      <div className="px-5 sm:px-8 lg:px-12">
+        <h2 className="titre text-balance text-3xl sm:text-4xl lg:text-5xl">
+          {v.formateurs.titre} <span className="manuscrit text-vitrine-jaune">{v.formateurs.manuscrit}</span>
+        </h2>
+        <p className="texte-leger mt-3 max-w-2xl text-pretty text-white">{v.formateurs.sousTitre}</p>
       </div>
 
-      <div id="experts-ruban" className="defilement-cadre mt-6 lg:mt-8">
+      <div className="defilement-cadre mt-6 lg:mt-8">
         <ul className="defilement-piste" style={{ animationDuration: duree }}>
           {[...liste, ...liste].map((f, i) => (
             <li key={`${f.id}-${i}`} aria-hidden={i >= liste.length ? true : undefined}>

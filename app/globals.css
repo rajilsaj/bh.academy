@@ -671,23 +671,8 @@ html.r2-vu .chargement-r2 {
     mask-image: none;
   }
 }
-html[data-eco='1'] .defilement-piste,
-.defilement-manuel .defilement-piste {
+html[data-eco='1'] .defilement-piste {
   animation: none;
-}
-/* Mode manuel (flèches) : le cadre défile, sans barre visible. */
-.defilement-manuel {
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-mask-image: none;
-  mask-image: none;
-}
-.defilement-manuel::-webkit-scrollbar {
-  display: none;
-}
-.fleche-defilement {
-  @apply grid h-11 w-11 place-items-center rounded-full border-2 border-white/40 text-xl font-bold text-white
-         transition-colors hover:border-vitrine-jaune hover:bg-vitrine-jaune hover:text-vitrine-violet-fonce;
 }
 html[data-eco='1'] .defilement-cadre {
   overflow-x: auto;
