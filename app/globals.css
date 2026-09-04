@@ -679,3 +679,84 @@ html[data-eco='1'] .defilement-cadre {
   -webkit-mask-image: none;
   mask-image: none;
 }
+
+/* ------------------------------------------------------------------ */
+/* ASSISTANT D'INSCRIPTION — une question par écran, à la Typeform.       */
+/* Barre fine en haut, numéro et flèche, titre large, champ souligné,     */
+/* « OK », flèches en bas à droite. Sans JavaScript, tout est empilé.     */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .tf {
+    @apply relative;
+  }
+  .tf-progression {
+    @apply fixed inset-x-0 top-0 z-40 h-1 bg-white/15;
+  }
+  .tf-progression > span {
+    @apply block h-full bg-vitrine-jaune transition-[width] duration-500;
+  }
+  .tf-ecran {
+    @apply flex gap-3 py-8 sm:gap-4 sm:py-12;
+    min-height: min(70vh, 40rem);
+  }
+  .tf-ecran[hidden] {
+    display: none;
+  }
+  .tf-numero {
+    @apply mt-1.5 flex shrink-0 items-center gap-1 text-lg font-semibold text-vitrine-jaune;
+  }
+  .tf-titre {
+    @apply titre text-balance text-2xl leading-tight text-white sm:text-3xl;
+  }
+  .tf-facultatif {
+    @apply font-titre text-lg text-white/60;
+  }
+  .tf-aide {
+    @apply mt-2 max-w-xl text-pretty text-lg leading-snug text-white/75;
+  }
+  .tf-champ {
+    @apply w-full border-0 border-b-2 border-white/40 bg-transparent px-0 py-2 text-2xl text-white
+           placeholder:text-white/35 focus:border-vitrine-jaune focus:outline-none focus:ring-0;
+  }
+  .tf-zone {
+    @apply resize-none text-xl leading-snug;
+  }
+  .tf-options {
+    @apply flex max-w-xl flex-col gap-2;
+  }
+  .tf-option {
+    @apply flex cursor-pointer items-center gap-3 rounded-bloc border-2 border-white/30 bg-white/5 px-3 py-2.5
+           text-lg text-white transition-colors hover:border-white/60
+           has-[:checked]:border-vitrine-jaune has-[:checked]:bg-vitrine-jaune/15
+           has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-white/60;
+  }
+  .tf-lettre {
+    @apply grid h-7 w-7 shrink-0 place-items-center rounded-md border border-white/40 text-sm font-bold text-white/80;
+  }
+  .tf-option:has(:checked) .tf-lettre {
+    @apply border-vitrine-jaune bg-vitrine-jaune text-vitrine-violet-fonce;
+  }
+  .tf-option-note {
+    @apply w-14 justify-center px-0;
+  }
+  .tf-ok {
+    @apply inline-flex items-center gap-2 rounded-lg bg-vitrine-jaune px-5 py-2.5 text-lg font-bold
+           tracking-fort text-vitrine-violet-fonce transition-colors hover:bg-vitrine-jaune-fonce;
+  }
+  .tf-recap {
+    @apply mt-6 rounded-bloc border border-white/20 bg-white/5 p-4;
+  }
+  .tf-erreur {
+    @apply mt-4 rounded-bloc border-2 border-vitrine-rose bg-vitrine-rose/15 px-4 py-3 text-lg text-white;
+  }
+  .tf-fleches {
+    @apply fixed bottom-5 right-5 z-40 flex overflow-hidden rounded-lg shadow-lg;
+  }
+  .tf-fleches > button {
+    @apply grid h-11 w-11 place-items-center bg-vitrine-jaune text-xl font-bold text-vitrine-violet-fonce
+           transition-colors hover:bg-vitrine-jaune-fonce disabled:cursor-default disabled:opacity-40;
+  }
+  .tf-fleches > button + button {
+    @apply border-l border-vitrine-violet-fonce/20;
+  }
+}

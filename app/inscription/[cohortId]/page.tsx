@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { Alerte, Bloc, LearnerShell } from '@/components/LearnerShell'
 import { CopierLien } from '@/components/CopierLien'
-import { AssistantInscription, type EtapeInscription } from '@/components/inscription/AssistantInscription'
+import { AssistantInscription, type QuestionInscription } from '@/components/inscription/AssistantInscription'
 import { db } from '@/lib/db'
 import { cohorts, learners } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
@@ -139,177 +139,151 @@ export default async function InscriptionPage({
   }
 
   /*
-   * Les trois étapes suivantes sont rendues ici, côté serveur, et confiées à
-   * l'assistant qui les montre une par une. Sans JavaScript, elles s'affichent toutes.
+   * Les questions, une par écran, rendues ici côté serveur et confiées à
+   * l'assistant. Sans JavaScript, elles s'affichent toutes à la suite.
    */
-  const etapes: EtapeInscription[] = [
+  const questions: QuestionInscription[] = [
     {
-      cle: 'identite',
-      titre: t.identite,
+      champ: 'fullName',
+      etape: 'identite',
+      titre: t.nomComplet,
       contenu: (
-        <Bloc className="space-y-4">
-          <Etape n={2} titre={t.identite} />
-          <div>
-            <label className="etiquette" htmlFor="fullName">
-              {t.nomComplet}
-            </label>
-            <input
-              id="fullName"
-              name="fullName"
-              required
-              maxLength={120}
-              autoComplete="name"
-              placeholder={t.nomExemple}
-              defaultValue={google.nom}
-              className="champ"
-            />
-          </div>
-          <div>
-            <label className="etiquette" htmlFor="phone">
-              {t.telephone}
-            </label>
-            <input
-              id="phone"
-              name="phone"
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel"
-              maxLength={30}
-              className="champ"
-            />
-            <p className="mt-1 text-xs text-slate-500">{t.telephoneAide}</p>
-          </div>
-          <div>
-            <label className="etiquette" htmlFor="email">
-              {t.email} <span className="font-normal text-slate-500">({t.google.emailVerifie})</span>
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              readOnly
-              value={google.email}
-              className="champ !bg-slate-100 !text-slate-600"
-            />
-          </div>
-        </Bloc>
+        <input name="fullName" required maxLength={120} autoComplete="name" placeholder={t.nomExemple} defaultValue={google.nom} className="tf-champ" aria-label={t.nomComplet} />
       ),
     },
     {
-      cle: 'situation',
-      titre: t.situation,
+      champ: 'phone',
+      etape: 'identite',
+      titre: t.telephone,
+      aide: t.telephoneAide,
+      facultatif: true,
       contenu: (
-        <Bloc className="space-y-5">
-          <Etape n={3} titre={t.situation} />
-
-          <fieldset>
-            <legend className="etiquette">{t.statutEmploi}</legend>
-            <div className="space-y-2">
-              {Object.entries(t.statutOptions).map(([value, label]) => (
-                <label key={value} className="option">
-                  <input type="radio" name="statut" value={value} required className="h-5 w-5 shrink-0 accent-vitrine-violet" />
-                  <span>{label}</span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend className="etiquette">{t.outilsIa}</legend>
-            <p className="mb-2 text-xs text-slate-500">{t.outilsIaAide}</p>
-            <div className="space-y-2">
-              {Object.entries(t.outilsOptions).map(([value, label]) => (
-                <label key={value} className="option">
-                  <input type="checkbox" name="outils" value={value} className="h-5 w-5 shrink-0 accent-vitrine-violet" />
-                  <span>{label}</span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend className="etiquette">{t.confiance}</legend>
-            <p className="mb-2 text-xs text-slate-500">{t.confianceAide}</p>
-            <div className="flex gap-2">
-              {[1, 2, 3, 4, 5].map((n) => (
-                <label key={n} className="option flex-1 !flex-col !gap-1 !p-2 text-center">
-                  <input type="radio" name="confiance" value={n} required className="h-5 w-5 accent-vitrine-violet" />
-                  <span className="titre text-lg">{n}</span>
-                </label>
-              ))}
-            </div>
-            {/* Les deux bouts de l'échelle, en clair. */}
-            <div className="mt-1.5 flex justify-between text-xs font-semibold text-slate-500">
-              <span>{t.confianceMin}</span>
-              <span>{t.confianceMax}</span>
-            </div>
-          </fieldset>
-
-          <div>
-            <label className="etiquette" htmlFor="objectif">
-              {t.objectif}
-            </label>
-            <textarea
-              id="objectif"
-              name="objectif"
-              required
-              rows={3}
-              maxLength={500}
-              placeholder={t.objectifExemple}
-              className="champ"
-            />
-            <p className="mt-1 text-xs text-slate-500">{t.objectifAide}</p>
-          </div>
-        </Bloc>
+        <>
+          <input name="phone" type="tel" inputMode="tel" autoComplete="tel" maxLength={30} placeholder="06 XXX XX XX" className="tf-champ" aria-label={t.telephone} />
+          <input type="hidden" name="email" value={google.email} />
+        </>
       ),
     },
     {
-      cle: 'consentements',
+      champ: 'statut',
+      etape: 'situation',
+      titre: t.statutEmploi,
+      choixUnique: true,
+      contenu: (
+        <div className="tf-options">
+          {Object.entries(t.statutOptions).map(([value, label], i) => (
+            <label key={value} className="tf-option">
+              <input type="radio" name="statut" value={value} required className="sr-only" />
+              <span className="tf-lettre">{String.fromCharCode(65 + i)}</span>
+              <span>{label}</span>
+            </label>
+          ))}
+        </div>
+      ),
+    },
+    {
+      champ: 'outils',
+      etape: 'situation',
+      titre: t.outilsIa,
+      aide: t.outilsIaAide,
+      facultatif: true,
+      contenu: (
+        <div className="tf-options">
+          {Object.entries(t.outilsOptions).map(([value, label], i) => (
+            <label key={value} className="tf-option">
+              <input type="checkbox" name="outils" value={value} className="sr-only" />
+              <span className="tf-lettre">{String.fromCharCode(65 + i)}</span>
+              <span>{label}</span>
+            </label>
+          ))}
+        </div>
+      ),
+    },
+    {
+      champ: 'confiance',
+      etape: 'situation',
+      titre: t.confiance,
+      aide: `${t.confianceAide}`,
+      choixUnique: true,
+      contenu: (
+        <div>
+          <div className="flex flex-wrap gap-2">
+            {[1, 2, 3, 4, 5].map((n) => (
+              <label key={n} className="tf-option tf-option-note">
+                <input type="radio" name="confiance" value={n} required className="sr-only" />
+                <span className="titre text-2xl">{n}</span>
+              </label>
+            ))}
+          </div>
+          <div className="mt-2 flex justify-between text-lg text-white/60">
+            <span>{t.confianceMin}</span>
+            <span>{t.confianceMax}</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      champ: 'objectif',
+      etape: 'situation',
+      titre: t.objectif,
+      aide: t.objectifAide,
+      contenu: (
+        <textarea name="objectif" required rows={3} maxLength={500} placeholder={t.objectifExemple} className="tf-champ tf-zone" aria-label={t.objectif} />
+      ),
+    },
+    {
+      champ: null,
+      etape: 'consentements',
       titre: t.consentements,
       contenu: (
-        <Bloc className="space-y-3">
-          <Etape n={4} titre={t.consentements} />
-          <label className="option !items-start">
-            <input type="checkbox" name="consentCommunity" className="mt-0.5 h-5 w-5 shrink-0 accent-vitrine-violet" />
-            <span className="text-sm">{t.consentCommunaute}</span>
+        <div className="tf-options">
+          <label className="tf-option !items-start">
+            <input type="checkbox" name="consentCommunity" className="sr-only" />
+            <span className="tf-lettre">A</span>
+            <span>{t.consentCommunaute}</span>
           </label>
-          <label className="option !items-start">
-            <input type="checkbox" name="consentData" required className="mt-0.5 h-5 w-5 shrink-0 accent-vitrine-violet" />
-            <span className="text-sm">{t.consentDonnees}</span>
+          <label className="tf-option !items-start">
+            <input type="checkbox" name="consentData" required className="sr-only" />
+            <span className="tf-lettre">B</span>
+            <span>
+              {t.consentDonnees} <span className="text-vitrine-jaune">*</span>
+            </span>
           </label>
-        </Bloc>
+        </div>
       ),
     },
   ]
 
   return (
     <LearnerShell title={t.titre} vitrine avecAccent accueilHref="/" fond="espace">
-      <p className="-mt-3 mb-5 text-sm text-white/75">{t.sousTitre}</p>
       {erreur ? <Alerte>{erreur}</Alerte> : null}
 
-      {/* Étape 1 franchie : le compte Google, et le moyen d'en changer. */}
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-bloc border border-white/20 bg-white/10 px-4 py-2.5 text-sm text-white">
+      {/* Étape Google franchie : le compte, et le moyen d'en changer. */}
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-lg text-white/80">
         <span className="flex items-center gap-2">
           <span className="grid h-6 w-6 place-items-center rounded-full bg-vitrine-jaune text-xs font-bold text-vitrine-violet-fonce" aria-hidden="true">✓</span>
-          {t.google.connecte} <strong>{google.email}</strong>
+          {t.google.connecte} <strong className="text-white">{google.email}</strong>
         </span>
         <form action={changerCompteInscription}>
           <input type="hidden" name="cohortId" value={cohort.id} />
-          <button type="submit" className="underline decoration-white/50 underline-offset-2">{t.google.changer}</button>
+          <button type="submit" className="underline decoration-white/50 underline-offset-2 hover:text-white">{t.google.changer}</button>
         </form>
       </div>
 
       <AssistantInscription
         action={inscrire}
         cohortId={cohort.id}
-        decalage={1}
-        etapes={etapes}
+        questions={questions}
         textes={{
-          etape: t.etape,
+          question: t.question,
           sur: t.sur,
+          ok: t.ok,
+          entree: t.entree,
+          entreeTexte: t.entreeTexte,
           precedent: t.precedent,
           suivant: t.suivant,
           envoyer: t.soumettre,
+          facultatif: `(${fr.app.facultatif})`,
           recapTitre: t.recapTitre,
           recapAide: t.recapAide,
           erreursTitre: t.erreursTitre,
@@ -324,7 +298,7 @@ export default async function InscriptionPage({
           confiance: t.confiance,
           objectif: t.objectif,
           consentCommunity: t.consentements,
-          consentData: t.consentements,
+          consentData: t.consentDonneesRequis,
         }}
         options={{ statut: t.statutOptions, outils: t.outilsOptions }}
         messages={{
