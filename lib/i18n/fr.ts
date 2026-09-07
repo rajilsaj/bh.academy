@@ -899,6 +899,12 @@ export const fr = {
       fermerMenu: 'Fermer',
     },
 
+    /*
+     * « Je m'inscris » mène au formulaire Google de la Fondation. Les pages
+     * `/inscription/[cohortId]` restent en place, sans lien depuis le site.
+     */
+    inscriptionUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdBWYh3bVXPfLQIbgj9jycEZvKABlLe7NiANYMbzLeGNG87oA/viewform',
+
     /* Logo et site institutionnel de la Fondation. */
     logoAlt: 'Fondation BantuHub',
     partenairesLabel: 'Nos partenaires : BantuHub, la Fondation, le FONEA et la République du Congo',

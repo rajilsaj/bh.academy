@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { asc, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { Alerte, Bloc, LearnerShell } from '@/components/LearnerShell'
 import { auth, googleActive } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { cohorts, learners } from '@/lib/db/schema'
+import { learners } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
 import { formatDate } from '@/lib/format'
 import { connexionGoogleEspace, deconnexionEspace } from './actions'
@@ -47,7 +47,6 @@ export default async function MonEspacePage({ searchParams }: { searchParams: { 
 
     if (apprenant?.validatedAt) redirect(`/l/${apprenant.token}`)
 
-    const [cohorte] = await db.select().from(cohorts).orderBy(asc(cohorts.startsOn)).limit(1)
     return (
       <LearnerShell title={t.titre} vitrine avecAccent accueilHref="/" fond="espace">
         <Bloc className="space-y-3 text-center">
@@ -65,11 +64,9 @@ export default async function MonEspacePage({ searchParams }: { searchParams: { 
             <>
               <p className="titre text-2xl">{t.inconnuTitre}</p>
               <p className="text-sm text-slate-700">{t.inconnuTexte}</p>
-              {cohorte ? (
-                <Link href={`/inscription/${cohorte.id}`} className="bouton-principal !py-3 !text-base">
-                  {fr.vitrine.nav.inscription}
-                </Link>
-              ) : null}
+              <a href={fr.vitrine.inscriptionUrl} target="_blank" rel="noopener" className="bouton-principal !py-3 !text-base">
+                {fr.vitrine.nav.inscription}
+              </a>
             </>
           )}
           <p className="text-sm text-slate-500">

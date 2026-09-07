@@ -1,7 +1,4 @@
 import Link from 'next/link'
-import { asc } from 'drizzle-orm'
-import { db } from '@/lib/db'
-import { cohorts } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
 import { policeAccent, policeTitre } from '@/lib/fonts'
 import { modeEconomie, raisonEconomie } from '@/lib/economie'
@@ -74,8 +71,7 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
   const eco = modeEconomie()
   const raison = raisonEconomie()
   const polices = eco ? '' : `${policeTitre.variable} ${policeAccent.variable}`
-  const [cohorte] = await db.select().from(cohorts).orderBy(asc(cohorts.startsOn)).limit(1)
-  const lienInscription = cohorte ? `/inscription/${cohorte.id}` : '/admin'
+  const lienInscription = v.inscriptionUrl
 
   /*
    * L'assistant de la FAQ passe par un formulaire GET : la question arrive
@@ -155,12 +151,12 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
             <Link href="/mon-espace" className="bouton-fantome hidden px-6 py-3 text-base md:inline-flex">
               {v.nav.connexion}
             </Link>
-            <Link href={lienInscription} className="bouton-pilule px-6 py-3 text-base">
+            <a href={lienInscription} target="_blank" rel="noopener" className="bouton-pilule px-6 py-3 text-base">
               {v.nav.inscription}
               <span className="fleche" aria-hidden="true">
                 ↗
               </span>
-            </Link>
+            </a>
 
             {/*
               Menu mobile en <details> : les liens de section disparaissaient
@@ -233,12 +229,12 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
             </p>
 
             <div className="mx-auto mt-7 flex max-w-xs flex-col items-center gap-3 sm:max-w-none sm:flex-row sm:justify-center">
-              <Link href={lienInscription} className="bouton-principal sm:w-auto">
+              <a href={lienInscription} target="_blank" rel="noopener" className="bouton-principal sm:w-auto">
                 {v.heroBouton}
                 <span className="fleche" aria-hidden="true">
                   ↗
                 </span>
-              </Link>
+              </a>
               <a href="#programme" className="bouton-fantome">
                 {v.heroSecondaire}
               </a>
@@ -313,12 +309,12 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
                 </p>
               </div>
             </div>
-            <Link href={lienInscription} className="bouton-pilule shrink-0">
+            <a href={lienInscription} target="_blank" rel="noopener" className="bouton-pilule shrink-0">
               {v.prixBouton}
               <span className="fleche" aria-hidden="true">
                 ↗
               </span>
-            </Link>
+            </a>
           </div>
         </section>
 
@@ -511,12 +507,12 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
           <Gribouillis className="parallaxe-lent absolute right-10 top-8 hidden h-14 w-14 text-white/15 xl:block" />
           <h2 className="titre text-2xl sm:text-3xl lg:text-4xl">{v.piedTitre}</h2>
           <div className="mt-5">
-            <Link href={lienInscription} className="bouton-pilule">
+            <a href={lienInscription} target="_blank" rel="noopener" className="bouton-pilule">
               {v.nav.inscription}
               <span className="fleche" aria-hidden="true">
                 ↗
               </span>
-            </Link>
+            </a>
           </div>
           <Signature />
         </footer>

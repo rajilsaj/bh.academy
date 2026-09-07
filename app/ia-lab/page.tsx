@@ -1,11 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { asc } from 'drizzle-orm'
 import { LogoIalab } from '@/components/LogoIalab'
 import { LogoFondation } from '@/components/LogoFondation'
 import { Photo } from '@/components/Photo'
-import { db } from '@/lib/db'
-import { cohorts } from '@/lib/db/schema'
 import { policeTitre } from '@/lib/fonts'
 import { modeEconomie } from '@/lib/economie'
 import { fr } from '@/lib/i18n/fr'
@@ -51,8 +48,7 @@ function Section({
  * texte. La formation y figure comme projet du lab.
  */
 export default async function IaLabPage() {
-  const [cohorte] = await db.select().from(cohorts).orderBy(asc(cohorts.startsOn)).limit(1)
-  const lienInscription = cohorte ? `/inscription/${cohorte.id}` : '/'
+  const lienInscription = v.inscriptionUrl
   const polices = modeEconomie() ? '' : policeTitre.variable
 
   const liens = [
@@ -119,9 +115,9 @@ export default async function IaLabPage() {
                 <Link href="/" className="bouton-principal !py-3 !text-base sm:w-auto">
                   {t.projetFormationBouton}
                 </Link>
-                <Link href={lienInscription} className="inline-flex items-center justify-center rounded-full border-2 border-white/40 px-5 py-2.5 text-lg font-semibold text-white hover:bg-white/10">
+                <a href={lienInscription} target="_blank" rel="noopener" className="inline-flex items-center justify-center rounded-full border-2 border-white/40 px-5 py-2.5 text-lg font-semibold text-white hover:bg-white/10">
                   {v.nav.inscription}
-                </Link>
+                </a>
               </div>
             </div>
             <Photo nom="certificat" alt={v.photos.certificat} sizes="(min-width: 768px) 45vw, 100vw" className="h-64 w-full object-cover md:h-full" />
