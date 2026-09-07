@@ -71,7 +71,10 @@ if (googleActive) {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   session: { strategy: 'jwt' },
-  pages: { signIn: '/admin/login', error: '/admin/login' },
+  // Les erreurs (Google qui refuse, échange OAuth raté) reviennent sur
+  // « Mon espace », la porte commune : un apprenant ne doit jamais atterrir
+  // sur le formulaire du Cockpit. La page lit `?error=` et l'explique.
+  pages: { signIn: '/admin/login', error: '/mon-espace' },
   providers,
   callbacks: {
     /**

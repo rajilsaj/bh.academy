@@ -22,7 +22,6 @@ import { Signature } from '@/components/Signature'
 import { Photo } from '@/components/Photo'
 import { MarqueIalab } from '@/components/MarqueIalab'
 import { Partenaires } from '@/components/Partenaires'
-import { Formateurs } from '@/components/Formateurs'
 import { NettoyerAncre } from '@/components/NettoyerAncre'
 import { Medaillon } from '@/components/Medaillon'
 import { SectionCourante } from '@/components/SectionCourante'
@@ -148,10 +147,10 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
 
           <div className="ml-auto flex items-center gap-3">
             {/*
-              Connexion à l'espace formateur — le seul accès par mot de passe
-              du site, les apprenants passant par leur lien personnel. Pilule
-              secondaire à côté de l'inscription dès `md` ; sur mobile, elle
-              rejoint le menu hamburger pour ne pas encombrer l'en-tête.
+              « Mon espace » : la porte unique des apprenants et de l'équipe
+              (voir `app/mon-espace`). Pilule secondaire à côté de l'inscription
+              dès `md` ; sur mobile, elle rejoint le menu hamburger pour ne pas
+              encombrer l'en-tête.
             */}
             <Link href="/mon-espace" className="bouton-fantome hidden px-6 py-3 text-base md:inline-flex">
               {v.nav.connexion}
@@ -187,7 +186,7 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
                   </a>
                 ))}
                 <Link
-                  href="/admin"
+                  href="/mon-espace"
                   className="mt-1 rounded-full border-t border-white/15 px-4 pb-2.5 pt-3.5 text-base font-semibold text-vitrine-jaune active:bg-white/10"
                 >
                   {v.nav.connexion}
@@ -431,8 +430,11 @@ export default async function Accueil({ searchParams }: { searchParams?: { q?: s
           </ol>
         </section>
 
-        {/* ----------------------------------------------------- nos experts */}
-        <Formateurs />
+        {/*
+          ------------------------------------------------- nos experts
+          Section masquée pour l'instant : `components/Formateurs.tsx` reste
+          prêt à être remis ici quand l'équipe sera au complet.
+        */}
 
         {/* ------------------------------------------------------------ FAQ */}
         <section id="questions" className="parallaxe-apparition px-5 pb-12 sm:px-8 lg:px-12 lg:pb-16">

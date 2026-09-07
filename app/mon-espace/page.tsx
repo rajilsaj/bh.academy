@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { asc, eq } from 'drizzle-orm'
-import { Bloc, LearnerShell } from '@/components/LearnerShell'
+import { Alerte, Bloc, LearnerShell } from '@/components/LearnerShell'
 import { auth, googleActive } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { cohorts, learners } from '@/lib/db/schema'
@@ -30,9 +30,13 @@ function MarqueGoogle() {
  * apprenant validé vers ses pages ; un apprenant en attente voit où il en
  * est ; un compte Google inconnu est invité à s'inscrire.
  */
-export default async function MonEspacePage({ searchParams }: { searchParams: { inscrit?: string } }) {
+export default async function MonEspacePage({ searchParams }: { searchParams: { inscrit?: string; error?: string } }) {
   const session = await auth()
   if (session?.user?.role) redirect('/admin')
+
+  // `error` est posé par Auth.js (voir `pages.error` dans `lib/auth.ts`) quand
+  // la connexion Google n'a pas abouti : on l'explique ici, sans jargon.
+  const erreur = searchParams.error ? (searchParams.error === 'AccessDenied' ? t.googleRefuse : t.googleErreur) : null
 
   if (session?.user?.googleSub) {
     const [apprenant] = await db
@@ -52,6 +56,7 @@ export default async function MonEspacePage({ searchParams }: { searchParams: { 
               {searchParams.inscrit ? <p className="manuscrit text-4xl">{t.enAttenteAccroche}</p> : null}
               <p className="titre text-2xl">{t.enAttenteTitre}</p>
               <p className="text-sm text-slate-700">{t.enAttenteTexte}</p>
+              {searchParams.inscrit ? <p className="text-sm font-semibold text-vitrine-violet">{t.enAttenteMerci}</p> : null}
               <p className="text-sm text-slate-500">
                 {t.inscritLe} {formatDate(apprenant.createdAt)}
               </p>
@@ -83,6 +88,7 @@ export default async function MonEspacePage({ searchParams }: { searchParams: { 
   /* Deux portes, côte à côte : l'apprenant, et l'équipe. */
   return (
     <LearnerShell title={t.titre} vitrine avecAccent accueilHref="/" fond="espace" large>
+      {erreur ? <Alerte>{erreur}</Alerte> : null}
       <div className="grid gap-4 sm:grid-cols-2">
         <Bloc className="flex flex-col gap-3">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-vitrine-violet">{t.apprenantTitre}</p>
