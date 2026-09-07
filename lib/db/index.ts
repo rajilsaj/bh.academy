@@ -12,12 +12,19 @@ const connectionString =
  * requis par le pooler de Supabase en mode transaction (port 6543), qui ne
  * garde pas les instructions préparées d'une requête à l'autre. Sur Vercel,
  * chaque instance de fonction ouvre son propre petit pool : on reste bas.
+ *
+ * `max_pipeline: 0` : pas de requêtes enchaînées sur une même connexion sans
+ * attendre la réponse. Le pilote le fait pour les requêtes sans paramètre
+ * (`select count(*) from …`), et le pooler en mode transaction perd alors la
+ * deuxième : la page attend une réponse qui ne vient jamais. Le Cockpit, qui
+ * lance ses compteurs en parallèle, restait ainsi bloqué.
  */
 export function optionsConnexion(url: string, max = Number(process.env.DB_POOL_MAX ?? 3)) {
   const locale = /localhost|127\.0\.0\.1/.test(url)
   return {
     max,
     prepare: false,
+    max_pipeline: 0,
     ssl: locale ? undefined : ('require' as const),
     idle_timeout: 20,
     connect_timeout: 15,
