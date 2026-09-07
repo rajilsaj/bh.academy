@@ -900,10 +900,10 @@ export const fr = {
     },
 
     /*
-     * « Je m'inscris » mène au formulaire Google de la Fondation. Les pages
+     * « Je m'inscris » mène à la page d'inscription du site de la Fondation. Les pages
      * `/inscription/[cohortId]` restent en place, sans lien depuis le site.
      */
-    inscriptionUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdBWYh3bVXPfLQIbgj9jycEZvKABlLe7NiANYMbzLeGNG87oA/viewform',
+    inscriptionUrl: 'https://bantuhub.com/ia',
 
     /* Logo et site institutionnel de la Fondation. */
     logoAlt: 'Fondation BantuHub',
