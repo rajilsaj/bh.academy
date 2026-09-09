@@ -1,12 +1,16 @@
-import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from 'pdf-lib'
+import { PDFDocument, PDFFont, PDFPage, PDFString, StandardFonts, rgb } from 'pdf-lib'
 
 /**
  * Export PDF d'une liste : un tableau en A4 paysage, l'en-tête répété sur
  * chaque page, les cellules qui vont à la ligne, le pied avec la date et le
  * numéro de page. Les polices standard du PDF (Helvetica) couvrent le
  * français ; ce qu'elles ne savent pas écrire est simplement omis.
+ *
+ * Une cellule peut porter un lien : elle s'affiche en bleu et un clic sur
+ * la cellule ouvre l'adresse — dans n'importe quel lecteur de PDF.
  */
 export type ColonnePdf = { titre: string; largeur: number }
+export type CellulePdf = string | { texte: string; lien: string }
 export type TableauPdf = {
   titre: string
   sousTitre?: string
@@ -14,7 +18,7 @@ export type TableauPdf = {
   /** « Page {n} / {total} » */
   page: string
   colonnes: ColonnePdf[]
-  lignes: string[][]
+  lignes: CellulePdf[][]
 }
 
 const A4_PAYSAGE: [number, number] = [841.89, 595.28]
@@ -25,6 +29,7 @@ const MARGE_CELLULE = 5
 
 const ENCRE = rgb(0.1, 0.11, 0.16)
 const DOUX = rgb(0.45, 0.47, 0.55)
+const LIEN = rgb(0.05, 0.35, 0.75)
 const FILET = rgb(0.85, 0.86, 0.9)
 const FOND_ENTETE = rgb(0.95, 0.96, 0.98)
 
@@ -57,6 +62,18 @@ function couper(texte: string, police: PDFFont, largeur: number): string[] {
     lignes.push(courante)
   }
   return lignes.length > 0 ? lignes : ['']
+}
+
+/** Rend la zone `[x, y, largeur, hauteur]` de la page cliquable vers `url`. */
+function annoterLien(doc: PDFDocument, page: PDFPage, x: number, y: number, largeur: number, hauteur: number, url: string) {
+  const annotation = doc.context.obj({
+    Type: 'Annot',
+    Subtype: 'Link',
+    Rect: [x, y, x + largeur, y + hauteur],
+    Border: [0, 0, 0],
+    A: { Type: 'Action', S: 'URI', URI: PDFString.of(url) },
+  })
+  page.node.addAnnot(doc.context.register(annotation))
 }
 
 export async function tableauPdf(t: TableauPdf): Promise<Buffer> {
@@ -107,14 +124,19 @@ export async function tableauPdf(t: TableauPdf): Promise<Buffer> {
   entete()
 
   for (const ligne of t.lignes) {
-    const cellules = ligne.map((v, i) => couper(propre(v ?? ''), police, largeurs[i] - 2 * MARGE_CELLULE))
-    const h = Math.max(...cellules.map((c) => c.length)) * INTERLIGNE + 2 * MARGE_CELLULE
+    const cellules = ligne.map((v, i) => {
+      const texte = typeof v === 'string' ? v : v.texte
+      const lien = typeof v === 'string' || !v.lien ? null : v.lien
+      return { lien, lignes: couper(propre(texte ?? ''), police, largeurs[i] - 2 * MARGE_CELLULE) }
+    })
+    const h = Math.max(...cellules.map((c) => c.lignes.length)) * INTERLIGNE + 2 * MARGE_CELLULE
     if (y - h < bas) nouvellePage()
     let x = MARGE
-    cellules.forEach((lignesCellule, i) => {
-      lignesCellule.forEach((texte, j) => {
-        page.drawText(texte, { x: x + MARGE_CELLULE, y: y - MARGE_CELLULE - TAILLE - j * INTERLIGNE, size: TAILLE, font: police, color: ENCRE })
+    cellules.forEach((cellule, i) => {
+      cellule.lignes.forEach((texte, j) => {
+        page.drawText(texte, { x: x + MARGE_CELLULE, y: y - MARGE_CELLULE - TAILLE - j * INTERLIGNE, size: TAILLE, font: police, color: cellule.lien ? LIEN : ENCRE })
       })
+      if (cellule.lien) annoterLien(doc, page, x, y - h, largeurs[i], h, cellule.lien)
       x += largeurs[i]
     })
     y -= h

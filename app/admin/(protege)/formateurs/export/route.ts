@@ -41,8 +41,8 @@ export async function GET(request: Request) {
   const formateurs = filtrerParVille(tous, filtre)
 
   const telephone = (f: { phone: string | null }) => f.phone ?? t.telephoneAChercher
-  /* Dans le PDF, un lien se lit sans son préfixe technique. */
-  const lien = (url: string | null) => (url ?? '').replace(/^https?:\/\/(www\.)?/, '')
+  /* Dans le PDF, un lien se lit sans son préfixe technique, et un clic dessus ouvre le profil. */
+  const lien = (url: string | null) => (url ? { texte: url.replace(/^https?:\/\/(www\.)?/, ''), lien: url } : '')
 
   if (params.get('format') === 'pdf') {
     const pdf = await tableauPdf({
