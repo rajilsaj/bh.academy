@@ -4,9 +4,9 @@ import { AccesRefuse } from '@/components/AccesRefuse'
 import { EnTete, TitreSection, Vide } from '@/components/admin/Cockpit'
 import { requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { staff, TRAINER_CITIES, trainerProfiles } from '@/lib/db/schema'
+import { staff, trainerProfiles } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
-import { initiales } from '@/lib/formateurs'
+import { FILTRES_VILLE, filtrerParVille, filtreVilleDepuis, initiales, libelleFiltreVille, nomFichierFormateurs } from '@/lib/formateurs'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,14 +15,16 @@ const u = fr.admin.utilisateurs
 
 /**
  * Les formateurs seuls, avec ce qui sert à les joindre et à les présenter :
- * ville, téléphone, LinkedIn, site web, profil. La même liste se télécharge
- * en Excel. La fiche se modifie depuis la page Utilisateurs.
+ * ville, téléphone, LinkedIn, site web, profil. Un filtre par ville, et la
+ * liste filtrée se télécharge en Excel ou en PDF. La fiche se modifie depuis
+ * la page Utilisateurs.
  */
-export default async function FormateursPage() {
+export default async function FormateursPage({ searchParams }: { searchParams: { ville?: string } }) {
   const session = await requirePermission('gererUtilisateurs')
   if (!session) return <AccesRefuse />
 
-  const formateurs = await db
+  const filtre = filtreVilleDepuis(searchParams.ville)
+  const tous = await db
     .select({
       id: staff.id,
       nom: trainerProfiles.fullName,
@@ -40,12 +42,11 @@ export default async function FormateursPage() {
     .where(eq(staff.role, 'formateur'))
     .orderBy(asc(trainerProfiles.fullName))
 
-  const parVille = TRAINER_CITIES.map((ville) => ({ ville, n: formateurs.filter((f) => f.city === ville).length }))
-  const sansVille = formateurs.filter((f) => !f.city).length
-  const repartition = [
-    ...parVille.map((v) => t.parVille.replace('{ville}', v.ville).replace('{n}', String(v.n))),
-    ...(sansVille > 0 ? [t.sansVille.replace('{n}', String(sansVille))] : []),
-  ].join(' · ')
+  const formateurs = filtrerParVille(tous, filtre)
+  const onglets = FILTRES_VILLE.map((f) => ({ cle: f, label: libelleFiltreVille(f), n: filtrerParVille(tous, f).length }))
+  const lienFiltre = (f: (typeof FILTRES_VILLE)[number]) => (f === 'tous' ? '/admin/formateurs' : `/admin/formateurs?ville=${encodeURIComponent(f)}`)
+  const lienExport = (format: 'xlsx' | 'pdf') =>
+    `/admin/formateurs/export?${new URLSearchParams({ ...(format === 'pdf' ? { format } : {}), ...(filtre === 'tous' ? {} : { ville: filtre }) })}`
 
   return (
     <div className="space-y-6">
@@ -55,13 +56,23 @@ export default async function FormateursPage() {
         actions={
           <>
             <Link href="/admin/utilisateurs" className="bo-bouton-discret">{t.ajouter}</Link>
-            <a href="/admin/formateurs/export" className="bo-bouton" download="formateurs.xlsx">{t.exporter}</a>
+            <a href={lienExport('pdf')} className="bo-bouton-discret" download={nomFichierFormateurs(filtre, 'pdf')}>{t.exporterPdf}</a>
+            <a href={lienExport('xlsx')} className="bo-bouton" download={nomFichierFormateurs(filtre, 'xlsx')}>{t.exporter}</a>
           </>
         }
       />
 
       <section className="bo-panneau">
-        <TitreSection titre={t.liste} compte={formateurs.length} actions={<p className="bo-doux">{repartition}</p>} />
+        <TitreSection titre={t.liste} compte={formateurs.length} />
+
+        {/* Filtre par ville, en onglets ; les téléchargements suivent le filtre. */}
+        <div className="bo-onglets mb-3">
+          {onglets.map((o) => (
+            <Link key={o.cle} href={lienFiltre(o.cle)} className={o.cle === filtre ? 'bo-onglet-actif' : 'bo-onglet'}>
+              {o.label} <span className={o.cle === filtre ? 'opacity-80' : 'bo-doux'}>({o.n})</span>
+            </Link>
+          ))}
+        </div>
 
         {formateurs.length === 0 ? (
           <Vide titre={t.aucun} texte={t.aucunAide} action={<Link href="/admin/utilisateurs" className="bo-bouton">{t.ajouter}</Link>} />
@@ -95,7 +106,7 @@ export default async function FormateursPage() {
                         </div>
                       </td>
                       <td className="whitespace-nowrap">{f.city ?? <span className="bo-doux">—</span>}</td>
-                      <td className="whitespace-nowrap">{f.phone ?? <span className="bo-doux">—</span>}</td>
+                      <td className="whitespace-nowrap">{f.phone ?? <span className="text-bo-jaune">{t.telephoneAChercher}</span>}</td>
                       <td>
                         <div className="flex flex-col gap-0.5">
                           {f.linkedin ? (

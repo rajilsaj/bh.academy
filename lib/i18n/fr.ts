@@ -298,6 +298,8 @@ export const fr = {
       modules: 'Modules',
       configuration: 'Configuration',
       menu: 'Menu',
+      reduire: 'Réduire le menu',
+      agrandir: 'Agrandir le menu',
     },
     roles: {
       admin: 'Administrateur',
@@ -638,14 +640,17 @@ export const fr = {
     /* La liste des formateurs, et son export Excel. */
     formateurs: {
       titre: 'Formateurs',
-      sousTitre: 'Les formateurs de la Fondation : nom, ville, téléphone, LinkedIn, site web et profil. La liste se télécharge en Excel.',
+      sousTitre: 'Les formateurs de la Fondation : nom, ville, téléphone, LinkedIn, site web et profil. La liste se télécharge en Excel ou en PDF.',
       liste: 'Tous les formateurs',
-      exporter: 'Télécharger la liste (Excel)',
+      exporter: 'Télécharger (Excel)',
+      exporterPdf: 'Télécharger (PDF)',
       ajouter: 'Ajouter un formateur',
       ajouterAide: 'Un formateur se crée depuis la page Utilisateurs, avec le rôle « Formateur ».',
       colonneNom: 'Nom',
       colonneVille: 'Ville',
       colonneTelephone: 'Téléphone',
+      /* Un numéro qu'on n'a pas encore est un numéro à trouver, pas un vide. */
+      telephoneAChercher: 'À chercher',
       colonneLiens: 'LinkedIn · Site web',
       colonneProfil: 'Profil',
       colonneStatut: 'Statut',
@@ -654,6 +659,8 @@ export const fr = {
       aucunAide: 'Créez le premier depuis la page Utilisateurs.',
       parVille: '{ville} : {n}',
       sansVille: 'Sans ville : {n}',
+      filtreTous: 'Toutes les villes',
+      filtreSansVille: 'Sans ville',
       excel: {
         feuille: 'Formateurs',
         nom: 'Nom',
@@ -662,6 +669,12 @@ export const fr = {
         telephone: 'Téléphone',
         profil: 'Profil',
         ville: 'Ville',
+      },
+      pdf: {
+        titre: 'Liste des formateurs',
+        compte: '{n} formateurs',
+        pied: 'ia.lab · Fondation BantuHub — généré le {date}',
+        page: 'Page {n} / {total}',
       },
     },
 

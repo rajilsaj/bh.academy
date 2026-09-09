@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto'
 import { asc, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { programModules, staff, trainerProfiles } from '@/lib/db/schema'
+import { CITIES, intervientA, programModules, staff, trainerProfiles, type TrainerCity } from '@/lib/db/schema'
+import { fr } from '@/lib/i18n/fr'
 import { envoyerFichier } from '@/lib/storage'
 import { contentTypeFor, extensionOf } from '@/lib/uploads'
 
@@ -89,4 +90,41 @@ export function initiales(nom: string): string {
     .slice(0, 2)
     .map((m) => m[0]!.toUpperCase())
     .join('')
+}
+
+/** « Brazzaville : 5 · Pointe-Noire : 3 · Sans ville : 2 » — un formateur des deux villes compte dans chacune. */
+export function repartitionParVille(formateurs: { city: TrainerCity | null }[]): string {
+  const t = fr.admin.formateurs
+  const parVille = CITIES.map((ville) => t.parVille.replace('{ville}', ville).replace('{n}', String(formateurs.filter((f) => intervientA(f.city, ville)).length)))
+  const sansVille = formateurs.filter((f) => !f.city).length
+  return [...parVille, ...(sansVille > 0 ? [t.sansVille.replace('{n}', String(sansVille))] : [])].join(' · ')
+}
+
+/** Le filtre par ville de la liste des formateurs : toutes, l'une des deux, ou ceux sans ville. */
+export const FILTRES_VILLE = ['tous', ...CITIES, 'sans'] as const
+export type FiltreVille = (typeof FILTRES_VILLE)[number]
+
+export function filtreVilleDepuis(param: string | undefined): FiltreVille {
+  return FILTRES_VILLE.find((f) => f === param) ?? 'tous'
+}
+
+/** Les formateurs retenus par le filtre ; un formateur des deux villes répond aux deux. */
+export function filtrerParVille<T extends { city: TrainerCity | null }>(formateurs: T[], filtre: FiltreVille): T[] {
+  if (filtre === 'tous') return formateurs
+  if (filtre === 'sans') return formateurs.filter((f) => !f.city)
+  return formateurs.filter((f) => intervientA(f.city, filtre))
+}
+
+/** Le libellé du filtre, pour les onglets et le sous-titre du PDF. */
+export function libelleFiltreVille(filtre: FiltreVille): string {
+  const t = fr.admin.formateurs
+  if (filtre === 'tous') return t.filtreTous
+  if (filtre === 'sans') return t.filtreSansVille
+  return filtre
+}
+
+/** Le nom du fichier téléchargé : « formateurs-brazzaville.pdf ». */
+export function nomFichierFormateurs(filtre: FiltreVille, extension: 'xlsx' | 'pdf'): string {
+  const suffixe = filtre === 'tous' ? '' : `-${filtre.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '')}`
+  return `formateurs${suffixe}.${extension}`
 }

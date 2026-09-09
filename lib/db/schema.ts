@@ -309,9 +309,15 @@ export const programModules = pgTable(
   }),
 )
 
-/** Les deux villes où la Fondation forme ; la ville d'un formateur est l'une d'elles. */
-export const TRAINER_CITIES = ['Brazzaville', 'Pointe-Noire'] as const
+/** Les deux villes où la Fondation forme. */
+export const CITIES = ['Brazzaville', 'Pointe-Noire'] as const
+export type City = (typeof CITIES)[number]
+/** La ville d'un formateur : l'une des deux, ou les deux quand il intervient partout. */
+export const BOTH_CITIES = 'Brazzaville/Pointe-Noire' as const
+export const TRAINER_CITIES = [...CITIES, BOTH_CITIES] as const
 export type TrainerCity = (typeof TRAINER_CITIES)[number]
+/** Vrai si un formateur rattaché à `city` intervient dans `ville`. */
+export const intervientA = (city: TrainerCity | null, ville: City) => city === ville || city === BOTH_CITIES
 
 /** Le profil public d'un formateur, et l'état de son invitation. */
 export const trainerProfiles = pgTable('trainer_profiles', {

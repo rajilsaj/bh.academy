@@ -298,7 +298,7 @@
 
   /* Barre latérale blanche ; le lien actif est une pastille bleu clair. */
   .bo-sidebar {
-    @apply w-64 shrink-0 border-r border-bo-bordure bg-white;
+    @apply w-64 shrink-0 border-r border-bo-bordure bg-white transition-[width] duration-200;
   }
   .bo-nav-groupe {
     @apply px-4 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-bo-doux;

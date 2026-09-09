@@ -30,8 +30,10 @@ function Icone({ nom }: { nom: IconeNav }) {
  * La navigation du Cockpit, en barre latérale. Le lien courant est celui
  * dont le chemin est le plus long préfixe de l'URL : « /admin » n'est actif
  * que sur l'accueil, « /admin/modules » aussi sur une fiche formation.
+ * Repliée, elle ne montre que les icônes ; le libellé passe en info-bulle et
+ * un filet remplace le titre de chaque groupe.
  */
-export function AdminSidebar({ groupes, onClick }: { groupes: GroupeNav[]; onClick?: () => void }) {
+export function AdminSidebar({ groupes, onClick, replie = false }: { groupes: GroupeNav[]; onClick?: () => void; replie?: boolean }) {
   const chemin = usePathname() ?? ''
   const tous = groupes.flatMap((g) => g.liens.map((l) => l.href))
   const courant = tous
@@ -42,18 +44,26 @@ export function AdminSidebar({ groupes, onClick }: { groupes: GroupeNav[]; onCli
     <nav aria-label="Navigation du Cockpit">
       {groupes.map((groupe) => (
         <div key={groupe.titre}>
-          {groupe.titre ? <p className="bo-nav-groupe">{groupe.titre}</p> : <div className="pt-3" />}
+          {replie ? (
+            <div className={groupe.titre ? 'mx-4 mb-2 mt-3 border-t border-bo-bordure' : 'pt-3'} />
+          ) : groupe.titre ? (
+            <p className="bo-nav-groupe">{groupe.titre}</p>
+          ) : (
+            <div className="pt-3" />
+          )}
           <ul className="space-y-0.5 px-2">
             {groupe.liens.map((lien) => (
               <li key={lien.href}>
                 <Link
                   href={lien.href}
-                  className="bo-nav-lien gap-2.5"
+                  className={`bo-nav-lien gap-2.5 ${replie ? 'justify-center !px-0' : ''}`}
                   aria-current={lien.href === courant ? 'page' : undefined}
+                  aria-label={replie ? lien.label : undefined}
+                  title={replie ? lien.label : undefined}
                   onClick={onClick}
                 >
                   {lien.icone ? <Icone nom={lien.icone} /> : null}
-                  {lien.label}
+                  {replie ? null : lien.label}
                 </Link>
               </li>
             ))}
