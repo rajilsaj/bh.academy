@@ -309,6 +309,10 @@ export const programModules = pgTable(
   }),
 )
 
+/** Les deux villes où la Fondation forme ; la ville d'un formateur est l'une d'elles. */
+export const TRAINER_CITIES = ['Brazzaville', 'Pointe-Noire'] as const
+export type TrainerCity = (typeof TRAINER_CITIES)[number]
+
 /** Le profil public d'un formateur, et l'état de son invitation. */
 export const trainerProfiles = pgTable('trainer_profiles', {
   staffId: uuid('staff_id')
@@ -317,6 +321,7 @@ export const trainerProfiles = pgTable('trainer_profiles', {
   fullName: text('full_name').notNull(),
   bio: text('bio'),
   phone: text('phone'),
+  city: text('city').$type<TrainerCity>(),
   linkedin: text('linkedin'),
   facebook: text('facebook'),
   website: text('website'),

@@ -22,7 +22,10 @@ const GROUPES: { titre: string; liens: Lien[] }[] = [
   },
   {
     titre: fr.admin.sidebar.personnes,
-    liens: [{ href: '/admin/utilisateurs', label: fr.admin.nav.utilisateurs, permission: 'gererUtilisateurs', icone: 'personnes' }],
+    liens: [
+      { href: '/admin/utilisateurs', label: fr.admin.nav.utilisateurs, permission: 'gererUtilisateurs', icone: 'personnes' },
+      { href: '/admin/formateurs', label: fr.admin.nav.formateurs, permission: 'gererUtilisateurs', icone: 'formateurs' },
+    ],
   },
   {
     titre: fr.admin.sidebar.modules,

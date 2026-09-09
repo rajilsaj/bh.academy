@@ -46,10 +46,20 @@ export async function runMigrations() {
       .map((s) => s.trim())
       .filter((s) => s.length > 0 && !/^(--[^\n]*\n?)*$/.test(s))
 
-    await sql.begin(async (tx) => {
+    // Une connexion réservée et un BEGIN explicite : `sql.begin` ne fonctionne
+    // pas quand les requêtes enchaînées sont désactivées (`max_pipeline: 0`).
+    const tx = await sql.reserve()
+    try {
+      await tx.unsafe('begin')
       for (const statement of statements) await tx.unsafe(statement)
       await tx`insert into __migrations (tag) values (${entry.tag})`
-    })
+      await tx.unsafe('commit')
+    } catch (error) {
+      await tx.unsafe('rollback').catch(() => undefined)
+      throw error
+    } finally {
+      tx.release()
+    }
 
     console.log(`+ ${entry.tag}`)
   }

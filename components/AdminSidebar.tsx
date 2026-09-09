@@ -3,13 +3,14 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-export type IconeNav = 'tableau' | 'personnes' | 'modules' | 'sessions' | 'ressources' | 'parametres' | 'visites'
+export type IconeNav = 'tableau' | 'personnes' | 'formateurs' | 'modules' | 'sessions' | 'ressources' | 'parametres' | 'visites'
 export type GroupeNav = { titre: string; liens: { href: string; label: string; icone?: IconeNav }[] }
 
 /** Traits simples, 24 × 24, une seule épaisseur : lisibles à 16 px sur le violet. */
 const TRAITS: Record<IconeNav, string> = {
   tableau: 'M4 5h7v6H4zM13 5h7v4h-7zM13 11h7v8h-7zM4 13h7v6H4z',
   personnes: 'M16 19v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1M9.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M21 19v-1a4 4 0 0 0-3-3.9M15 4.1a3.5 3.5 0 0 1 0 6.8',
+  formateurs: 'M3 4h18v11H3zM7 8h6M7 11h10M12 15v5M8 20h8',
   modules: 'M4 6h16M4 12h16M4 18h10',
   sessions: 'M5 5h14v15H5zM5 9h14M9 3v4M15 3v4',
   ressources: 'M5 4h9l5 5v11H5zM14 4v5h5',

@@ -4,7 +4,7 @@ import { AccesRefuse, AlerteSombre, SuccesSombre } from '@/components/AccesRefus
 import { BarreSelection, EnTete, TitreSection } from '@/components/admin/Cockpit'
 import { requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { cohorts, learners, ROLES, staff, trainerProfiles } from '@/lib/db/schema'
+import { cohorts, learners, ROLES, staff, TRAINER_CITIES, trainerProfiles } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
 import { formatDateTime, formatPercent } from '@/lib/format'
 import {
@@ -65,6 +65,8 @@ export default async function UtilisateursPage({
         nom: trainerProfiles.fullName,
         linkedin: trainerProfiles.linkedin,
         facebook: trainerProfiles.facebook,
+        phone: trainerProfiles.phone,
+        city: trainerProfiles.city,
         bio: trainerProfiles.bio,
         photoPath: trainerProfiles.photoPath,
         website: trainerProfiles.website,
@@ -390,6 +392,19 @@ export default async function UtilisateursPage({
               <input id="f-nom" name="fullName" required maxLength={120} defaultValue={ficheOuverte.nom ?? ''} className="bo-champ" />
             </div>
             <div>
+              <label className="bo-doux mb-1 block" htmlFor="f-phone">{t.telephone}</label>
+              <input id="f-phone" name="phone" type="tel" maxLength={30} defaultValue={ficheOuverte.phone ?? ''} className="bo-champ" />
+            </div>
+            <div>
+              <label className="bo-doux mb-1 block" htmlFor="f-city">{t.ville}</label>
+              <select id="f-city" name="city" defaultValue={ficheOuverte.city ?? ''} className="bo-champ">
+                <option value="">{t.villeInconnue}</option>
+                {TRAINER_CITIES.map((v) => (
+                  <option key={v} value={v}>{v}</option>
+                ))}
+              </select>
+            </div>
+            <div>
               <label className="bo-doux mb-1 block" htmlFor="f-linkedin">{t.linkedin}</label>
               <input id="f-linkedin" name="linkedin" type="url" defaultValue={ficheOuverte.linkedin ?? ''} placeholder="https://linkedin.com/in/…" className="bo-champ" />
             </div>
@@ -446,6 +461,15 @@ export default async function UtilisateursPage({
           <div>
             <label className="bo-doux mb-1 block" htmlFor="phone">{t.telephone}</label>
             <input id="phone" name="phone" type="tel" maxLength={30} className="bo-champ" />
+          </div>
+          <div>
+            <label className="bo-doux mb-1 block" htmlFor="city">{t.ville}</label>
+            <select id="city" name="city" defaultValue="" className="bo-champ">
+              <option value="">{t.villeInconnue}</option>
+              {TRAINER_CITIES.map((v) => (
+                <option key={v} value={v}>{v}</option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="bo-doux mb-1 block" htmlFor="linkedin">{t.linkedin}</label>

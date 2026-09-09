@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { eq, inArray } from 'drizzle-orm'
 import bcrypt from 'bcryptjs'
 import { db } from '@/lib/db'
-import { learners, ROLES, staff, trainerProfiles, type Role } from '@/lib/db/schema'
+import { learners, ROLES, staff, TRAINER_CITIES, trainerProfiles, type Role, type TrainerCity } from '@/lib/db/schema'
 import { requirePermission } from '@/lib/auth'
 import { appUrl } from '@/lib/config'
 import { fr } from '@/lib/i18n/fr'
@@ -16,6 +16,8 @@ import { enregistrerPhotoFormateur, MAX_PHOTO_BYTES, photoAcceptee } from '@/lib
 const BASE = '/admin/utilisateurs'
 const champ = (f: FormData, nom: string) => String(f.get(nom) ?? '').trim()
 const ouNull = (s: string) => (s ? s : null)
+/** La ville du formulaire, si c'est l'une des deux villes ; sinon rien. */
+const villeOuNull = (s: string): TrainerCity | null => (TRAINER_CITIES.find((v) => v === s) ?? null)
 
 /** Le portrait du formulaire, rangé dans le stockage ; `undefined` si aucun fichier, `null` s'il est refusé. */
 async function lirePhoto(formData: FormData, staffId: string): Promise<string | null | undefined> {
@@ -76,6 +78,7 @@ export async function creerCompte(formData: FormData) {
       fullName: nom,
       photoPath: photoPath ?? null,
       phone: ouNull(champ(formData, 'phone')),
+      city: villeOuNull(champ(formData, 'city')),
       linkedin: ouNull(champ(formData, 'linkedin')),
       facebook: ouNull(champ(formData, 'facebook')),
       website: ouNull(champ(formData, 'website')),
@@ -123,6 +126,8 @@ export async function modifierFormateur(formData: FormData) {
     .set({
       fullName,
       bio: ouNull(champ(formData, 'bio')),
+      phone: ouNull(champ(formData, 'phone')),
+      city: villeOuNull(champ(formData, 'city')),
       linkedin: ouNull(champ(formData, 'linkedin')),
       facebook: ouNull(champ(formData, 'facebook')),
       website: ouNull(champ(formData, 'website')),
