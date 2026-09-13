@@ -40,11 +40,13 @@ function parseRow(row: (string | null)[]): FormResponse | null {
 }
 
 export async function syncLearnersFromGoogleSheets(overrideSpreadsheetId?: string, overrideSheetName?: string) {
+  console.log('[sheets-sync] Starting sync...')
   if (!process.env.GOOGLE_SHEETS_CREDENTIALS) {
     throw new Error('GOOGLE_SHEETS_CREDENTIALS not set')
   }
 
   const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS)
+  console.log('[sheets-sync] Credentials loaded, email:', credentials.client_email)
 
   // Get config from database
   let spreadsheetId = overrideSpreadsheetId
@@ -89,6 +91,13 @@ export async function syncLearnersFromGoogleSheets(overrideSpreadsheetId?: strin
   })
 
   const rows = response.data.values || []
+  console.log(`[sheets-sync] Fetched ${rows.length} rows from sheet`)
+  if (rows.length === 0) {
+    console.log('[sheets-sync] No data found in sheet. Check:')
+    console.log('  1. Service account has viewer access to the sheet')
+    console.log('  2. Sheet contains data in rows 2 and beyond')
+    console.log('  3. Columns A-J are populated')
+  }
   const results = {
     total: 0,
     created: 0,
@@ -101,11 +110,13 @@ export async function syncLearnersFromGoogleSheets(overrideSpreadsheetId?: strin
     try {
       const form = parseRow(row as (string | null)[])
       if (!form) {
+        console.log(`[sheets-sync] Row skipped (invalid format or missing required fields)`, row)
         results.skipped++
         continue
       }
 
       results.total++
+      console.log(`[sheets-sync] Processing: ${form.fullName} (${form.email})`)
 
       // Check if learner already exists
       const existing = await db
