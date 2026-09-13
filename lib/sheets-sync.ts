@@ -85,7 +85,7 @@ export async function syncLearnersFromGoogleSheets(overrideSpreadsheetId?: strin
   // Fetch sheet data
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: `'${sheetName}'!A2:J`,
+    range: `A2:J`,
   })
 
   const rows = response.data.values || []
