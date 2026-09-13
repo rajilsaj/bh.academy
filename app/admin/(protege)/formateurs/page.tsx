@@ -19,8 +19,8 @@ export default async function FormateursPage({ searchParams }: { searchParams: {
     .where(eq(staff.role, 'formateur'))
 
   if (selectedCity) {
-    const profiles = await db.select().from(trainerProfiles).where(eq(trainerProfiles.trainerId, selectedCity))
-    formateurs = formateurs.filter(f => profiles.some(p => p.trainerId === f.id))
+    const profiles = await db.select().from(trainerProfiles).where(eq(trainerProfiles.city, selectedCity))
+    formateurs = formateurs.filter(f => profiles.some(p => p.staffId === f.id))
   }
 
   return (
