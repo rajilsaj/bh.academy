@@ -1,0 +1,1 @@
+Vercel deployment fix - force rebuild
