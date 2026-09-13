@@ -21,28 +21,28 @@ type Lien = { href: string; label: string; permission: Permission; icone: IconeN
 const GROUPES: { titre: string; liens: Lien[] }[] = [
   {
     titre: '',
-    liens: [{ href: '/admin', label: fr.admin.nav.tableau, permission: 'voirTableauBord', icone: 'tableau' }],
+    liens: [{ href: '/admin', label: 'Tableau de bord', permission: 'voirTableauBord', icone: 'tableau' }],
   },
   {
-    titre: fr.admin.sidebar.personnes,
+    titre: 'Personnes',
     liens: [
-      { href: '/admin/utilisateurs', label: fr.admin.nav.utilisateurs, permission: 'gererUtilisateurs', icone: 'personnes' },
-      { href: '/admin/formateurs', label: fr.admin.nav.formateurs, permission: 'gererUtilisateurs', icone: 'formateurs' },
+      { href: '/admin/formateurs', label: 'Formateurs', permission: 'gererUtilisateurs', icone: 'formateurs' },
+      { href: '/admin/utilisateurs', label: 'Apprenants', permission: 'gererUtilisateurs', icone: 'personnes' },
     ],
   },
   {
-    titre: fr.admin.sidebar.modules,
+    titre: 'Gestion',
     liens: [
-      { href: '/admin/modules', label: fr.admin.nav.modules, permission: 'voirModules', icone: 'modules' },
-      { href: '/admin/sessions', label: fr.admin.nav.sessions, permission: 'voirModules', icone: 'sessions' },
-      { href: '/admin/ressources', label: fr.admin.nav.ressources, permission: 'gererRessources', icone: 'ressources' },
+      { href: '/admin/modules', label: 'Modules', permission: 'voirModules', icone: 'modules' },
+      { href: '/admin/sessions', label: 'Sessions', permission: 'voirModules', icone: 'sessions' },
+      { href: '/admin/ressources', label: 'Ressources', permission: 'gererRessources', icone: 'ressources' },
     ],
   },
   {
-    titre: fr.admin.sidebar.configuration,
+    titre: 'Configuration',
     liens: [
-      { href: '/admin/configuration', label: fr.admin.nav.configuration, permission: 'gererConfiguration', icone: 'parametres' },
-      { href: '/admin/visites', label: fr.admin.nav.visites, permission: 'voirVisites', icone: 'visites' },
+      { href: '/admin/configuration', label: 'Configs', permission: 'gererConfiguration', icone: 'parametres' },
+      { href: '/admin/visites', label: 'Support Technique', permission: 'voirVisites', icone: 'visites' },
     ],
   },
 ]

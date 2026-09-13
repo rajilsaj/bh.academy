@@ -1,7 +1,7 @@
-# BantuHub Academy
+# Cockpit IALAB
 
-Plateforme de la formation « Intelligence artificielle et employabilité » de la
-Fondation BantuHub, à Brazzaville et Pointe-Noire.
+Plateforme de gestion et suivi de la formation « Intelligence artificielle et employabilité » 
+de la Fondation BantuHub, à Brazzaville et Pointe-Noire.
 
 - **Site vitrine** : présentation de la formation, inscription en ligne,
   assistant de questions-réponses.

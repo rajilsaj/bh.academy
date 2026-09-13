@@ -40,8 +40,8 @@ export const fr = {
   },
 
   app: {
-    nom: 'BantuHub — Suivi IA',
-    baseline: 'Fondation BantuHub, Brazzaville',
+    nom: 'Cockpit IALAB',
+    baseline: 'Cockpit de gestion — Fondation BantuHub',
     chargement: 'Chargement…',
     retour: 'Retour',
     seDeconnecter: 'Se déconnecter',

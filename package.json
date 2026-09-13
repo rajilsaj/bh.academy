@@ -1,6 +1,6 @@
 {
-  "name": "bantuhub-suivi",
-  "version": "1.0.0",
+  "name": "cockpit-ialab",
+  "version": "2.0.0",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
