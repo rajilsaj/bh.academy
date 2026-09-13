@@ -1,8 +1,7 @@
 import Link from 'next/link'
-import { eq } from 'drizzle-orm'
 import { requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { programs, programModules } from '@/lib/db/schema'
+import { programModules } from '@/lib/db/schema'
 import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
