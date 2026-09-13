@@ -152,10 +152,17 @@ export default async function UtilisateursPage({
       {messageOk ? <SuccesSombre>{messageOk}</SuccesSombre> : null}
       {messageErreur ? <AlerteSombre>{messageErreur}</AlerteSombre> : null}
 
-      {/* ------------------------------------------ Sync from Google Forms */}
-      <div className="bo-panneau">
-        <p className="mb-3 font-semibold">Synchronisation Google Forms</p>
-        <SyncLearnersButton />
+      {/* ------------------------------------------ Sync from Google Forms - SIMPLIFIED */}
+      <div className="rounded-lg border-l-4 border-l-bo-bleu bg-blue-50 p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h3 className="font-bold text-slate-900">📥 Importer les apprenants</h3>
+            <p className="mt-1 text-sm text-slate-600">Synchronisez automatiquement avec votre formulaire Google</p>
+          </div>
+          <div className="shrink-0">
+            <SyncLearnersButton />
+          </div>
+        </div>
       </div>
 
       {/* ------------------------------------------------- la liste unique */}
