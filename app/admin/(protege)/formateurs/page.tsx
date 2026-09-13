@@ -11,14 +11,14 @@ export default async function FormateursPage({ searchParams }: { searchParams: {
   const session = await requirePermission('gererUtilisateurs')
   if (!session) redirect('/admin/login')
 
-  const selectedCity = searchParams.city
+  const selectedCity = searchParams.city as any
 
   let formateurs = await db
     .select()
     .from(staff)
     .where(eq(staff.role, 'formateur'))
 
-  if (selectedCity) {
+  if (selectedCity && TRAINER_CITIES.includes(selectedCity)) {
     const profiles = await db.select().from(trainerProfiles).where(eq(trainerProfiles.city, selectedCity))
     formateurs = formateurs.filter(f => profiles.some(p => p.staffId === f.id))
   }
