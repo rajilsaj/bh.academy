@@ -42,6 +42,20 @@ async function main() {
       await runSeed()
       break
 
+    // Nettoie tous les utilisateurs et apprenants, garde seulement le superadmin
+    case 'cleanup': {
+      const sql = postgres(process.env.DATABASE_URL!, optionsConnexion(process.env.DATABASE_URL!, 1))
+      try {
+        await sql`delete from learners`
+        await sql`delete from staff where email != 'svembe@gmail.com'`
+        console.log('✓ Nettoyage terminé : tous les utilisateurs et apprenants supprimés.')
+        console.log('✓ Superadmin conservé : svembe@gmail.com')
+      } finally {
+        await sql.end()
+      }
+      break
+    }
+
     // Ajoute la formation de démonstration (modules, formateur, ressources,
     // points) à une base existante, sans rien effacer. Ne fait rien si une
     // formation existe déjà.

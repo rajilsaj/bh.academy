@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 export type IconeNav = 'tableau' | 'personnes' | 'formateurs' | 'modules' | 'sessions' | 'ressources' | 'parametres' | 'visites'
-export type GroupeNav = { titre: string; liens: { href: string; label: string; icone?: IconeNav }[] }
+export type NavLien = { href: string; label: string; icone?: IconeNav; sousLiens?: NavLien[] }
+export type GroupeNav = { titre: string; liens: NavLien[] }
 
 /** Traits simples, 24 × 24, une seule épaisseur : lisibles à 16 px sur le violet. */
 const TRAITS: Record<IconeNav, string> = {
@@ -65,6 +66,23 @@ export function AdminSidebar({ groupes, onClick, replie = false }: { groupes: Gr
                   {lien.icone ? <Icone nom={lien.icone} /> : null}
                   {replie ? null : lien.label}
                 </Link>
+                {!replie && lien.sousLiens ? (
+                  <ul className="ml-2 space-y-0.5 border-l border-bo-bordure/50 py-0.5 pl-2">
+                    {lien.sousLiens.map((sousLien) => (
+                      <li key={sousLien.href}>
+                        <Link
+                          href={sousLien.href}
+                          className="bo-nav-lien gap-2.5 text-sm"
+                          aria-current={sousLien.href === courant ? 'page' : undefined}
+                          onClick={onClick}
+                        >
+                          {sousLien.icone ? <Icone nom={sousLien.icone} /> : null}
+                          {sousLien.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </li>
             ))}
           </ul>

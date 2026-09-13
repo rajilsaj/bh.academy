@@ -12,7 +12,7 @@ import { MarqueIalab } from '@/components/MarqueIalab'
 
 export const dynamic = 'force-dynamic'
 
-type Lien = { href: string; label: string; permission: Permission; icone: IconeNav }
+type Lien = { href: string; label: string; permission: Permission; icone?: IconeNav; sousLiens?: Omit<Lien, 'icone'>[] }
 
 /**
  * Trois groupes : les personnes, la matière enseignée, la configuration. Un
@@ -26,8 +26,17 @@ const GROUPES: { titre: string; liens: Lien[] }[] = [
   {
     titre: 'Personnes',
     liens: [
-      { href: '/admin/formateurs', label: 'Formateurs', permission: 'gererUtilisateurs', icone: 'formateurs' },
-      { href: '/admin/utilisateurs', label: 'Apprenants', permission: 'gererUtilisateurs', icone: 'personnes' },
+      {
+        href: '/admin/utilisateurs',
+        label: 'Utilisateurs',
+        permission: 'gererUtilisateurs',
+        icone: 'personnes',
+        sousLiens: [
+          { href: '/admin/utilisateurs?role=admin', label: 'Admins', permission: 'gererUtilisateurs' },
+          { href: '/admin/utilisateurs', label: 'Apprenants', permission: 'gererUtilisateurs' },
+          { href: '/admin/formateurs', label: 'Formateurs', permission: 'gererUtilisateurs' },
+        ],
+      },
     ],
   },
   {
@@ -60,7 +69,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const groupes: GroupeNav[] = GROUPES.map((g) => ({
     titre: g.titre,
-    liens: g.liens.filter((l) => can(role, l.permission)).map(({ href, label, icone }) => ({ href, label, icone })),
+    liens: g.liens.filter((l) => can(role, l.permission)).map(({ href, label, icone, sousLiens }) => ({
+      href,
+      label,
+      icone,
+      sousLiens: sousLiens?.filter((sl) => can(role, sl.permission)),
+    })),
   })).filter((g) => g.liens.length > 0)
 
   /* La marque ia.lab et sa signature, puis le nom de l'espace en petit. */
