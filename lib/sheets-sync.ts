@@ -125,6 +125,13 @@ export async function syncLearnersFromGoogleSheets(overrideSpreadsheetId?: strin
         email: form.email,
         token,
         validatedAt: null, // Require manual validation
+        status: form.status || null,
+        gender: form.gender || null,
+        dateOfBirth: form.dateOfBirth || null,
+        idDocumentUrl: form.idDocumentUrl || null,
+        cvUrl: form.cvUrl || null,
+        city: form.city || null,
+        formSubmittedAt: form.timestamp ? new Date(form.timestamp) : null,
       })
 
       results.created++

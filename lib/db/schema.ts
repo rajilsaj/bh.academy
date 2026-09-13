@@ -68,6 +68,14 @@ export const learners = pgTable(
     /** Posé par un administrateur : avant, l'espace apprenant reste fermé. */
     validatedAt: timestamp('validated_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    // Google Sheets form fields
+    status: text('status'), // Étudiant, Sans emploi, Entrepreneur
+    gender: text('gender'), // Féminin, Masculin
+    dateOfBirth: text('date_of_birth'),
+    idDocumentUrl: text('id_document_url'),
+    cvUrl: text('cv_url'),
+    city: text('city'),
+    formSubmittedAt: timestamp('form_submitted_at', { withTimezone: true }),
   },
   (t) => ({
     cohortIdx: index('learners_cohort_idx').on(t.cohortId),
