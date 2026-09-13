@@ -456,3 +456,11 @@ export const visits = pgTable(
     createdIdx: index('visits_created_idx').on(t.createdAt),
   }),
 )
+
+/** Application settings : Google Sheets sync configuration */
+export const settings = pgTable('settings', {
+  key: text('key').primaryKey(),
+  value: text('value').notNull(),
+  description: text('description'),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})

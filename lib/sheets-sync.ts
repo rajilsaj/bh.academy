@@ -1,7 +1,7 @@
 import { google } from 'googleapis'
 import { db } from './db'
 import { learners, cohorts } from './db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, sql as raw } from 'drizzle-orm'
 import { generateLearnerToken } from './ids'
 
 interface FormResponse {
@@ -39,14 +39,24 @@ function parseRow(row: (string | null)[]): FormResponse | null {
   }
 }
 
-export async function syncLearnersFromGoogleSheets() {
+export async function syncLearnersFromGoogleSheets(overrideSpreadsheetId?: string, overrideSheetName?: string) {
   if (!process.env.GOOGLE_SHEETS_CREDENTIALS) {
     throw new Error('GOOGLE_SHEETS_CREDENTIALS not set')
   }
 
   const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS)
-  const spreadsheetId = '1bDNHIaswXofSMkQfF4ZwBAbVJ-KCLMC-x1RkpNznZeg'
-  const sheetName = 'Form Responses 1'
+
+  // Get config from database
+  let spreadsheetId = overrideSpreadsheetId
+  let sheetName = overrideSheetName
+
+  if (!spreadsheetId || !sheetName) {
+    const [configSpreadsheet] = await db.execute<{ value: string }>(raw`select value from settings where key = 'google_sheets_spreadsheet_id'`)
+    const [configSheet] = await db.execute<{ value: string }>(raw`select value from settings where key = 'google_sheets_sheet_name'`)
+
+    spreadsheetId = spreadsheetId || configSpreadsheet?.value || '1bDNHIaswXofSMkQfF4ZwBAbVJ-KCLMC-x1RkpNznZeg'
+    sheetName = sheetName || configSheet?.value || 'Form Responses 1'
+  }
 
   const auth = new google.auth.GoogleAuth({
     credentials,
