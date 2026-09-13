@@ -107,7 +107,7 @@ export default async function AccueilCockpit() {
   )
 }
 
-function ActionCard({ icon, title, description, href, highlight = false }) {
+function ActionCard({ icon, title, description, href, highlight = false }: { icon: string; title: string; description: string; href: string; highlight?: boolean }) {
   return (
     <Link
       href={href}
@@ -127,7 +127,7 @@ function ActionCard({ icon, title, description, href, highlight = false }) {
   )
 }
 
-function StatCard({ label, value, detail }) {
+function StatCard({ label, value, detail }: { label: string; value: number; detail?: string }) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-4">
       <p className="text-sm text-slate-600">{label}</p>
