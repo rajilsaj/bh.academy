@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { asc, count, desc, eq, isNull } from 'drizzle-orm'
+import { asc, count, desc, eq, isNull, isNotNull } from 'drizzle-orm'
 import { SyncLearnersButton } from '@/components/SyncLearnersButton'
 import { requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
@@ -34,13 +34,13 @@ export default async function UtilisateursPageSimple({
     data = await db
       .select()
       .from(learners)
-      .where(isNull(learners.validatedAt) === false)
+      .where(isNotNull(learners.validatedAt))
       .orderBy(desc(learners.createdAt))
   } else if (tab === 'attente') {
     data = await db
       .select()
       .from(learners)
-      .where(isNull(learners.validatedAt) === true)
+      .where(isNull(learners.validatedAt))
       .orderBy(desc(learners.createdAt))
   } else if (tab === 'admins') {
     data = await db
