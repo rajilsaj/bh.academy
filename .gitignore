@@ -6,3 +6,7 @@ next-env.d.ts
 data/
 backups/
 .vercel
+.env*
+google-credentials.json
+scripts/reset-admin-password.js
+v1/

@@ -19,10 +19,10 @@ interface FormResponse {
 
 /**
  * Parse Google Sheets row into FormResponse
- * Columns: A=Timestamp, B=Status, C=Name, D=Gender, E=DOB, F=ID, G=Phone, H=Email, I=CV, J=City
+ * Columns: A=Timestamp, B=Status, C=Name, D=Gender, E=DOB, F=ID, G=Phone, H=Email, I=CV, J=City (optional)
  */
 function parseRow(row: (string | null)[]): FormResponse | null {
-  if (row.length < 10) return null
+  if (row.length < 9) return null // Minimum 9 fields required (A-I)
   if (!row[2] || !row[7]) return null // Name and email required
 
   return {
@@ -35,18 +35,35 @@ function parseRow(row: (string | null)[]): FormResponse | null {
     phone: (row[6] || '').trim(),
     email: (row[7] || '').trim().toLowerCase(),
     cvUrl: row[8] || '',
-    city: row[9] || '',
+    city: row[9] || '', // Optional city field
   }
 }
 
 export async function syncLearnersFromGoogleSheets(overrideSpreadsheetId?: string, overrideSheetName?: string) {
   console.log('[sheets-sync] Starting sync...')
-  if (!process.env.GOOGLE_SHEETS_CREDENTIALS) {
-    throw new Error('GOOGLE_SHEETS_CREDENTIALS not set')
-  }
 
-  const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS)
-  console.log('[sheets-sync] Credentials loaded, email:', credentials.client_email)
+  let credentials
+  try {
+    // Try to load from credentials file (local development)
+    const fs = await import('fs')
+    const path = await import('path')
+    const credPath = path.join(process.cwd(), 'google-credentials.json')
+    if (fs.existsSync(credPath)) {
+      const credFile = fs.readFileSync(credPath, 'utf-8')
+      credentials = JSON.parse(credFile)
+      console.log('[sheets-sync] Credentials loaded from file, email:', credentials.client_email)
+    } else {
+      // Fall back to env variable (production)
+      if (!process.env.GOOGLE_SHEETS_CREDENTIALS) {
+        throw new Error('GOOGLE_SHEETS_CREDENTIALS not set and google-credentials.json not found')
+      }
+      credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS)
+      console.log('[sheets-sync] Credentials loaded from env, email:', credentials.client_email)
+    }
+  } catch (error) {
+    console.error('[sheets-sync] Failed to load credentials:', error)
+    throw error
+  }
 
   // Get config from database
   let spreadsheetId = overrideSpreadsheetId
