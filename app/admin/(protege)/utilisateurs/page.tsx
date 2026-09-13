@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { asc, desc, eq, ilike, or, sql as raw } from 'drizzle-orm'
 import { AccesRefuse, AlerteSombre, SuccesSombre } from '@/components/AccesRefuse'
 import { BarreSelection, EnTete, TitreSection } from '@/components/admin/Cockpit'
+import { SyncLearnersButton } from '@/components/SyncLearnersButton'
 import { requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { cohorts, learners, ROLES, staff, TRAINER_CITIES, trainerProfiles } from '@/lib/db/schema'
@@ -151,6 +152,12 @@ export default async function UtilisateursPage({
       {messageOk ? <SuccesSombre>{messageOk}</SuccesSombre> : null}
       {messageErreur ? <AlerteSombre>{messageErreur}</AlerteSombre> : null}
 
+      {/* ------------------------------------------ Sync from Google Forms */}
+      <div className="bo-panneau">
+        <p className="mb-3 font-semibold">Synchronisation Google Forms</p>
+        <SyncLearnersButton />
+      </div>
+
       {/* ------------------------------------------------- la liste unique */}
       <section className="bo-panneau group/selection">
         <TitreSection
@@ -244,7 +251,7 @@ export default async function UtilisateursPage({
                       <div className="flex flex-wrap items-center gap-2">
                         <form action={reinitialiserMotDePasse} className="flex items-center gap-1">
                           <input type="hidden" name="staffId" value={m.id} />
-                          <input name="password" type="password" minLength={8} required placeholder={t.reinitialiser} autoComplete="new-password" className="bo-champ !w-40 !py-1" />
+                          <input name="password" type="password" minLength={8} required placeholder={t.reinitialiser} autoComplete="new-password" className="bo-champ !w-48 !py-1" />
                           <button type="submit" className="bo-bouton-discret !px-3 !py-1.5 !text-xs">{fr.app.valider}</button>
                         </form>
                         {estFormateur ? (
