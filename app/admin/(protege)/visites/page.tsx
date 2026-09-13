@@ -70,11 +70,12 @@ export default async function VisitesPage({ searchParams }: { searchParams: { ok
       {/* -------------------------------------------- 14 derniers jours */}
       <section className="bo-panneau">
         <h2 className="mb-3 font-semibold">{t.quatorzeJours}</h2>
-        <div className="flex h-40 items-end gap-1" role="img" aria-label={t.quatorzeJours}>
+        {/* Hauteur des barres en pixels : un pourcentage ne se résout pas dans une colonne flex sans hauteur. */}
+        <div className="flex items-end gap-1" role="img" aria-label={t.quatorzeJours}>
           {parJour.map((j) => (
             <div key={j.jour} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-1" title={`${j.jour} : ${j.visites} ${t.visites}, ${j.visiteurs} ${t.visiteursUniques}`}>
               <span className="text-xs tabular-nums text-bo-doux">{j.visites || ''}</span>
-              <div className="w-full rounded-t bg-bo-menthe" style={{ height: `${Math.max(2, (j.visites / maxJour) * 100)}%` }} />
+              <div className="w-full rounded-t bg-bo-menthe" style={{ height: `${Math.max(3, Math.round((j.visites / maxJour) * 120))}px` }} />
               <span className="text-[10px] text-bo-doux">{j.jour.slice(8)}</span>
             </div>
           ))}

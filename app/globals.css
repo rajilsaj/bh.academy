@@ -248,13 +248,13 @@
 
   /* Le sélecteur pilule : l'onglet actif est bleu. */
   .bo-onglets {
-    @apply inline-flex items-center gap-1 rounded-xl border border-bo-bordure bg-bo-panneau-2 p-1;
+    @apply flex max-w-full items-center gap-1 overflow-x-auto rounded-xl border border-bo-bordure bg-bo-panneau-2 p-1 sm:inline-flex;
   }
   .bo-onglet {
-    @apply rounded-lg px-4 py-1.5 text-sm font-medium text-bo-doux hover:text-bo-texte;
+    @apply shrink-0 whitespace-nowrap rounded-lg px-4 py-1.5 text-sm font-medium text-bo-doux hover:text-bo-texte;
   }
   .bo-onglet-actif {
-    @apply rounded-lg bg-bo-bleu px-4 py-1.5 text-sm font-semibold text-white;
+    @apply shrink-0 whitespace-nowrap rounded-lg bg-bo-bleu px-4 py-1.5 text-sm font-semibold text-white;
   }
 
   .bo-puce {
