@@ -5,7 +5,6 @@ import { useState } from 'react'
 interface SyncResults {
   total: number
   created: number
-  updated: number
   skipped: number
   errors: string[]
 }
@@ -16,6 +15,7 @@ export function SyncLearnersButton() {
   const [error, setError] = useState<string | null>(null)
 
   const handleSync = async () => {
+    if (loading) return
     setLoading(true)
     setError(null)
     setResult(null)
@@ -28,48 +28,59 @@ export function SyncLearnersButton() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error || 'Sync failed')
+        setError(data.error || 'Échec de la synchronisation')
         return
       }
 
       setResult(data.results)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sync failed')
+      setError(err instanceof Error ? err.message : 'Échec de la synchronisation')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
+      {/* Simple Button */}
       <button
         onClick={handleSync}
         disabled={loading}
-        className="bo-bouton"
+        className={`w-full rounded-lg px-4 py-3 font-semibold transition-all ${
+          loading
+            ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
+            : 'bg-bo-bleu text-white hover:bg-bo-bleu/90 active:scale-95'
+        }`}
       >
-        {loading ? 'Synchronisation...' : 'Synchroniser avec Google Forms'}
+        {loading ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="animate-spin">⟳</span>
+            Synchronisation en cours...
+          </span>
+        ) : (
+          '📥 Importer les apprenants'
+        )}
       </button>
 
+      {/* Error Message */}
       {error && (
-        <div className="rounded-bloc bg-red-50 p-4 text-red-700">
-          <p className="font-semibold">Erreur</p>
-          <p className="text-sm">{error}</p>
+        <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          <p className="font-semibold">⚠️ Erreur</p>
+          <p className="mt-1">{error}</p>
         </div>
       )}
 
+      {/* Success Message */}
       {result && (
-        <div className="rounded-bloc bg-green-50 p-4 text-green-700">
-          <p className="font-semibold">Synchronisation réussie!</p>
-          <ul className="mt-2 space-y-1 text-sm">
-            <li>✓ {result.created} apprenants créés</li>
-            <li>• {result.total} lignes traitées</li>
-            <li>• {result.skipped} ignorées (doublons)</li>
+        <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-700">
+          <p className="font-semibold">✅ Synchronisation réussie</p>
+          <div className="mt-2 space-y-1 text-xs">
+            <p>• <strong>{result.created}</strong> apprenants ajoutés</p>
+            <p>• <strong>{result.skipped}</strong> doublons ignorés</p>
             {result.errors.length > 0 && (
-              <li className="mt-2 text-red-600">
-                {result.errors.length} erreurs
-              </li>
+              <p className="text-red-600">• <strong>{result.errors.length}</strong> erreurs</p>
             )}
-          </ul>
+          </div>
         </div>
       )}
     </div>
