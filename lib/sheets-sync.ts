@@ -51,11 +51,17 @@ export async function syncLearnersFromGoogleSheets(overrideSpreadsheetId?: strin
   let sheetName = overrideSheetName
 
   if (!spreadsheetId || !sheetName) {
-    const [configSpreadsheet] = await db.execute<{ value: string }>(raw`select value from settings where key = 'google_sheets_spreadsheet_id'`)
-    const [configSheet] = await db.execute<{ value: string }>(raw`select value from settings where key = 'google_sheets_sheet_name'`)
+    try {
+      const [configSpreadsheet] = await db.execute<{ value: string }>(raw`select value from settings where key = 'google_sheets_spreadsheet_id'`)
+      const [configSheet] = await db.execute<{ value: string }>(raw`select value from settings where key = 'google_sheets_sheet_name'`)
 
-    spreadsheetId = spreadsheetId || configSpreadsheet?.value || '1bDNHIaswXofSMkQfF4ZwBAbVJ-KCLMC-x1RkpNznZeg'
-    sheetName = sheetName || configSheet?.value || 'Form Responses 1'
+      spreadsheetId = spreadsheetId || configSpreadsheet?.value || '1bDNHIaswXofSMkQfF4ZwBAbVJ-KCLMC-x1RkpNznZeg'
+      sheetName = sheetName || configSheet?.value || 'Form Responses 1'
+    } catch {
+      // Settings table doesn't exist or query failed, use defaults
+      spreadsheetId = spreadsheetId || '1bDNHIaswXofSMkQfF4ZwBAbVJ-KCLMC-x1RkpNznZeg'
+      sheetName = sheetName || 'Form Responses 1'
+    }
   }
 
   const auth = new google.auth.GoogleAuth({
