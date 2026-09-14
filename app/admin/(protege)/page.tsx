@@ -25,10 +25,13 @@ export default async function AccueilCockpit() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 p-6">
-      {/* Header */}
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold text-gray-900">Apprenants</h1>
-        <p className="text-gray-600">Gestion de tous les apprenants</p>
+      {/* Header with Sync Button */}
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold text-gray-900">Apprenants</h1>
+          <p className="text-gray-600">Gestion de tous les apprenants</p>
+        </div>
+        <SyncButton />
       </div>
 
       {/* Sync Status Card */}
@@ -96,5 +99,34 @@ export default async function AccueilCockpit() {
         </table>
       </div>
     </div>
+  )
+}
+
+function SyncButton() {
+  return (
+    <form action={async () => {
+      'use server'
+      try {
+        const response = await fetch('/admin/api/trigger-sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        })
+        if (response.ok) {
+          console.log('Sync triggered successfully')
+        }
+      } catch (error) {
+        console.error('Sync error:', error)
+      }
+    }}>
+      <button
+        type="submit"
+        className="inline-flex items-center gap-2 rounded-lg bg-bo-bleu px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
+      >
+        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 5.5a10 10 0 0 0-18.8 4.3" />
+        </svg>
+        Synchroniser
+      </button>
+    </form>
   )
 }
