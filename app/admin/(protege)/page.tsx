@@ -1,13 +1,9 @@
 import Link from 'next/link'
-import { and, asc, count, eq, gte, isNull } from 'drizzle-orm'
-import { AdminLayout } from '@/components/AdminLayout'
+import { and, asc, count, desc, eq, isNull } from 'drizzle-orm'
 import { auth, can } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { cohorts, learners, programModules, sessions, staff } from '@/lib/db/schema'
-import { fr } from '@/lib/i18n/fr'
-import { formatDate } from '@/lib/format'
+import { learners, staff } from '@/lib/db/schema'
 import { redirect } from 'next/navigation'
-import '@/styles/design-system.css'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,126 +13,174 @@ export default async function AccueilCockpit() {
   const role = session.user.role
   const isAdmin = can(role, 'gererUtilisateurs')
 
-  const maintenant = new Date()
-  const [[apprenants], [enAttente], [formateurs], [modules], prochaines] = await Promise.all([
-    db.select({ n: count() }).from(learners),
-    db.select({ n: count() }).from(learners).where(isNull(learners.validatedAt)),
-    db.select({ n: count() }).from(staff).where(eq(staff.role, 'formateur')),
-    db.select({ n: count() }).from(programModules),
+  const [adminsList, formateursList, apprenantsList, pendingCount] = await Promise.all([
     db
-      .select({
-        id: sessions.id,
-        moduleName: sessions.moduleName,
-        heldOn: sessions.heldOn,
-        opensAt: sessions.opensAt,
-        closesAt: sessions.closesAt,
-        dayCode: sessions.dayCode,
-        cohort: cohorts.name,
-      })
-      .from(sessions)
-      .innerJoin(cohorts, eq(cohorts.id, sessions.cohortId))
-      .where(and(gte(sessions.closesAt, maintenant)))
-      .orderBy(asc(sessions.opensAt))
-      .limit(5),
+      .select({ id: staff.id, email: staff.email, role: staff.role, createdAt: staff.createdAt })
+      .from(staff)
+      .where(eq(staff.role, 'admin'))
+      .orderBy(desc(staff.createdAt))
+      .limit(10),
+    db
+      .select({ id: staff.id, email: staff.email, role: staff.role, createdAt: staff.createdAt })
+      .from(staff)
+      .where(eq(staff.role, 'formateur'))
+      .orderBy(desc(staff.createdAt))
+      .limit(10),
+    db
+      .select({ id: learners.id, email: learners.email, firstName: learners.firstName, lastName: learners.lastName, validatedAt: learners.validatedAt, createdAt: learners.createdAt })
+      .from(learners)
+      .orderBy(desc(learners.createdAt))
+      .limit(10),
+    db.select({ n: count() }).from(learners).where(isNull(learners.validatedAt)),
   ])
 
-  const enCours = prochaines.filter((s) => s.opensAt <= maintenant && s.closesAt >= maintenant)
+  const [[pendingCount_n]] = await Promise.all([pendingCount])
 
   return (
-    <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">📊 Tableau de Bord</h1>
-          <p className="mt-1 text-gray-600">Bienvenue dans le Cockpit IALAB</p>
+    <div className="space-y-8 p-8">
+      {/* Header */}
+      <div className="space-y-2 border-b border-gray-200 pb-6">
+        <h1 className="text-4xl font-bold text-gray-900">Tableau de Bord</h1>
+        <p className="text-gray-600">Gestion centralisée de votre plateforme</p>
+      </div>
+
+      {/* Quick Summary Stats */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="rounded-lg border border-gray-200 bg-white p-6">
+          <p className="text-sm font-semibold text-gray-700">Admins</p>
+          <p className="mt-3 text-3xl font-bold text-gray-900">{adminsList.length}</p>
         </div>
+        <div className="rounded-lg border border-gray-200 bg-white p-6">
+          <p className="text-sm font-semibold text-gray-700">Formateurs</p>
+          <p className="mt-3 text-3xl font-bold text-gray-900">{formateursList.length}</p>
+        </div>
+        <div className={`rounded-lg border-2 p-6 ${pendingCount_n.n > 0 ? 'border-orange-300 bg-orange-50' : 'border-gray-200 bg-white'}`}>
+          <p className="text-sm font-semibold text-gray-700">Apprenants (en attente)</p>
+          <p className={`mt-3 text-3xl font-bold ${pendingCount_n.n > 0 ? 'text-orange-600' : 'text-gray-900'}`}>{pendingCount_n.n}</p>
+        </div>
+      </div>
 
-      {/* Quick Actions - Most Important */}
-      {isAdmin && (
-        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <ActionCard
-            icon="📥"
-            title="Importer les apprenants"
-            description={enAttente.n > 0 ? `${enAttente.n} en attente de validation` : 'Synchroniser avec Google Forms'}
-            href="/admin/utilisateurs"
-            highlight={enAttente.n > 0}
-          />
-          <ActionCard
-            icon="👨‍🏫"
-            title="Ajouter un formateur"
-            description="Créer un nouveau compte formateur"
-            href="/admin/utilisateurs"
-          />
-          <ActionCard
-            icon="📚"
-            title="Créer un module"
-            description="Ajouter une nouvelle formation"
-            href="/admin/modules"
-          />
-        </section>
-      )}
-
-      {/* Stats - Overview */}
-      <section>
-        <h2 className="mb-4 text-lg font-bold">📈 Vue d'ensemble</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="👥 Apprenants" value={apprenants.n} detail={enAttente.n > 0 ? `${enAttente.n} en attente` : undefined} />
-          <StatCard label="👨‍🏫 Formateurs" value={formateurs.n} />
-          <StatCard label="📚 Modules" value={modules.n} />
-          <StatCard label="📅 Prochaines sessions" value={prochaines.length} detail={enCours.length > 0 ? `${enCours.length} en cours` : undefined} />
+      {/* Admins List */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-gray-900">Administrateurs</h2>
+          <Link href="/admin/utilisateurs?role=admin" className="text-sm font-semibold text-bo-bleu hover:underline">
+            Voir tous →
+          </Link>
+        </div>
+        <div className="rounded-lg border border-gray-200 bg-white overflow-hidden">
+          <table className="w-full">
+            <thead className="border-b border-gray-200 bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Créé le</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {adminsList.length > 0 ? (
+                adminsList.map((admin) => (
+                  <tr key={admin.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 text-sm text-gray-900">{admin.email}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{new Date(admin.createdAt).toLocaleDateString('fr-FR')}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={2} className="px-6 py-8 text-center text-sm text-gray-600">
+                    Aucun administrateur trouvé
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </section>
 
-      {/* Upcoming Sessions */}
-      {prochaines.length > 0 && (
-        <section>
-          <h2 className="mb-4 text-lg font-bold">📅 Prochaines sessions</h2>
-          <div className="space-y-2">
-            {prochaines.map((s) => (
-              <div key={s.id} className="rounded-lg border border-gray-200 bg-white p-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="font-semibold">{s.moduleName}</p>
-                    <p className="text-sm text-slate-600">{formatDate(new Date(s.heldOn))} · {s.cohort}</p>
-                  </div>
-                  <div className="text-sm font-mono text-blue-600 font-semibold">{s.dayCode}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-      </div>
-    </AdminLayout>
-  )
-}
+      {/* Formateurs List */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-gray-900">Formateurs</h2>
+          <Link href="/admin/utilisateurs" className="text-sm font-semibold text-bo-bleu hover:underline">
+            Voir tous →
+          </Link>
+        </div>
+        <div className="rounded-lg border border-gray-200 bg-white overflow-hidden">
+          <table className="w-full">
+            <thead className="border-b border-gray-200 bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Créé le</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {formateursList.length > 0 ? (
+                formateursList.map((formateur) => (
+                  <tr key={formateur.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 text-sm text-gray-900">{formateur.email}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{new Date(formateur.createdAt).toLocaleDateString('fr-FR')}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={2} className="px-6 py-8 text-center text-sm text-gray-600">
+                    Aucun formateur trouvé
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-function ActionCard({ icon, title, description, href, highlight = false }: { icon: string; title: string; description: string; href: string; highlight?: boolean }) {
-  return (
-    <Link
-      href={href}
-      className={`rounded-lg border-2 p-4 transition-all ${
-        highlight
-          ? 'border-orange-300 bg-orange-50 hover:border-orange-400'
-          : 'border-gray-200 bg-white hover:border-blue-300'
-      }`}
-    >
-      <div className="text-3xl mb-2">{icon}</div>
-      <h3 className="font-bold text-slate-900">{title}</h3>
-      <p className="mt-1 text-sm text-slate-600">{description}</p>
-      <div className="mt-3 flex items-center gap-1 text-sm font-semibold text-blue-600">
-        Accéder →
-      </div>
-    </Link>
-  )
-}
-
-function StatCard({ label, value, detail }: { label: string; value: number; detail?: string }) {
-  return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4">
-      <p className="text-sm text-slate-600">{label}</p>
-      <p className="mt-1 text-3xl font-bold">{value}</p>
-      {detail && <p className="mt-1 text-xs text-slate-500">{detail}</p>}
+      {/* Apprenants List */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-gray-900">Apprenants Récents</h2>
+          <Link href="/admin/utilisateurs" className="text-sm font-semibold text-bo-bleu hover:underline">
+            Voir tous →
+          </Link>
+        </div>
+        <div className="rounded-lg border border-gray-200 bg-white overflow-hidden">
+          <table className="w-full">
+            <thead className="border-b border-gray-200 bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Nom</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Statut</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Créé le</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {apprenantsList.length > 0 ? (
+                apprenantsList.map((apprenant) => (
+                  <tr key={apprenant.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 text-sm text-gray-900 font-medium">
+                      {apprenant.firstName} {apprenant.lastName}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{apprenant.email}</td>
+                    <td className="px-6 py-4 text-sm">
+                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                        apprenant.validatedAt
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {apprenant.validatedAt ? 'Validé' : 'En attente'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{new Date(apprenant.createdAt).toLocaleDateString('fr-FR')}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="px-6 py-8 text-center text-sm text-gray-600">
+                    Aucun apprenant trouvé
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   )
 }
