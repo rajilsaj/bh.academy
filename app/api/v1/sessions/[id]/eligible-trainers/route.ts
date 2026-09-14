@@ -1,6 +1,6 @@
 import { requirePermission } from '@/lib/auth'
 import { getSession as getSessionData, getTrainerSessions, getAllTrainers } from '@/lib/training/queries'
-import { assessTrainerEligibility } from '@/lib/training/rules'
+import { assessTrainerEligibility, type AvailabilityWindow } from '@/lib/training/rules'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,6 +17,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const eligibleList = await Promise.all(
       allTrainers.map(async (trainer) => {
         const overlappingSessions = await getTrainerSessions(trainer.id, params.id)
+        const windows = Array.isArray(trainer.availabilityWindows)
+          ? (trainer.availabilityWindows as AvailabilityWindow[])
+          : []
 
         const eligibilityResult = assessTrainerEligibility({
           trainer: {
@@ -26,7 +29,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
             source: trainer.source,
             status: trainer.status,
             skills: trainer.skills || [],
-            availabilityWindows: trainer.availabilityWindows || [],
+            availabilityWindows: windows,
           },
           session: {
             id: sessionData.id,
