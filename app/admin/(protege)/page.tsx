@@ -43,12 +43,13 @@ export default async function AccueilCockpit() {
   const enCours = prochaines.filter((s) => s.opensAt <= maintenant && s.closesAt >= maintenant)
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold">📊 Tableau de Bord</h1>
-        <p className="mt-1 text-slate-600">Bienvenue dans le Cockpit IALAB</p>
-      </div>
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">📊 Tableau de Bord</h1>
+          <p className="mt-1 text-gray-600">Bienvenue dans le Cockpit IALAB</p>
+        </div>
 
       {/* Quick Actions - Most Important */}
       {isAdmin && (
@@ -105,7 +106,8 @@ export default async function AccueilCockpit() {
           </div>
         </section>
       )}
-    </div>
+      </div>
+    </AdminLayout>
   )
 }
 
