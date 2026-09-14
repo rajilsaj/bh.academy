@@ -47,12 +47,6 @@ export function ApprenantsList({ initialData }: { initialData: any[] }) {
   const [selectedApprenant, setSelectedApprenant] = useState<Apprenant | null>(null)
   const checkboxRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    if (checkboxRef.current) {
-      checkboxRef.current.indeterminate = someSelected
-    }
-  }, [someSelected])
-
   const filteredApprenants = useMemo(() => {
     if (!searchQuery.trim()) return apprenants
 
@@ -89,6 +83,12 @@ export function ApprenantsList({ initialData }: { initialData: any[] }) {
 
   const allSelected = filteredApprenants.length > 0 && selectedIds.size === filteredApprenants.length
   const someSelected = selectedIds.size > 0 && selectedIds.size < filteredApprenants.length
+
+  useEffect(() => {
+    if (checkboxRef.current) {
+      checkboxRef.current.indeterminate = someSelected
+    }
+  }, [someSelected])
 
   return (
     <div className="space-y-4">
