@@ -3,11 +3,13 @@ import { asc, count, desc, eq, isNull, isNotNull } from 'drizzle-orm'
 import { SyncLearnersButton } from '@/components/SyncLearnersButton'
 import { LearnersList } from '@/components/LearnersList'
 import { DocumentUpload } from '@/components/DocumentUpload'
+import { SyncMonitor } from '@/components/SyncMonitor'
 import { requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { learners, staff } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
 import { redirect } from 'next/navigation'
+import '@/styles/design-system.css'
 
 export const dynamic = 'force-dynamic'
 
@@ -99,41 +101,47 @@ export default async function UtilisateursPageSimple({
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold">👥 Utilisateurs</h1>
-        <p className="mt-1 text-slate-600">Gérez tous les utilisateurs de la plateforme</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900">👥 Utilisateurs</h1>
+          <p className="mt-2 text-gray-600">Gérez tous les utilisateurs de la plateforme</p>
+        </div>
 
-      {/* Import Banner */}
-      <div className="rounded-lg border-l-4 border-l-blue-500 bg-blue-50 p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="font-bold text-slate-900">📥 Importer les apprenants</h3>
-            <p className="mt-1 text-sm text-slate-600">Synchronisez avec votre formulaire Google</p>
-          </div>
-          <div className="shrink-0 w-32">
-            <SyncLearnersButton />
+        {/* Sync Monitor */}
+        <SyncMonitor />
+
+        {/* Import Banner */}
+        <div className="ds-card bg-gradient-to-r from-indigo-50 to-purple-50 border-l-4 border-l-indigo-600">
+          <div className="p-6 flex items-start justify-between gap-6">
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">📥 Importer les apprenants</h3>
+              <p className="mt-1 text-sm text-gray-600">Synchronisez avec votre formulaire Google automatiquement</p>
+            </div>
+            <div className="shrink-0">
+              <SyncLearnersButton />
+            </div>
           </div>
         </div>
-      </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-gray-200 overflow-x-auto">
-        {tabs.map((t) => (
-          <Link
-            key={t.id}
-            href={`/admin/utilisateurs?tab=${t.id}`}
-            className={`px-4 py-3 border-b-2 font-semibold transition-all whitespace-nowrap ${
-              tab === t.id
-                ? 'border-b-blue-500 text-blue-600'
-                : `border-b-transparent text-slate-600 ${t.highlight ? 'text-orange-600' : ''}`
-            }`}
-          >
-            {t.label}
-          </Link>
-        ))}
+      <div className="ds-card">
+        <div className="flex gap-2 border-b border-gray-200 overflow-x-auto">
+          {tabs.map((t) => (
+            <Link
+              key={t.id}
+              href={`/admin/utilisateurs?tab=${t.id}`}
+              className={`px-4 py-3 border-b-2 font-semibold transition-all whitespace-nowrap ${
+                tab === t.id
+                  ? 'border-b-indigo-600 text-indigo-600'
+                  : `border-b-transparent text-gray-600 ${t.highlight ? 'text-orange-600' : ''}`
+              }`}
+            >
+              {t.label}
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* Search and Filters */}
