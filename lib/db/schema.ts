@@ -102,10 +102,17 @@ export const sessions = pgTable(
     dayCode: varchar('day_code', { length: 6 }).notNull(),
     opensAt: timestamp('opens_at', { withTimezone: true }).notNull(),
     closesAt: timestamp('closes_at', { withTimezone: true }).notNull(),
+    moduleId: uuid('module_id'),
+    status: text('status').$type<'planifiée' | 'confirmée' | 'réalisée' | 'annulée'>().default('planifiée'),
+    roomLocation: text('room_location'),
+    canceledReason: text('canceled_reason'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({
     cohortIdx: index('sessions_cohort_idx').on(t.cohortId),
     codeIdx: index('sessions_day_code_idx').on(t.dayCode),
+    moduleIdx: index('sessions_module_idx').on(t.moduleId),
   }),
 )
 
