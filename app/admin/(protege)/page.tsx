@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import { and, asc, count, eq, gte, isNull } from 'drizzle-orm'
+import { AdminLayout } from '@/components/AdminLayout'
 import { auth, can } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { cohorts, learners, programModules, sessions, staff } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
 import { formatDate } from '@/lib/format'
 import { redirect } from 'next/navigation'
+import '@/styles/design-system.css'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,124 +43,100 @@ export default async function AccueilCockpit() {
   const enCours = prochaines.filter((s) => s.opensAt <= maintenant && s.closesAt >= maintenant)
 
   return (
-    <div className="space-y-8 p-8">
-      {/* Header */}
-      <div className="space-y-2">
-        <h1 className="text-4xl font-bold text-gray-900">Tableau de Bord</h1>
-        <p className="text-gray-600">Aperçu de votre plateforme</p>
-      </div>
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">📊 Tableau de Bord</h1>
+          <p className="mt-1 text-gray-600">Bienvenue dans le Cockpit IALAB</p>
+        </div>
 
-      {/* Quick Actions */}
+      {/* Quick Actions - Most Important */}
       {isAdmin && (
-        <section className="space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Actions rapides</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <ActionCard
-              title="Importer les apprenants"
-              description={enAttente.n > 0 ? `${enAttente.n} en attente de validation` : 'Synchroniser avec Google Forms'}
-              href="/admin/utilisateurs"
-              highlight={enAttente.n > 0}
-              icon="↓"
-            />
-            <ActionCard
-              title="Ajouter un formateur"
-              description="Créer un nouveau compte formateur"
-              href="/admin/utilisateurs"
-              icon="+"
-            />
-            <ActionCard
-              title="Créer un module"
-              description="Ajouter une nouvelle formation"
-              href="/admin/modules"
-              icon="+"
-            />
-          </div>
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ActionCard
+            icon="📥"
+            title="Importer les apprenants"
+            description={enAttente.n > 0 ? `${enAttente.n} en attente de validation` : 'Synchroniser avec Google Forms'}
+            href="/admin/utilisateurs"
+            highlight={enAttente.n > 0}
+          />
+          <ActionCard
+            icon="👨‍🏫"
+            title="Ajouter un formateur"
+            description="Créer un nouveau compte formateur"
+            href="/admin/utilisateurs"
+          />
+          <ActionCard
+            icon="📚"
+            title="Créer un module"
+            description="Ajouter une nouvelle formation"
+            href="/admin/modules"
+          />
         </section>
       )}
 
-      {/* Stats Overview */}
-      <section className="space-y-4">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Vue d'ensemble</h2>
+      {/* Stats - Overview */}
+      <section>
+        <h2 className="mb-4 text-lg font-bold">📈 Vue d'ensemble</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Apprenants" value={apprenants.n} detail={enAttente.n > 0 ? `${enAttente.n} en attente` : undefined} />
-          <StatCard label="Formateurs" value={formateurs.n} />
-          <StatCard label="Modules" value={modules.n} />
-          <StatCard label="Sessions" value={prochaines.length} detail={enCours.length > 0 ? `${enCours.length} en cours` : undefined} />
+          <StatCard label="👥 Apprenants" value={apprenants.n} detail={enAttente.n > 0 ? `${enAttente.n} en attente` : undefined} />
+          <StatCard label="👨‍🏫 Formateurs" value={formateurs.n} />
+          <StatCard label="📚 Modules" value={modules.n} />
+          <StatCard label="📅 Prochaines sessions" value={prochaines.length} detail={enCours.length > 0 ? `${enCours.length} en cours` : undefined} />
         </div>
       </section>
 
       {/* Upcoming Sessions */}
       {prochaines.length > 0 && (
-        <section className="space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Prochaines sessions</h2>
-          <div className="space-y-3">
+        <section>
+          <h2 className="mb-4 text-lg font-bold">📅 Prochaines sessions</h2>
+          <div className="space-y-2">
             {prochaines.map((s) => (
-              <div key={s.id} className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 hover:border-gray-300 transition-colors">
-                <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-gray-900">{s.moduleName}</p>
-                  <p className="text-sm text-gray-600">{formatDate(new Date(s.heldOn))} · {s.cohort}</p>
+              <div key={s.id} className="rounded-lg border border-gray-200 bg-white p-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="font-semibold">{s.moduleName}</p>
+                    <p className="text-sm text-slate-600">{formatDate(new Date(s.heldOn))} · {s.cohort}</p>
+                  </div>
+                  <div className="text-sm font-mono text-blue-600 font-semibold">{s.dayCode}</div>
                 </div>
-                <div className="ml-4 font-mono text-sm font-semibold text-bo-bleu">{s.dayCode}</div>
               </div>
             ))}
           </div>
         </section>
       )}
-    </div>
+      </div>
+    </AdminLayout>
   )
 }
 
-function ActionCard({
-  title,
-  description,
-  href,
-  highlight = false,
-  icon = '→'
-}: {
-  title: string
-  description: string
-  href: string
-  highlight?: boolean
-  icon?: string
-}) {
+function ActionCard({ icon, title, description, href, highlight = false }: { icon: string; title: string; description: string; href: string; highlight?: boolean }) {
   return (
     <Link
       href={href}
-      className={`group relative flex flex-col gap-3 rounded-lg border p-6 transition-all ${
+      className={`rounded-lg border-2 p-4 transition-all ${
         highlight
-          ? 'border-orange-200 bg-orange-50 hover:border-orange-300 hover:shadow-sm'
-          : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+          ? 'border-orange-300 bg-orange-50 hover:border-orange-400'
+          : 'border-gray-200 bg-white hover:border-blue-300'
       }`}
     >
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <h3 className="font-semibold text-gray-900">{title}</h3>
-          <p className="mt-1 text-sm text-gray-600">{description}</p>
-        </div>
-        <div className={`ml-3 text-lg font-semibold transition-colors ${
-          highlight ? 'text-orange-600 group-hover:text-orange-700' : 'text-gray-400 group-hover:text-gray-600'
-        }`}>
-          {icon}
-        </div>
+      <div className="text-3xl mb-2">{icon}</div>
+      <h3 className="font-bold text-slate-900">{title}</h3>
+      <p className="mt-1 text-sm text-slate-600">{description}</p>
+      <div className="mt-3 flex items-center gap-1 text-sm font-semibold text-blue-600">
+        Accéder →
       </div>
     </Link>
   )
 }
 
-function StatCard({
-  label,
-  value,
-  detail
-}: {
-  label: string
-  value: number
-  detail?: string
-}) {
+function StatCard({ label, value, detail }: { label: string; value: number; detail?: string }) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-5 hover:border-gray-300 transition-colors">
-      <p className="text-sm font-medium text-gray-700">{label}</p>
-      <p className="mt-2 text-3xl font-bold text-gray-900">{value}</p>
-      {detail && <p className="mt-2 text-xs text-gray-600">{detail}</p>}
+    <div className="rounded-lg border border-gray-200 bg-white p-4">
+      <p className="text-sm text-slate-600">{label}</p>
+      <p className="mt-1 text-3xl font-bold">{value}</p>
+      {detail && <p className="mt-1 text-xs text-slate-500">{detail}</p>}
     </div>
   )
 }
