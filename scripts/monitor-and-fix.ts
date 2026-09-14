@@ -120,7 +120,7 @@ async function fetchVercelLogs(): Promise<string[]> {
 
     process.stdout.on('data', (data) => {
       const lines = data.toString().split('\n')
-      vercelLogs.push(...lines.filter((l) => l.trim()))
+      vercelLogs.push(...lines.filter((l: string) => l.trim()))
     })
 
     process.stderr.on('data', (data) => {
