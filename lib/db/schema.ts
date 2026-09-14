@@ -7,13 +7,13 @@ import {
   numeric,
   pgTable,
   primaryKey,
-  sql,
   text,
   timestamp,
   unique,
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 
 /** Deux rôles : l'administrateur voit et gère tout, le formateur ses modules et leurs ressources. */
 export const ROLES = ['admin', 'formateur'] as const
