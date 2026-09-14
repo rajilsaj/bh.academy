@@ -1,6 +1,5 @@
 import { requirePermission } from '@/lib/auth'
 import { commitSync, type SyncResult } from '@/lib/training/sync'
-import { getSession } from '@/lib/auth'
 
 export const dynamic = 'force-dynamic'
 
