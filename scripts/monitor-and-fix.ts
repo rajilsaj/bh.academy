@@ -57,7 +57,7 @@ function parseErrorLogs(logs: string[]): DeploymentError[] {
         errors.push({
           type: 'MissingModule',
           message: `Module not found: ${moduleName}`,
-          context: lines
+          context: logs
             .slice(Math.max(0, index - 2), Math.min(logs.length, index + 3))
             .join('\n'),
           autoFix: true,
