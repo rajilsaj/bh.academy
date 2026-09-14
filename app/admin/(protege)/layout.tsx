@@ -26,6 +26,7 @@ const GROUPES: { titre: string; liens: Lien[] }[] = [
     titre: '',
     liens: [
       { href: '/admin/apprenants', label: 'Apprenants', permission: 'gererUtilisateurs', icone: 'personnes' },
+      { href: '/admin/courses', label: 'Cours', permission: 'gererUtilisateurs', icone: 'ressources' },
     ],
   },
 ]

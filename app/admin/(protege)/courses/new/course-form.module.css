@@ -1,0 +1,230 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: 1000px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-lg);
+}
+
+.header h1 {
+  margin: 0 0 var(--space-xs) 0;
+  font-size: var(--font-size-2xl);
+  color: var(--color-gray-900);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-500);
+}
+
+.backLink {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast);
+}
+
+.backLink:hover {
+  color: var(--color-primary-dark);
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.section {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionTitle {
+  margin: 0 0 var(--space-lg) 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-gray-900);
+  font-weight: var(--font-weight-semibold);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Form Grid */
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+.formGroup label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-700);
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  background-color: white;
+  transition: all var(--transition-fast);
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.errorInput {
+  border-color: var(--color-danger) !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+}
+
+.errorMessage {
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Tag Input */
+.tagInput {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.tagInputField {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-end;
+}
+
+.tagInputField input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+}
+
+.tagInputField input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.tagInputField button {
+  flex-shrink: 0;
+}
+
+/* Tags List */
+.tagsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 12px;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--border-radius-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.tagRemove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  padding: 0;
+  opacity: 0.8;
+  transition: opacity var(--transition-fast);
+}
+
+.tagRemove:hover {
+  opacity: 1;
+}
+
+/* Form Actions */
+.formActions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: flex-end;
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tagInputField {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tagInputField button {
+    width: 100%;
+  }
+
+  .formActions {
+    flex-direction: column-reverse;
+  }
+
+  .formActions button,
+  .formActions a {
+    width: 100%;
+  }
+}
