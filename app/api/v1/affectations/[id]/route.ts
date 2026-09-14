@@ -44,7 +44,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     if (!existing) return new Response('Affectation not found', { status: 404 })
 
-    const statusHistory = existing.statusHistory || []
+    const statusHistory = Array.isArray(existing.statusHistory) ? existing.statusHistory : []
     if (body.status && body.status !== existing.status) {
       statusHistory.push({
         status: body.status,
