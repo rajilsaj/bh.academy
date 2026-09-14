@@ -194,7 +194,7 @@ async function seed() {
         .values({
           code: moduleData.code,
           title: moduleData.title,
-          durationHours: moduleData.durationHours,
+          durationHours: moduleData.durationHours.toString(),
           description: moduleData.description,
           maxLearners: moduleData.maxLearners,
           requiredSkills: moduleData.requiredSkills,
