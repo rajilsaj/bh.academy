@@ -1,6 +1,7 @@
 import { requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { affectations } from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +17,7 @@ export async function GET(request: Request) {
       const sessionAffectations = await db
         .select()
         .from(affectations)
-        .where((f) => f.sessionId === sessionId)
+        .where(eq(affectations.sessionId, sessionId))
 
       return Response.json(sessionAffectations)
     }
