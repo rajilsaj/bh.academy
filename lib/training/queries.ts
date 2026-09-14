@@ -88,8 +88,8 @@ export async function getAllTrainers(filters?: {
 }) {
   const where = []
 
-  if (filters?.status) {
-    where.push(eq(trainers.status, filters.status))
+  if (filters?.status && ['actif', 'inactif'].includes(filters.status)) {
+    where.push(eq(trainers.status, filters.status as 'actif' | 'inactif'))
   } else {
     where.push(eq(trainers.status, 'actif'))
   }
