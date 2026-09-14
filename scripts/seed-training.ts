@@ -4,7 +4,7 @@
  */
 
 import { db } from '../lib/db'
-import { trainers, modules, sessions, affectations } from '../lib/db/schema'
+import { trainers, modules, sessions, affectations, programs } from '../lib/db/schema'
 
 const CITIES = ['Brazzaville', 'Pointe-Noire']
 
@@ -141,8 +141,21 @@ async function seed() {
   try {
     console.log('🌱 Seeding training data...\n')
 
+    // Create a program for the modules
+    console.log('📋 Creating training program...')
+    const [program] = await db
+      .insert(programs)
+      .values({
+        name: 'Technical Training Program',
+        description: 'Comprehensive technical training covering development, DevOps, and cloud technologies',
+        startsOn: new Date(),
+        endsOn: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000), // 6 months from now
+      })
+      .returning()
+    console.log(`  ✓ Program created: ${program.name}`)
+
     // Create trainers
-    console.log('📚 Creating trainers...')
+    console.log('\n📚 Creating trainers...')
     const createdTrainers = []
     for (const trainerData of TRAINER_DATA) {
       const [trainer] = await db
@@ -183,7 +196,7 @@ async function seed() {
           maxLearners: moduleData.maxLearners,
           requiredSkills: moduleData.requiredSkills,
           prerequisites: [],
-          programId: null,
+          programId: program.id,
           createdAt: new Date(),
           updatedAt: new Date(),
         })
