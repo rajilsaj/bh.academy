@@ -87,10 +87,10 @@ export default async function UtilisateursPageSimple({
   const cityOptions = [...new Set(data.map((d: any) => d.city).filter(Boolean))].sort()
 
   const tabs = [
-    { id: 'apprenants', label: `👥 Apprenants (${totalApprenants.n})`, count: totalApprenants.n },
-    { id: 'attente', label: `⏳ En attente (${enAttente.n})`, count: enAttente.n, highlight: enAttente.n > 0 },
-    { id: 'admins', label: `🔐 Admins (${admins.n})`, count: admins.n },
-    { id: 'formateurs', label: `👨‍🏫 Formateurs (${formateurs.n})`, count: formateurs.n },
+    { id: 'apprenants', label: `Apprenants (${totalApprenants.n})`, count: totalApprenants.n },
+    { id: 'attente', label: `En attente (${enAttente.n})`, count: enAttente.n, highlight: enAttente.n > 0 },
+    { id: 'admins', label: `Admins (${admins.n})`, count: admins.n },
+    { id: 'formateurs', label: `Formateurs (${formateurs.n})`, count: formateurs.n },
   ]
 
   // Get detail view data if fiche param is set
