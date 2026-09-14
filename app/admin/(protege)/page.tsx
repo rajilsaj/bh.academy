@@ -13,28 +13,27 @@ export default async function AccueilCockpit() {
   const role = session.user.role
   const isAdmin = can(role, 'gererUtilisateurs')
 
-  const [adminsList, formateursList, apprenantsList, pendingCount] = await Promise.all([
+  const [adminsList, formateursList, apprenantsList, pendingCountResult] = await Promise.all([
     db
-      .select({ id: staff.id, email: staff.email, role: staff.role, createdAt: staff.createdAt })
+      .select({ id: staff.id, email: staff.email })
       .from(staff)
       .where(eq(staff.role, 'admin'))
-      .orderBy(desc(staff.createdAt))
       .limit(10),
     db
-      .select({ id: staff.id, email: staff.email, role: staff.role, createdAt: staff.createdAt })
+      .select({ id: staff.id, email: staff.email })
       .from(staff)
       .where(eq(staff.role, 'formateur'))
-      .orderBy(desc(staff.createdAt))
       .limit(10),
     db
-      .select({ id: learners.id, email: learners.email, firstName: learners.firstName, lastName: learners.lastName, validatedAt: learners.validatedAt, createdAt: learners.createdAt })
+      .select({ id: learners.id, email: learners.email, fullName: learners.fullName, validatedAt: learners.validatedAt, createdAt: learners.createdAt })
       .from(learners)
       .orderBy(desc(learners.createdAt))
       .limit(10),
     db.select({ n: count() }).from(learners).where(isNull(learners.validatedAt)),
   ])
 
-  const [[pendingCount_n]] = await Promise.all([pendingCount])
+  const [pendingCountData] = await Promise.all([pendingCountResult])
+  const pendingCount_n = pendingCountData[0]
 
   return (
     <div className="space-y-8 p-8">
@@ -73,7 +72,6 @@ export default async function AccueilCockpit() {
             <thead className="border-b border-gray-200 bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Créé le</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -81,12 +79,11 @@ export default async function AccueilCockpit() {
                 adminsList.map((admin) => (
                   <tr key={admin.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 text-sm text-gray-900">{admin.email}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{new Date(admin.createdAt).toLocaleDateString('fr-FR')}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={2} className="px-6 py-8 text-center text-sm text-gray-600">
+                  <td className="px-6 py-8 text-center text-sm text-gray-600">
                     Aucun administrateur trouvé
                   </td>
                 </tr>
@@ -109,7 +106,6 @@ export default async function AccueilCockpit() {
             <thead className="border-b border-gray-200 bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Créé le</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -117,12 +113,11 @@ export default async function AccueilCockpit() {
                 formateursList.map((formateur) => (
                   <tr key={formateur.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 text-sm text-gray-900">{formateur.email}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{new Date(formateur.createdAt).toLocaleDateString('fr-FR')}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={2} className="px-6 py-8 text-center text-sm text-gray-600">
+                  <td className="px-6 py-8 text-center text-sm text-gray-600">
                     Aucun formateur trouvé
                   </td>
                 </tr>
@@ -155,7 +150,7 @@ export default async function AccueilCockpit() {
                 apprenantsList.map((apprenant) => (
                   <tr key={apprenant.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 text-sm text-gray-900 font-medium">
-                      {apprenant.firstName} {apprenant.lastName}
+                      {apprenant.fullName}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">{apprenant.email}</td>
                     <td className="px-6 py-4 text-sm">
