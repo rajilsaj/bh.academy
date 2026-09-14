@@ -222,7 +222,7 @@ export async function dryRunSync(
             phone: existingTrainer.phone,
             city: existingTrainer.city,
             skills: existingTrainer.skills || [],
-            availabilityWindows: existingTrainer.availabilityWindows || [],
+            availabilityWindows: (Array.isArray(existingTrainer.availabilityWindows) ? existingTrainer.availabilityWindows : []) as any,
             status: existingTrainer.status,
             site: existingTrainer.site,
             source: existingTrainer.source,
