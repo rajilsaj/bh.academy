@@ -143,7 +143,33 @@ export async function syncLearnersFromGoogleSheets(overrideSpreadsheetId?: strin
         .limit(1)
 
       if (existing.length > 0) {
-        results.skipped++
+        const learner = existing[0]
+
+        // If validated by admin, skip (prevent overwriting admin decisions)
+        if (learner.validatedAt) {
+          console.log(`[sheets-sync] Skipped ${form.fullName} (already validated)`)
+          results.skipped++
+          continue
+        }
+
+        // If pending, update with latest form data (allow corrections)
+        console.log(`[sheets-sync] Updating pending learner: ${form.fullName}`)
+        await db
+          .update(learners)
+          .set({
+            fullName: form.fullName,
+            phone: form.phone || null,
+            status: form.status || null,
+            gender: form.gender || null,
+            dateOfBirth: form.dateOfBirth || null,
+            idDocumentUrl: form.idDocumentUrl || null,
+            cvUrl: form.cvUrl || null,
+            city: form.city || null,
+            formSubmittedAt: form.timestamp ? new Date(form.timestamp) : null,
+          })
+          .where(eq(learners.email, form.email))
+
+        results.updated = (results.updated || 0) + 1
         continue
       }
 
