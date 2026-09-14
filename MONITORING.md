@@ -4,6 +4,41 @@ Automated monitoring scripts for tracking Vercel deployments and attempting fixe
 
 ## Scripts Available
 
+### 0. **claude-deployment-agent.ts** (Intelligent Analysis - NEW)
+
+Claude-powered deployment agent with intelligent error analysis.
+
+**Features:**
+- 🤖 Claude API integration for smart error analysis
+- 🎯 Context-aware fix suggestions
+- 📊 Severity classification (critical/warning/info)
+- 💾 JSON analysis logs for tracking
+- 🔄 Auto-fix with manual review fallback
+
+**Usage:**
+
+```bash
+# Run the intelligent agent
+npx tsx scripts/claude-deployment-agent.ts
+
+# Or compile first
+npx tsc scripts/claude-deployment-agent.ts
+node scripts/claude-deployment-agent.js
+```
+
+**What it does:**
+1. Monitors for new Vercel deployments
+2. Pulls logs when deployment state changes
+3. Sends logs to Claude for intelligent analysis
+4. Displays structured analysis with:
+   - Error type classification
+   - Severity level
+   - Suggested fixes (prioritized)
+   - Auto-fixability assessment
+   - Recommendations
+5. Auto-applies fixes and triggers re-deployment
+6. Saves all analysis to `.deployment-logs.json`
+
 ### 1. **monitor-vercel.sh** (Recommended - Bash Version)
 
 Simple shell script that continuously monitors deployment status.
