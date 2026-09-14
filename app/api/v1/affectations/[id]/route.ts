@@ -61,7 +61,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         statusHistory,
         confirmedAt: body.status === 'confirmé' ? new Date() : existing.confirmedAt,
         refusedAt: body.status === 'refusé' ? new Date() : existing.refusedAt,
-        updatedAt: new Date(),
       })
       .where(eq(affectations.id, params.id))
       .returning()
