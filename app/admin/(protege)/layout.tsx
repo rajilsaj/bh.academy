@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic'
 type Lien = { href: string; label: string; permission: Permission; icone?: IconeNav; sousLiens?: Omit<Lien, 'icone'>[] }
 
 /**
- * Simplified navigation: only Admin, Apprenants, and Formateurs
+ * Simplified navigation: only Apprenants
  */
 const GROUPES: { titre: string; liens: Lien[] }[] = [
   {
@@ -23,11 +23,9 @@ const GROUPES: { titre: string; liens: Lien[] }[] = [
     liens: [{ href: '/admin', label: 'Tableau de bord', permission: 'voirTableauBord', icone: 'tableau' }],
   },
   {
-    titre: 'Utilisateurs',
+    titre: '',
     liens: [
-      { href: '/admin/utilisateurs?role=admin', label: 'Admins', permission: 'gererUtilisateurs', icone: 'personnes' },
       { href: '/admin/apprenants', label: 'Apprenants', permission: 'gererUtilisateurs', icone: 'personnes' },
-      { href: '/admin/formateurs', label: 'Formateurs', permission: 'gererUtilisateurs', icone: 'personnes' },
     ],
   },
 ]
