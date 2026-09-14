@@ -16,19 +16,25 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    console.log('[cron:sync-learners] Starting sync...')
+    console.log('[cron:sync-learners] Starting scheduled sync...')
+    const startTime = Date.now()
+
     const results = await syncLearnersFromGoogleSheets()
 
-    console.log('[cron:sync-learners] Sync completed:', {
+    const duration = Date.now() - startTime
+    console.log('[cron:sync-learners] Sync completed in', duration + 'ms', {
       total: results.total,
       created: results.created,
+      updated: results.updated,
       skipped: results.skipped,
       errors: results.errors.length,
     })
 
     return NextResponse.json({
       success: true,
-      message: `Sync completed: ${results.created} created, ${results.skipped} skipped`,
+      timestamp: new Date().toISOString(),
+      duration: `${duration}ms`,
+      message: `Sync: ${results.created} created, ${results.updated} updated, ${results.skipped} skipped`,
       results,
     })
   } catch (error) {
