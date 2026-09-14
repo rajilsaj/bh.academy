@@ -7,6 +7,7 @@ import {
   numeric,
   pgTable,
   primaryKey,
+  sql,
   text,
   timestamp,
   unique,
@@ -472,3 +473,127 @@ export const settings = pgTable('settings', {
   description: text('description'),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 })
+
+/* ------------------------------------------------------------------ */
+/* Training Management Module: trainers, modules, sessions, affectations */
+/* ------------------------------------------------------------------ */
+
+export const TRAINER_STATUSES = ['actif', 'inactif'] as const
+export type TrainerStatus = (typeof TRAINER_STATUSES)[number]
+
+export const TRAINER_SOURCES = ['import', 'manuel'] as const
+export type TrainerSource = (typeof TRAINER_SOURCES)[number]
+
+export const IMPORT_SOURCES = ['google_sheets', 'xlsx_upload'] as const
+export type ImportSource = (typeof IMPORT_SOURCES)[number]
+
+export const IMPORT_STATUSES = ['dry_run', 'committed', 'failed'] as const
+export type ImportStatus = (typeof IMPORT_STATUSES)[number]
+
+export const AFFECTATION_ROLES = ['titulaire', 'suppléant'] as const
+export type AffectationRole = (typeof AFFECTATION_ROLES)[number]
+
+export const AFFECTATION_STATUSES = ['proposé', 'confirmé', 'refusé'] as const
+export type AffectationStatus = (typeof AFFECTATION_STATUSES)[number]
+
+export const SESSION_STATUSES = ['planifiée', 'confirmée', 'réalisée', 'annulée'] as const
+export type SessionStatus = (typeof SESSION_STATUSES)[number]
+
+/** Formateurs: formal trainer identity with skills, availability, sync tracking */
+export const trainers = pgTable(
+  'trainers',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    externalRef: text('external_ref').unique(), // Google Sheets ID or partner ID
+    email: text('email').notNull().unique(),
+    fullName: text('full_name').notNull(),
+    phone: text('phone'),
+    city: text('city'), // 'Brazzaville', 'Pointe-Noire', or 'Brazzaville/Pointe-Noire'
+    status: text('status').$type<TrainerStatus>().notNull().default('actif'),
+    source: text('source').$type<TrainerSource>().notNull(), // 'import', 'manuel'
+    skills: text('skills').array().default(sql`'{}'::text[]`), // Array of skill names
+    availabilityWindows: jsonb('availability_windows').default(sql`'[]'::jsonb`), // [{dayOfWeek, startTime, endTime}]
+    site: text('site'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    importedAt: timestamp('imported_at', { withTimezone: true }),
+    importRunId: uuid('import_run_id').references(() => importRuns.id, { onDelete: 'set null' }),
+  },
+  (t) => ({
+    statusIdx: index('trainers_status_idx').on(t.status),
+    sourceIdx: index('trainers_source_idx').on(t.source),
+    cityIdx: index('trainers_city_idx').on(t.city),
+    externalRefIdx: index('trainers_external_ref_idx').on(t.externalRef),
+  }),
+)
+
+/** Import runs: audit log of sync operations */
+export const importRuns = pgTable(
+  'import_runs',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    source: text('source').$type<ImportSource>().notNull(), // 'google_sheets', 'xlsx_upload'
+    actorId: uuid('actor_id').references(() => staff.id, { onDelete: 'set null' }),
+    timestamp: timestamp('timestamp', { withTimezone: true }).notNull().defaultNow(),
+    status: text('status').$type<ImportStatus>().notNull(), // 'dry_run', 'committed', 'failed'
+    counts: jsonb('counts').notNull(), // {created, updated, unchanged, rejected}
+    errorReport: jsonb('error_report').default(sql`'[]'::jsonb`), // [{row_num, issue, raw_row}]
+    sheetHash: text('sheet_hash'), // Hash of imported data
+  },
+  (t) => ({
+    actorIdx: index('import_runs_actor_idx').on(t.actorId),
+    timestampIdx: index('import_runs_timestamp_idx').on(t.timestamp),
+    statusIdx: index('import_runs_status_idx').on(t.status),
+  }),
+)
+
+/** Modules: formal module definition with prerequisites and required skills */
+export const modules = pgTable(
+  'modules',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    code: text('code').notNull(),
+    title: text('title').notNull(),
+    durationHours: numeric('duration_hours', { precision: 5, scale: 1 }).notNull(),
+    description: text('description'),
+    maxLearners: integer('max_learners'),
+    requiredSkills: text('required_skills').array().default(sql`'{}'::text[]`),
+    prerequisites: uuid('prerequisites').array().default(sql`'{}'::uuid[]`),
+    programId: uuid('program_id')
+      .notNull()
+      .references(() => programs.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    programIdx: index('modules_program_idx').on(t.programId),
+    uq: unique('modules_program_code_uq').on(t.programId, t.code),
+  }),
+)
+
+/** Affectations: trainer assignments to sessions with role and status tracking */
+export const affectations = pgTable(
+  'affectations',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    sessionId: uuid('session_id')
+      .notNull()
+      .references(() => sessions.id, { onDelete: 'cascade' }),
+    trainerId: uuid('trainer_id')
+      .notNull()
+      .references(() => trainers.id, { onDelete: 'cascade' }),
+    role: text('role').$type<AffectationRole>().notNull(), // 'titulaire', 'suppléant'
+    status: text('status').$type<AffectationStatus>().notNull().default('proposé'),
+    statusHistory: jsonb('status_history').default(sql`'[]'::jsonb`), // [{status, changedAt, changedBy}]
+    conflictReason: text('conflict_reason'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    confirmedAt: timestamp('confirmed_at', { withTimezone: true }),
+    refusedAt: timestamp('refused_at', { withTimezone: true }),
+  },
+  (t) => ({
+    sessionIdx: index('affectations_session_idx').on(t.sessionId),
+    trainerIdx: index('affectations_trainer_idx').on(t.trainerId),
+    statusIdx: index('affectations_status_idx').on(t.status),
+    uq: unique('affectations_session_trainer_role_uq').on(t.sessionId, t.trainerId, t.role),
+  }),
+)
