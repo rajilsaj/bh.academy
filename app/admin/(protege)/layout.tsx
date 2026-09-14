@@ -15,8 +15,7 @@ export const dynamic = 'force-dynamic'
 type Lien = { href: string; label: string; permission: Permission; icone?: IconeNav; sousLiens?: Omit<Lien, 'icone'>[] }
 
 /**
- * Trois groupes : les personnes, la matière enseignée, la configuration. Un
- * formateur ne voit que la matière ; l'administrateur voit tout.
+ * Simplified navigation: only Admin, Apprenants, and Formateurs
  */
 const GROUPES: { titre: string; liens: Lien[] }[] = [
   {
@@ -24,34 +23,11 @@ const GROUPES: { titre: string; liens: Lien[] }[] = [
     liens: [{ href: '/admin', label: 'Tableau de bord', permission: 'voirTableauBord', icone: 'tableau' }],
   },
   {
-    titre: 'Personnes',
+    titre: 'Utilisateurs',
     liens: [
-      {
-        href: '/admin/utilisateurs',
-        label: 'Utilisateurs',
-        permission: 'gererUtilisateurs',
-        icone: 'personnes',
-        sousLiens: [
-          { href: '/admin/utilisateurs?role=admin', label: 'Admins', permission: 'gererUtilisateurs' },
-          { href: '/admin/utilisateurs', label: 'Apprenants', permission: 'gererUtilisateurs' },
-          { href: '/admin/formateurs', label: 'Formateurs', permission: 'gererUtilisateurs' },
-        ],
-      },
-    ],
-  },
-  {
-    titre: 'Gestion',
-    liens: [
-      { href: '/admin/modules', label: 'Modules', permission: 'voirModules', icone: 'modules' },
-      { href: '/admin/sessions', label: 'Sessions', permission: 'voirModules', icone: 'sessions' },
-      { href: '/admin/ressources', label: 'Ressources', permission: 'gererRessources', icone: 'ressources' },
-    ],
-  },
-  {
-    titre: 'Configuration',
-    liens: [
-      { href: '/admin/configuration', label: 'Configs', permission: 'gererConfiguration', icone: 'parametres' },
-      { href: '/admin/visites', label: 'Support Technique', permission: 'voirVisites', icone: 'visites' },
+      { href: '/admin/utilisateurs?role=admin', label: 'Admins', permission: 'gererUtilisateurs', icone: 'personnes' },
+      { href: '/admin/utilisateurs', label: 'Apprenants', permission: 'gererUtilisateurs', icone: 'personnes' },
+      { href: '/admin/formateurs', label: 'Formateurs', permission: 'gererUtilisateurs', icone: 'personnes' },
     ],
   },
 ]
