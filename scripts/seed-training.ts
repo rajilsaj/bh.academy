@@ -143,13 +143,18 @@ async function seed() {
 
     // Create a program for the modules
     console.log('📋 Creating training program...')
+    const today = new Date()
+    const sixMonthsLater = new Date(today.getTime() + 180 * 24 * 60 * 60 * 1000)
+
+    const formatDate = (d: Date) => d.toISOString().split('T')[0]
+
     const [program] = await db
       .insert(programs)
       .values({
         name: 'Technical Training Program',
         description: 'Comprehensive technical training covering development, DevOps, and cloud technologies',
-        startsOn: new Date(),
-        endsOn: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000), // 6 months from now
+        startsOn: formatDate(today),
+        endsOn: formatDate(sixMonthsLater),
       })
       .returning()
     console.log(`  ✓ Program created: ${program.name}`)
@@ -173,8 +178,6 @@ async function seed() {
           source: 'manuel',
           importRunId: null,
           importedAt: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         })
         .returning()
 
@@ -197,8 +200,6 @@ async function seed() {
           requiredSkills: moduleData.requiredSkills,
           prerequisites: [],
           programId: program.id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         })
         .returning()
 
@@ -220,14 +221,16 @@ async function seed() {
       const [session] = await db
         .insert(sessions)
         .values({
+          cohortId: 'seed-training-cohort', // Placeholder cohort ID for training sessions
+          moduleName: `Training Session ${i + 1}`,
+          heldOn: formatDate(sessionStart),
+          dayCode: 'TRN',
           moduleId: createdModules[i].id,
           opensAt: sessionStart,
           closesAt: sessionEnd,
           status: 'planifiée',
           roomLocation: i % 2 === 0 ? 'Room A - Brazzaville' : 'Room B - Pointe-Noire',
           canceledReason: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         })
         .returning()
 
@@ -262,8 +265,6 @@ async function seed() {
               },
             ],
             conflictReason: null,
-            createdAt: new Date(),
-            updatedAt: new Date(),
             confirmedAt: null,
             refusedAt: null,
           })
