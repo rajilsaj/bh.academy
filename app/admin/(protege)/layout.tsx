@@ -26,7 +26,7 @@ const GROUPES: { titre: string; liens: Lien[] }[] = [
     titre: 'Utilisateurs',
     liens: [
       { href: '/admin/utilisateurs?role=admin', label: 'Admins', permission: 'gererUtilisateurs', icone: 'personnes' },
-      { href: '/admin/utilisateurs', label: 'Apprenants', permission: 'gererUtilisateurs', icone: 'personnes' },
+      { href: '/admin/apprenants', label: 'Apprenants', permission: 'gererUtilisateurs', icone: 'personnes' },
       { href: '/admin/formateurs', label: 'Formateurs', permission: 'gererUtilisateurs', icone: 'personnes' },
     ],
   },
