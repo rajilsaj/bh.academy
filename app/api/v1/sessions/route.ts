@@ -27,15 +27,20 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
 
-    if (!body.moduleId || !body.opensAt || !body.closesAt) {
-      return new Response('moduleId, opensAt, and closesAt are required', { status: 400 })
+    if (!body.cohortId || !body.moduleId || !body.opensAt || !body.closesAt) {
+      return new Response('cohortId, moduleId, opensAt, and closesAt are required', { status: 400 })
     }
 
+    const opensDate = new Date(body.opensAt)
     const [newSession] = await db
       .insert(sessions)
       .values({
+        cohortId: body.cohortId,
+        moduleName: body.moduleName || 'Training Session',
+        heldOn: body.heldOn || opensDate.toISOString().split('T')[0],
+        dayCode: body.dayCode || 'TRN',
         moduleId: body.moduleId,
-        opensAt: new Date(body.opensAt),
+        opensAt: opensDate,
         closesAt: new Date(body.closesAt),
         status: body.status || 'planifiée',
         roomLocation: body.roomLocation || null,
