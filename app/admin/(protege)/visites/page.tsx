@@ -1,4 +1,3 @@
-import { AdminLayout } from '@/components/AdminLayout'
 import Link from 'next/link'
 import { AccesRefuse, SuccesSombre } from '@/components/AccesRefuse'
 import { EnTete } from '@/components/admin/Cockpit'
@@ -18,7 +17,7 @@ const t = fr.admin.visites
  * pages, et qui revient. Réservé à l'administrateur.
  */
 export default async function VisitesPage({ searchParams }: { searchParams: { ok?: string; n?: string } }) {
-  const session = await requirePermission('voirVisites'</div></AdminLayout>)
+  const session = await requirePermission('voirVisites')
   if (!session) return <AccesRefuse />
 
   const [stats, parJour, pages, visiteurs] = await Promise.all([
@@ -26,18 +25,18 @@ export default async function VisitesPage({ searchParams }: { searchParams: { ok
     visitesParJour(14),
     pagesLesPlusVues(15),
     listeVisiteurs(100),
-  ]</div></AdminLayout>)
-  const totalPages = pages.reduce((n, p) => n + p.visites, 0</div></AdminLayout>)
-  const maxJour = Math.max(1, ...parJour.map((j) => j.visites)</div></AdminLayout>)
+  ])
+  const totalPages = pages.reduce((n, p) => n + p.visites, 0)
+  const maxJour = Math.max(1, ...parJour.map((j) => j.visites))
 
   const message =
     searchParams.ok === 'purge'
-      ? t.messages.purge.replace('{n}', searchParams.n ?? '0'</div></AdminLayout>)
+      ? t.messages.purge.replace('{n}', searchParams.n ?? '0')
       : searchParams.ok === 'visiteurSupprime'
         ? t.messages.visiteurSupprime
         : null
 
-  return (<AdminLayout><div className="max-w-7xl mx-auto space-y-6">
+  return (
     <div className="space-y-6">
       <EnTete
         titre={t.titre}
@@ -134,5 +133,5 @@ export default async function VisitesPage({ searchParams }: { searchParams: { ok
         </div>
       </section>
     </div>
-  </div></AdminLayout>)
+  )
 }

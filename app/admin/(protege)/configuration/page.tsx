@@ -1,4 +1,3 @@
-import { AdminLayout } from '@/components/AdminLayout'
 import { requirePermission } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { getSetting } from './actions'
@@ -6,13 +5,13 @@ import { getSetting } from './actions'
 export const dynamic = 'force-dynamic'
 
 export default async function ConfigurationPage() {
-  const session = await requirePermission('gererConfiguration'</div></AdminLayout>)
-  if (!session) redirect('/admin/login'</div></AdminLayout>)
+  const session = await requirePermission('gererConfiguration')
+  if (!session) redirect('/admin/login')
 
-  const spreadsheetId = await getSetting('google_sheets_spreadsheet_id'</div></AdminLayout>)
-  const sheetName = await getSetting('google_sheets_sheet_name'</div></AdminLayout>)
+  const spreadsheetId = await getSetting('google_sheets_spreadsheet_id')
+  const sheetName = await getSetting('google_sheets_sheet_name')
 
-  return (<AdminLayout><div className="max-w-7xl mx-auto space-y-6">
+  return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">⚙️ Configuration</h1>
@@ -67,5 +66,5 @@ export default async function ConfigurationPage() {
         </div>
       </div>
     </div>
-  </div></AdminLayout>)
+  )
 }

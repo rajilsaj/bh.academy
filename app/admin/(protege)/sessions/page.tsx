@@ -1,4 +1,3 @@
-import { AdminLayout } from '@/components/AdminLayout'
 import Link from 'next/link'
 import { asc, eq } from 'drizzle-orm'
 import { requirePermission } from '@/lib/auth'
@@ -19,7 +18,7 @@ export default async function SessionsPage() {
     .innerJoin(cohorts, eq(cohorts.id, sessions.cohortId))
     .orderBy(asc(sessions.heldOn))
 
-  return (<AdminLayout><div className="max-w-7xl mx-auto space-y-6">
+  return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">📅 Sessions</h1>
@@ -45,5 +44,5 @@ export default async function SessionsPage() {
         ))}
       </div>
     </div>
-  </div></AdminLayout>)
+  )
 }

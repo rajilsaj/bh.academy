@@ -1,4 +1,3 @@
-import { AdminLayout } from '@/components/AdminLayout'
 import Link from 'next/link'
 import { requirePermission } from '@/lib/auth'
 import { db } from '@/lib/db'
@@ -8,8 +7,8 @@ import { redirect } from 'next/navigation'
 export const dynamic = 'force-dynamic'
 
 export default async function ModulesPage() {
-  const session = await requirePermission('voirModules'</div></AdminLayout>)
-  if (!session) redirect('/admin/login'</div></AdminLayout>)
+  const session = await requirePermission('voirModules')
+  if (!session) redirect('/admin/login')
 
   const modules = await db
     .select({
@@ -17,11 +16,11 @@ export default async function ModulesPage() {
       title: programModules.title,
       description: programModules.description,
       pointsTotal: programModules.pointsTotal,
-    }</div></AdminLayout>)
-    .from(programModules</div></AdminLayout>)
-    .orderBy(programModules.position</div></AdminLayout>)
+    })
+    .from(programModules)
+    .orderBy(programModules.position)
 
-  return (<AdminLayout><div className="max-w-7xl mx-auto space-y-6">
+  return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">📚 Modules</h1>
@@ -52,5 +51,5 @@ export default async function ModulesPage() {
         ))}
       </div>
     </div>
-  </div></AdminLayout>)
+  )
 }

@@ -1,4 +1,3 @@
-import { AdminLayout } from '@/components/AdminLayout'
 import Link from 'next/link'
 import { eq } from 'drizzle-orm'
 import { requirePermission } from '@/lib/auth'
@@ -9,22 +8,22 @@ import { redirect } from 'next/navigation'
 export const dynamic = 'force-dynamic'
 
 export default async function FormateursPage({ searchParams }: { searchParams: { city?: string } }) {
-  const session = await requirePermission('gererUtilisateurs'</div></AdminLayout>)
-  if (!session) redirect('/admin/login'</div></AdminLayout>)
+  const session = await requirePermission('gererUtilisateurs')
+  if (!session) redirect('/admin/login')
 
   const selectedCity = searchParams.city as any
 
   let formateurs = await db
-    .select(</div></AdminLayout>)
-    .from(staff</div></AdminLayout>)
-    .where(eq(staff.role, 'formateur')</div></AdminLayout>)
+    .select()
+    .from(staff)
+    .where(eq(staff.role, 'formateur'))
 
   if (selectedCity && TRAINER_CITIES.includes(selectedCity)) {
-    const profiles = await db.select().from(trainerProfiles).where(eq(trainerProfiles.city, selectedCity)</div></AdminLayout>)
-    formateurs = formateurs.filter(f => profiles.some(p => p.staffId === f.id)</div></AdminLayout>)
+    const profiles = await db.select().from(trainerProfiles).where(eq(trainerProfiles.city, selectedCity))
+    formateurs = formateurs.filter(f => profiles.some(p => p.staffId === f.id))
   }
 
-  return (<AdminLayout><div className="max-w-7xl mx-auto space-y-6">
+  return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">👨‍🏫 Formateurs</h1>
@@ -64,5 +63,5 @@ export default async function FormateursPage({ searchParams }: { searchParams: {
         ))}
       </div>
     </div>
-  </div></AdminLayout>)
+  )
 }
