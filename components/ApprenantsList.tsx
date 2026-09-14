@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { ApprenantModal } from './ApprenantModal'
 
 export interface Apprenant {
@@ -45,6 +45,13 @@ export function ApprenantsList({ initialData }: { initialData: any[] }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [selectedApprenant, setSelectedApprenant] = useState<Apprenant | null>(null)
+  const checkboxRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (checkboxRef.current) {
+      checkboxRef.current.indeterminate = someSelected
+    }
+  }, [someSelected])
 
   const filteredApprenants = useMemo(() => {
     if (!searchQuery.trim()) return apprenants
@@ -166,9 +173,9 @@ export function ApprenantsList({ initialData }: { initialData: any[] }) {
             <tr>
               <th className="px-6 py-4 text-left">
                 <input
+                  ref={checkboxRef}
                   type="checkbox"
                   checked={allSelected}
-                  indeterminate={someSelected}
                   onChange={(e) => handleSelectAll(e.target.checked)}
                   className="h-4 w-4 rounded border-gray-300"
                 />
