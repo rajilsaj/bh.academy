@@ -1,3 +1,4 @@
+import { AdminLayout } from '@/components/AdminLayout'
 import Link from 'next/link'
 import { asc, eq } from 'drizzle-orm'
 import { requirePermission } from '@/lib/auth'
@@ -9,16 +10,16 @@ import { redirect } from 'next/navigation'
 export const dynamic = 'force-dynamic'
 
 export default async function SessionsPage() {
-  const session = await requirePermission('voirModules')
-  if (!session) redirect('/admin/login')
+  const session = await requirePermission('voirModules'</div></AdminLayout>)
+  if (!session) redirect('/admin/login'</div></AdminLayout>)
 
   const allSessions = await db
-    .select()
-    .from(sessions)
-    .innerJoin(cohorts, eq(cohorts.id, sessions.cohortId))
-    .orderBy(asc(sessions.heldOn))
+    .select(</div></AdminLayout>)
+    .from(sessions</div></AdminLayout>)
+    .innerJoin(cohorts, eq(cohorts.id, sessions.cohortId)</div></AdminLayout>)
+    .orderBy(asc(sessions.heldOn)</div></AdminLayout>)
 
-  return (
+  return (<AdminLayout><div className="max-w-7xl mx-auto space-y-6">
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">📅 Sessions</h1>
@@ -44,5 +45,5 @@ export default async function SessionsPage() {
         ))}
       </div>
     </div>
-  )
+  </div></AdminLayout>)
 }

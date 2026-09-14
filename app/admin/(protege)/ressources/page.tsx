@@ -1,3 +1,4 @@
+import { AdminLayout } from '@/components/AdminLayout'
 import Link from 'next/link'
 import { asc, desc, eq, inArray, sql as raw } from 'drizzle-orm'
 import { AccesRefuse, AlerteSombre, SuccesSombre } from '@/components/AccesRefuse'
@@ -18,18 +19,18 @@ const t = fr.admin.ressources
  * télécharge. Un formateur ne voit que ses modules ; l'équipe voit tout.
  */
 export default async function RessourcesPage({ searchParams }: { searchParams: { module?: string; ok?: string; e?: string } }) {
-  const session = await requirePermission('gererRessources')
+  const session = await requirePermission('gererRessources'</div></AdminLayout>)
   if (!session) return <AccesRefuse />
   const estFormateur = session.user.role === 'formateur'
 
   const modules = await db
-    .select({ id: programModules.id, title: programModules.title, position: programModules.position, formation: programs.name, programId: programs.id })
-    .from(programModules)
-    .innerJoin(programs, eq(programs.id, programModules.programId))
-    .where(estFormateur ? eq(programModules.trainerId, session.user.id) : raw`true`)
-    .orderBy(asc(programs.name), asc(programModules.position))
+    .select({ id: programModules.id, title: programModules.title, position: programModules.position, formation: programs.name, programId: programs.id }</div></AdminLayout>)
+    .from(programModules</div></AdminLayout>)
+    .innerJoin(programs, eq(programs.id, programModules.programId)</div></AdminLayout>)
+    .where(estFormateur ? eq(programModules.trainerId, session.user.id) : raw`true`</div></AdminLayout>)
+    .orderBy(asc(programs.name), asc(programModules.position)</div></AdminLayout>)
 
-  const moduleIds = modules.map((m) => m.id)
+  const moduleIds = modules.map((m) => m.id</div></AdminLayout>)
   const selection = searchParams.module && moduleIds.includes(searchParams.module) ? searchParams.module : null
   const liste = moduleIds.length
     ? await db
@@ -39,20 +40,20 @@ export default async function RessourcesPage({ searchParams }: { searchParams: {
           formation: programs.name,
           deposePar: trainerProfiles.fullName,
           deposeParEmail: staff.email,
-        })
-        .from(resources)
-        .innerJoin(programModules, eq(programModules.id, resources.moduleId))
-        .innerJoin(programs, eq(programs.id, programModules.programId))
-        .leftJoin(staff, eq(staff.id, resources.trainerId))
-        .leftJoin(trainerProfiles, eq(trainerProfiles.staffId, staff.id))
-        .where(selection ? eq(resources.moduleId, selection) : inArray(resources.moduleId, moduleIds))
-        .orderBy(asc(programs.name), asc(programModules.position), desc(resources.createdAt))
+        }</div></AdminLayout>)
+        .from(resources</div></AdminLayout>)
+        .innerJoin(programModules, eq(programModules.id, resources.moduleId)</div></AdminLayout>)
+        .innerJoin(programs, eq(programs.id, programModules.programId)</div></AdminLayout>)
+        .leftJoin(staff, eq(staff.id, resources.trainerId)</div></AdminLayout>)
+        .leftJoin(trainerProfiles, eq(trainerProfiles.staffId, staff.id)</div></AdminLayout>)
+        .where(selection ? eq(resources.moduleId, selection) : inArray(resources.moduleId, moduleIds)</div></AdminLayout>)
+        .orderBy(asc(programs.name), asc(programModules.position), desc(resources.createdAt)</div></AdminLayout>)
     : []
 
   const messageOk = searchParams.ok ? t.messages[searchParams.ok as keyof typeof t.messages] : null
   const messageErreur = searchParams.e ? t.messages[searchParams.e as keyof typeof t.messages] : null
 
-  return (
+  return (<AdminLayout><div className="max-w-7xl mx-auto space-y-6">
     <div className="space-y-6">
       <EnTete titre={t.titre} sousTitre={t.sousTitre} />
       {messageOk ? <SuccesSombre>{messageOk}</SuccesSombre> : null}
@@ -174,5 +175,5 @@ export default async function RessourcesPage({ searchParams }: { searchParams: {
         </>
       )}
     </div>
-  )
+  </div></AdminLayout>)
 }

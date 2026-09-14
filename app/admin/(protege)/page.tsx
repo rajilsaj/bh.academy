@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import { and, asc, count, eq, gte, isNull } from 'drizzle-orm'
+import { AdminLayout } from '@/components/AdminLayout'
 import { auth, can } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { cohorts, learners, programModules, sessions, staff } from '@/lib/db/schema'
 import { fr } from '@/lib/i18n/fr'
 import { formatDate } from '@/lib/format'
 import { redirect } from 'next/navigation'
+import '@/styles/design-system.css'
 
 export const dynamic = 'force-dynamic'
 
